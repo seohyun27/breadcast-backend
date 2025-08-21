@@ -1,5 +1,5 @@
 # breadcast-backend
-🍞 Review bakeries &amp; menus, share bread journey routes — 빵지순례 (Your Bread Journey Map)
+🍞 Review bakeries &amp; menus, share bread journey routes — BreadCast (Your Bread Journey Map)
 
 ## member
 - 김서현
