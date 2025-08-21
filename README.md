@@ -1,10 +1,10 @@
 # breadcast-backend
-🍞 Review bakeries &amp; menus, share bread journey routes — BreadCast (Your Bread Journey Map)
+🍞 Review bakeries and menus, share bread journey routes — BreadCast (Your Bread Journey Map)
 
 ## member
 - 김서현
 - 박세은
-- 김서현
+- 김서연
 - 이지원
 - 김현지
 - 노은재
