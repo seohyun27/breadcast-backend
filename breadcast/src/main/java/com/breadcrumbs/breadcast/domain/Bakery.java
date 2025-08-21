@@ -38,9 +38,13 @@ public class Bakery {
     @OneToMany(mappedBy = "bakery", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menus = new ArrayList<>();
 
+    @OneToMany(mappedBy = "bakery", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CoursePart> courseParts = new ArrayList<>();
+
     /// 생성 메소드 ///
     public static Bakery createBakery(String name, String address, String phone,
-                                      String URL, String photo1, String photo2, List<Menu> menus) {
+                                      String URL, String photo1, String photo2,
+                                      List<Menu> menus, List<CoursePart> courseParts) {
         Bakery bakery = new Bakery();
         bakery.name = name;
         bakery.address = address;
@@ -51,6 +55,9 @@ public class Bakery {
         for (Menu menu : menus) {
             bakery.addMenu(menu); // 연관관계 편의 메소드 사용
         }
+        for (CoursePart coursePart : courseParts) {
+            bakery.addCoursePart(coursePart); // 연관관계 편의 메소드 사용
+        }
         return bakery;
     }
 
@@ -60,4 +67,8 @@ public class Bakery {
         menu.setBakery(this); // Menu 쪽 FK도 연결
     }
 
+    public void addCoursePart(CoursePart coursePart) {
+        courseParts.add(coursePart);
+        coursePart.setBakery(this);
+    }
 }
