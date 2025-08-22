@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.domain;
+package com.breadcrumbs.breadcast.domain.course;
 
 public enum Period {
     DAY,

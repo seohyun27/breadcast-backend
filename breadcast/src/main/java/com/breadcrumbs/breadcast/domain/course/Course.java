@@ -1,5 +1,6 @@
-package com.breadcrumbs.breadcast.domain;
+package com.breadcrumbs.breadcast.domain.course;
 
+import com.breadcrumbs.breadcast.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class Course {
     // Member가 삭제될 때 해당 Course도 함께 삭제되어야 함
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id",
-            foreignKey = @ForeignKey(name = "FK_member_to_course",
+            foreignKey = @ForeignKey(name = "FK_course_to_member",
                     foreignKeyDefinition = "FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE"))
     private Member member;
 

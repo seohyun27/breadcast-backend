@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.domain;
+package com.breadcrumbs.breadcast.domain.menu;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
