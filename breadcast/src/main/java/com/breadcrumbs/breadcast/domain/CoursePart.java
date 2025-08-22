@@ -15,31 +15,23 @@ public class CoursePart {
     @Column(name = "course_part_id")
     private long id;
 
+    private long travelOrder;
     // 만약 빵집의 삭제로 인해 CoursePart 하나가 삭제됐을 때 Course에서 CoursePart들을 불러오는 순서에 오류가 발생함
     // 이를 해결할 로직 or 방법이 필요함
-    private long travel_order;
 
-    private String boby;
-
+    private String body;
     private String photo;
+    private double distance;
+    private long travelMinute;
 
-    private double Distance;
-
-    private long TravelMinute;
-
+    // Course가 삭제될 때 해당 CoursePart도 함께 삭제되어야 함
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
 
+    // Bakery가 삭제될 때 해당 CoursePart도 함께 삭제되어야 함
     @ManyToOne
     @JoinColumn(name = "bakery_id")
     private Bakery bakery;
-
-    public void setBakery(Bakery bakery) {
-        this.bakery = bakery;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
 }
+

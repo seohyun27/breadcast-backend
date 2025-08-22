@@ -23,20 +23,16 @@ public class Menu {
 
     private String photo;
 
+    // bakery가 삭제될 때 menu도 함께 삭제되어야 함
     @ManyToOne
     @JoinColumn(name = "bakery_id")
     private Bakery bakery;
 
     /// 생성 메소드 ///
-    /// 빵집을 추가하는 과정은 Bakery.addMenu()에서 이루어짐
     public static Menu createMenu(String name, int price, String inform, String photo) {
         Menu menu = new Menu();
         menu.name = name;
         return menu;
-    }
-
-    public void setBakery(Bakery bakery) {
-        this.bakery = bakery;
     }
 }
 
