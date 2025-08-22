@@ -12,12 +12,14 @@ public class Course {
 
     @Id
     @GeneratedValue
-    @Column(name = "favorite_course_id")
+    @Column(name = "course_id")
     private long id;
 
     // Member가 삭제될 때 해당 Course도 함께 삭제되어야 함
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id",
+            foreignKey = @ForeignKey(name = "FK_member_to_course",
+                    foreignKeyDefinition = "FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE"))
     private Member member;
 
     private String title;

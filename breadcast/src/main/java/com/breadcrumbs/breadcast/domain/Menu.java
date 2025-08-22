@@ -25,7 +25,9 @@ public class Menu {
 
     // bakery가 삭제될 때 menu도 함께 삭제되어야 함
     @ManyToOne
-    @JoinColumn(name = "bakery_id")
+    @JoinColumn(name = "bakery_id",
+            foreignKey = @ForeignKey(name = "FK_mune_to_bakery",
+                    foreignKeyDefinition = "FOREIGN KEY (bakery_id) REFERENCES bakery(bakery_id) ON DELETE CASCADE"))
     private Bakery bakery;
 
     /// 생성 메소드 ///

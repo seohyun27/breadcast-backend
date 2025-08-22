@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FavoriteCourse {
+public class FavoriteBakery {
 
     @Id
     @GeneratedValue
-    @Column(name = "favorite_course_id")
+    @Column(name = "favorite_bakery_id")
     private long id;
 
     @ManyToOne
@@ -20,6 +20,6 @@ public class FavoriteCourse {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "course_id")
-    private Course course;
+    @JoinColumn(name = "bakery_id")
+    private Bakery bakery;
 }
