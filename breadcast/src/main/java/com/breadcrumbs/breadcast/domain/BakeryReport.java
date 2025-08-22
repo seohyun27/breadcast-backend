@@ -27,11 +27,15 @@ public class BakeryReport {
     @Column(name = "report_date")
     private LocalDateTime date;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id",
+            foreignKey = @ForeignKey(name = "FK_bakery_report_to_member",
+                    foreignKeyDefinition = "FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE"))
     private Member member;
 
-    @ManyToOne
-    @JoinColumn(name = "bakery_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bakery_id",
+            foreignKey = @ForeignKey(name = "FK_bakery_report_to_bakery",
+                    foreignKeyDefinition = "FOREIGN KEY (bakery_id) REFERENCES bakery(bakery_id) ON DELETE CASCADE"))
     private Bakery bakery;
 }
