@@ -49,7 +49,7 @@ public class BakeryReview {
 
     /// 생성 메소드 ///
     public static BakeryReview createBakeryReview(double rating, String text,
-                        String photo, Member member, Bakery bakery) {
+                                                  String photo, Member member, Bakery bakery) {
         BakeryReview bakeryReview = new BakeryReview();
         bakeryReview.rating = rating;
         bakeryReview.text = text;

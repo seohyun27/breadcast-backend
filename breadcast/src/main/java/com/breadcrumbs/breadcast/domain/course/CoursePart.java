@@ -17,8 +17,6 @@ public class CoursePart {
     private long id;
 
     private long travelOrder;
-    // 만약 빵집의 삭제로 인해 CoursePart 하나가 삭제됐을 때 Course에서 CoursePart들을 불러오는 순서에 오류가 발생함
-    // 이를 해결할 로직 or 방법이 필요함
 
     private String body;
 
