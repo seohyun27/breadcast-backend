@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -22,6 +21,8 @@ public class Member {
 
     private String nickname;
 
+
+    /// 생성 메소드 ///
     public static Member createUser(String loginId, String password, String nickname){
         Member member = new Member();
         member.loginId = loginId;

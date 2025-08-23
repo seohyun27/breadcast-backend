@@ -1,7 +1,6 @@
 package com.breadcrumbs.breadcast.domain.bakery;
 
 import com.breadcrumbs.breadcast.domain.Member;
-import com.breadcrumbs.breadcast.domain.bakery.Bakery;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,6 +21,7 @@ public class BakeryReview {
     @Column(name = "bakery_review_id")
     private long id;
 
+    @Column(name = "bakery_review_rating")
     private double rating;
 
     @Column(name = "bakery_review_text")
@@ -45,4 +45,17 @@ public class BakeryReview {
             foreignKey = @ForeignKey(name = "FK_bakery_review_to_bakery",
                     foreignKeyDefinition = "FOREIGN KEY (bakery_id) REFERENCES bakery(bakery_id) ON DELETE CASCADE"))
     private Bakery bakery;
+
+
+    /// 생성 메소드 ///
+    public static BakeryReview createBakeryReview(double rating, String text,
+                        String photo, Member member, Bakery bakery) {
+        BakeryReview bakeryReview = new BakeryReview();
+        bakeryReview.rating = rating;
+        bakeryReview.text = text;
+        bakeryReview.photo = photo;
+        bakeryReview.member = member;
+        bakeryReview.bakery = bakery;
+        return bakeryReview;
+    }
 }

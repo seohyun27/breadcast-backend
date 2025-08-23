@@ -21,7 +21,10 @@ public class CoursePart {
     // 이를 해결할 로직 or 방법이 필요함
 
     private String body;
+
+    @Column(name = "course_part_photo")
     private String photo;
+
     private double distance;
     private long travelMinute;
 
@@ -38,5 +41,20 @@ public class CoursePart {
             foreignKey = @ForeignKey(name = "FK_course_part_to_bakery",
                     foreignKeyDefinition = "FOREIGN KEY (bakery_id) REFERENCES bakery(bakery_id) ON DELETE CASCADE"))
     private Bakery bakery;
+
+
+    /// 생성 메소드 ///
+    public static CoursePart createCoursePart(long travelOrder, String body, String photo,
+                      double distance, long travelMinute, Course course, Bakery bakery) {
+        CoursePart coursePart = new CoursePart();
+        coursePart.travelOrder = travelOrder;
+        coursePart.body = body;
+        coursePart.photo = photo;
+        coursePart.distance = distance;
+        coursePart.travelMinute = travelMinute;
+        coursePart.course = course;
+        coursePart.bakery = bakery;
+        return coursePart;
+    }
 }
 

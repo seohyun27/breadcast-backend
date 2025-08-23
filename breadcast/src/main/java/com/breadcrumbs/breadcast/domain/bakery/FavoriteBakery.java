@@ -27,4 +27,13 @@ public class FavoriteBakery {
             foreignKey = @ForeignKey(name = "FK_favorite_bakery_to_bakery",
                     foreignKeyDefinition = "FOREIGN KEY (bakery_id) REFERENCES bakery(bakery_id) ON DELETE CASCADE"))
     private Bakery bakery;
+
+
+    /// 생성 메소드 ///
+    public static FavoriteBakery createFavoriteBakery(Member member, Bakery bakery) {
+        FavoriteBakery favoriteBakery = new FavoriteBakery();
+        favoriteBakery.member = member;
+        favoriteBakery.bakery = bakery;
+        return favoriteBakery;
+    }
 }

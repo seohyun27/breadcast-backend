@@ -39,4 +39,14 @@ public class BakeryReport {
             foreignKey = @ForeignKey(name = "FK_bakery_report_to_bakery",
                     foreignKeyDefinition = "FOREIGN KEY (bakery_id) REFERENCES bakery(bakery_id) ON DELETE CASCADE"))
     private Bakery bakery;
+
+
+    /// 생성 메소드 ///
+    public static BakeryReport createBakeryReport(String text, Member member, Bakery bakery) {
+        BakeryReport bakeryReport = new BakeryReport();
+        bakeryReport.text = text;
+        bakeryReport.member = member;
+        bakeryReport.bakery = bakery;
+        return bakeryReport;
+    }
 }

@@ -23,6 +23,8 @@ public class Bread {
 
     private String category;
 
+
+    /// 생성 메소드 ///
     public static Bread createBread(String name, String category){
         Bread bread = new Bread();
         bread.name = name;

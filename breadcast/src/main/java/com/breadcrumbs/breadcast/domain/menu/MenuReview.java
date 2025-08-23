@@ -22,6 +22,7 @@ public class MenuReview {
     @Column(name = "menu_review_id")
     private long id;
 
+    @Column(name = "menu_review_rating")
     private double rating;
 
     @Column(name = "menu_review_text")
@@ -43,10 +44,21 @@ public class MenuReview {
                     foreignKeyDefinition = "FOREIGN KEY (bakery_id) REFERENCES bakery(bakery_id) ON DELETE CASCADE"))
     private Bakery bakery;
 
-    //메뉴
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id",
             foreignKey = @ForeignKey(name = "FK_menu_review_to_menu",
                     foreignKeyDefinition = "FOREIGN KEY (menu_id) REFERENCES menu(menu_id) ON DELETE CASCADE"))
     private Menu menu;
+
+
+    /// 생성 메소드 ///
+    public static MenuReview createMenuReview(double rating, String text, Member member, Bakery bakery, Menu menu) {
+        MenuReview menuReview = new MenuReview();
+        menuReview.rating = rating;
+        menuReview.text = text;
+        menuReview.member = member;
+        menuReview.bakery = bakery;
+        menuReview.menu = menu;
+        return menuReview;
+    }
 }

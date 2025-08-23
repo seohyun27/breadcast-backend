@@ -40,4 +40,14 @@ public class CourseReview {
             foreignKey = @ForeignKey(name = "FK_course_review_to_bakery",
                     foreignKeyDefinition = "FOREIGN KEY (bakery_id) REFERENCES bakery(bakery_id) ON DELETE CASCADE"))
     private Bakery bakery;
+
+
+    /// 생성 메소드 ///
+    public static CourseReview createCourseReview(String text, Member member, Bakery bakery) {
+        CourseReview courseReview = new CourseReview();
+        courseReview.text = text;
+        courseReview.member = member;
+        courseReview.bakery = bakery;
+        return courseReview;
+    }
 }

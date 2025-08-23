@@ -27,4 +27,13 @@ public class FavoriteCourse {
             foreignKey = @ForeignKey(name = "FK_favorite_course_to_course",
                     foreignKeyDefinition = "FOREIGN KEY (course_id) REFERENCES course(course_id) ON DELETE CASCADE"))
     private Course course;
+
+
+    /// 생성 메소드 ///
+    public static FavoriteCourse createFavoriteCourse(Member member, Course course) {
+        FavoriteCourse favoriteCourse = new FavoriteCourse();
+        favoriteCourse.member = member;
+        favoriteCourse.course = course;
+        return favoriteCourse;
+    }
 }
