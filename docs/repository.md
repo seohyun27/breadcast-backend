@@ -32,22 +32,19 @@
 | `Menu`    | 어플 실행 시 미리 만들어짐. 변동 없음                           |
 | `Period`  | Enum, DB 저장용이라 Repository 필요 없음                  |
 
-> 요약 : 해당 엔티티들은 부모 엔티티를 통해 조회하거나, 서비스에서 필요할 때만 조회됨
+> 요약 : 해당 엔티티들은 부모 엔티티를 통해 조회하거나, 서비스에서 필요할 때만 조회됨.
+> Bakery, Bread, Menu, Classfy는 read-only용으로 조회만 필요하므로 서비스에서 EntityManager나 JPA query를 통해 접근
 
 ---
 
-### 3. Repository 구조 예시
+### 3. 쿼리문 예시
+```
+" select mr from MenuReview mr where mr.member = :member ORDER BY mr.date DESC "
 
-```java
-public interface MemberRepository extends JpaRepository<Member, Long> {}
-public interface BakeryReviewRepository extends JpaRepository<BakeryReview, Long> {}
-public interface BakeryReportRepository extends JpaRepository<BakeryReport, Long> {}
-public interface FavoriteBakeryRepository extends JpaRepository<FavoriteBakery, Long> {}
-public interface CourseRepository extends JpaRepository<Course, Long> {}
-public interface CourseReviewRepository extends JpaRepository<CourseReview, Long> {}
-public interface FavoriteCourseRepository extends JpaRepository<FavoriteCourse, Long> {}
-public interface MenuReviewRepository extends JpaRepository<MenuReview, Long> {}
+mr.date : MenuReview 엔티티의 date 필드
+
+DESC : 내림차순 정렬 (최신 날짜가 먼저 나오도록)
+ASC : 오름차순 정렬
 ```
 
-* Bakery, Bread, Menu, Classfy는 read-only용으로 조회만 필요하므로 서비스에서 EntityManager나 JPA query를 통해 접근
 
