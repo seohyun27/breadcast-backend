@@ -2,8 +2,6 @@ package com.breadcrumbs.breadcast.repository.bakery;
 
 import com.breadcrumbs.breadcast.domain.Member;
 import com.breadcrumbs.breadcast.domain.bakery.FavoriteBakery;
-import com.breadcrumbs.breadcast.domain.course.Course;
-import com.breadcrumbs.breadcast.domain.course.CourseReview;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

@@ -29,7 +29,7 @@ class BreadCastApplicationTests {
 	@Rollback(false)
 	void DB테스트() {
 		//given
-		Member member = Member.createUser("yu1234", "yu1234", "yu");
+		Member member = Member.createMember("yu1234", "yu1234", "yu");
 		Bakery bakery = Bakery.createBakery("영남 빵집", "대구 광역시", "010-1234-1234",
 				"hello/bakery", "photo1", "photo2");
 		Menu menu = Menu.createMenu("소금빵", 3000, "바삭바삭 소금빵", "photo", bakery);

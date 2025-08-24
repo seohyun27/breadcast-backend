@@ -23,11 +23,15 @@ public class Member {
 
 
     /// 생성 메소드 ///
-    public static Member createUser(String loginId, String password, String nickname){
+    public static Member createMember(String loginId, String password, String nickname){
         Member member = new Member();
         member.loginId = loginId;
         member.password = password;
         member.nickname = nickname;
         return member;
+    }
+
+    /// 구현 중
+    public static void setNickname(String newNickname) {
     }
 }

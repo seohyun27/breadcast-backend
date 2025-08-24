@@ -1,18 +1,41 @@
 package com.breadcrumbs.breadcast.service;
 
+import com.breadcrumbs.breadcast.domain.Member;
 import com.breadcrumbs.breadcast.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)     // 기본을 읽기 모드로 설정 (DB 조회 이외의 삽입/삭제 시 false 옵션 필수!)
-@RequiredArgsConstructor            // final을 포함한 생성자 자동 생성
+@Transactional
+@RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    //@Transactional  // 읽기 전용이 아닌 메소드에 반드시 작성할 것
+    //읽기 전용에는 @Transactional(readOnly = true) 붙일 것
 
+    @Transactional
+    public void deleteUser(Long memId){
+        /*
+        Member member = memberRepository.findById(memId);
+        memberRepository.delete(memId);
+         */
+    }
+
+    @Transactional
+    public Member updateNickname(Long memId, String newNickname){
+        /*
+        Member member = memberRepository.findById(memId);
+        if (memberRepository.existsNickname(newNickname))
+            //예외 발생
+        else
+            Member.setNickname(newNickname);
+            session.setAttribute("member", member);
+        return member;
+         */
+
+        return null;
+    };
 
 }

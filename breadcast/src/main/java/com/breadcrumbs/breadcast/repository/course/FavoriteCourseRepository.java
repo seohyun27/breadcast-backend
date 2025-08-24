@@ -1,7 +1,6 @@
 package com.breadcrumbs.breadcast.repository.course;
 
 import com.breadcrumbs.breadcast.domain.Member;
-import com.breadcrumbs.breadcast.domain.course.CourseReview;
 import com.breadcrumbs.breadcast.domain.course.FavoriteCourse;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
