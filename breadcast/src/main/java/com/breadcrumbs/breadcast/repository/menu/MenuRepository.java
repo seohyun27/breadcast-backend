@@ -1,27 +1,10 @@
 package com.breadcrumbs.breadcast.repository.menu;
 
 import com.breadcrumbs.breadcast.domain.menu.Menu;
-import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-@RequiredArgsConstructor
-public class MenuRepository {
+public interface MenuRepository extends JpaRepository<Menu, Long> {
 
-    private final EntityManager em;
-
-    public void save(Menu menu){
-        em.persist(menu);
-    }
-
-    public void delete(Long id) {
-        Menu menu = em.find(Menu.class, id);
-        if (menu != null) em.remove(menu);
-    }
-
-    public Menu findOne(Long id){
-        return em.find(Menu.class, id);
-    }
-
+    // 해당 메뉴에 달린 리뷰가 몇 개인지를 반환하는 메소드
+    int countById(Long menuId);
 }

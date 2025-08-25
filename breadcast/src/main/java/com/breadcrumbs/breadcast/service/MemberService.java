@@ -31,9 +31,10 @@ public class MemberService {
             //예외 발생
         else
             Member.setNickname(newNickname);
-            session.setAttribute("member", member);
         return member;
          */
+
+        // 이후 컨트롤러에서 세션 처리 : session.setAttribute("member", member);
 
         return null;
     };
