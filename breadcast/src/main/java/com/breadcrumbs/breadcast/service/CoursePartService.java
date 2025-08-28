@@ -26,4 +26,15 @@ public class CoursePartService {
 
         return null;
     }
+
+    public List<CoursePart> updateCourseParts(Long courseId, List<CoursePart> courseParts) {
+        /*
+        -courseId에 연결된 모든 기존 CoursePart를 삭제하고, 새로운 구성 요소를 저장하는 메소드입니다.
+        -courseParts 리스트를 순회하며 각 빵집 ID의 유효성을 bakeryRepository.findById를 통해 검증합니다.
+        - coursePartRepository.deleteAllByCourseId를 호출하여 기존 데이터를 모두 삭제합니다.
+        - 유효성 검사를 통과한 새로운 CoursePart 엔티티들을 coursePartRepository.saveAll을 호출하여 DB에 일괄 저장합니다.
+        */
+
+        return null;
+    }
 }

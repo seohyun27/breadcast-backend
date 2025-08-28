@@ -10,4 +10,8 @@ public interface FavoriteCourseRepository extends JpaRepository<FavoriteCourse, 
 
     // Member 기준으로 즐겨찾기 코스 리스트 조회
     List<FavoriteCourse> findByMember(Member member);
+
+    // courseId에 해당하는 좋아요의 개수를 세어 long 타입으로 반환
+    public long countByCourseId(Long courseId);
+
 }
