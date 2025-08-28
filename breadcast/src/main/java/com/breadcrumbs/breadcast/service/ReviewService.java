@@ -1,6 +1,9 @@
 package com.breadcrumbs.breadcast.service;
 
+import com.breadcrumbs.breadcast.domain.course.CourseReview;
 import com.breadcrumbs.breadcast.domain.menu.MenuReview;
+import com.breadcrumbs.breadcast.repository.course.CourseRepository;
+import com.breadcrumbs.breadcast.repository.course.CourseReviewRepository;
 import com.breadcrumbs.breadcast.repository.menu.MenuRepository;
 import com.breadcrumbs.breadcast.repository.menu.MenuReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,9 @@ public class ReviewService {
     private MenuReviewRepository menuReviewRepository;
     private MenuRepository menuRepository;
     private MenuReview menuReview;
+
+    private CourseReviewRepository courseReviewRepository;
+    private CourseRepository courseRepository;
 
     // 사용자 인증 및 권한 확인 Service 추가로 필요
 
@@ -61,6 +67,40 @@ public class ReviewService {
         */
     }
 
+    public CourseReview addCourseReview(CourseReview courseReview) {
+        /*
+        -리뷰 엔티티를 받아 데이터베이스에 저장합니다.
+        -courseRepository.findById(courseReview.getCourse().getId()) 를 호출하여 리뷰를 작성할 코스가 실제로 존재하는지 확인합니다.
+        -코스가 존재하지 않으면 예외를 발생시키거나 null을 반환하여 리뷰 저장을 중단합니다.
+        - 코스가 존재할 경우, courseReviewRepository.save를 호출하여 데이터베이스에 리뷰를 저장합니다.
+        - 저장 후 CourseReview 엔티티를 반환합니다.
+        */
 
+        return null;
+    }
 
+    public CourseReview updateCourseReview(Long courseReviewId, Long userId, CourseReview updatedCourseReview) {
+        /*
+        -reviewId에 해당하는 리뷰를 updatedCourseReview 엔티티의 내용으로 수정하는 메소드입니다.
+        - courseReviewRepository.findById를 호출하여 해당 리뷰가 존재하는지 확인합니다.
+        - 존재하지 않으면 예외를 발생시킵니다.
+        - 조회된 리뷰 엔티티의 작성자 ID가 userId와 일치하는지 확인합니다.
+        - 일치하지 않으면 수정 권한이 없으므로 예외를 발생시킵니다.
+        -검증이 끝나면 조회된 리뷰 엔티티에 updatedCourseReview의 새로운 내용을 반영합니다.
+        -변경된 엔티티를 courseReviewRepository.save 메소드를 통해 데이터베이스에 저장합니다.
+        - 수정된 CourseReview 엔티티를 반환합니다.
+        */
+
+        return null;
+    }
+
+    public void deleteCourseReview(Long courseReviewId, Long userId) {
+       /*
+        설명 : 특정 reviewId에 해당하는 리뷰를 삭제하는 메소드입니다.
+        -courseReviewRepository.findById를 호출하여 해당 리뷰가 존재하는지 확인합니다.
+        - userId가 작성자와 일치하는지 검증합니다.
+        - 권한이 없으면 삭제를 진행하지 않습니다.
+        -권한 확인이 완료되면, courseReviewRepository.deleteById를 호출하여 데이터베이스에서 리뷰를 삭제합니다.
+        */
+    }
 }
