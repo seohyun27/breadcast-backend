@@ -3,8 +3,11 @@ package com.breadcrumbs.breadcast.repository.menu;
 import com.breadcrumbs.breadcast.domain.menu.Menu;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface MenuRepository extends JpaRepository<Menu, Long> {
 
-    // 해당 메뉴에 달린 리뷰가 몇 개인지를 반환하는 메소드
-    int countById(Long menuId);
+    // 특정 bakeryId와 일치하는 모든 메뉴 엔티티를 Menu 데이터베이스에서 찾아 리스트로 반환
+    List<Menu> findByBakeryId(Long bakeryId);
+
 }
