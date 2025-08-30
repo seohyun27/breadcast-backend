@@ -17,7 +17,7 @@ public class MemberService {
 
 
     @Transactional
-    public Member addMember(String loginId, String password) {
+    public Member addMember(String loginId, String password, String nickname) {
         /*
         // 유효성 검사 - 필요하다면 유효성 검사를 private으로 분리
         // 아이디의 길이가 5~20 사이이면서 영문과 숫자로만 이루어져있는지
@@ -37,6 +37,25 @@ public class MemberService {
 
         // 3. UserRepository에 저장
         memberRepository.save(member);
+        */
+
+        return null;
+    }
+
+    public Member login(String loginId, String password) {
+        /*
+        // 1. 아이디로 DB에서 사용자 조회
+        // Optional<Member> memberOptional = memberRepository.findByUsername(loginId);
+        Member member = memberRepository.findByloginId(loginId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        // 2. PasswordEncoder.matches()를 사용하여 비밀번호 일치 여부 확인
+        // 입력된 비밀번호(rawPassword)와 DB에 저장된 암호화된 비밀번호(encodedPassword)를 비교
+        if (passwordEncoder.matches(password, member.getPassword())) {
+            return member; // 비밀번호 일치 시 Member 객체 반환
+        } else {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
         */
 
         return null;
