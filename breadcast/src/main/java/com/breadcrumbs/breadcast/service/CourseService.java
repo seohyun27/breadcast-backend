@@ -26,7 +26,7 @@ public class CourseService {
     private final CoursePartRepository coursePartRepository;
 
 
-    public Course createCourse(Long userId, Course course) {
+    public Course createCourse(Long memId, Course course) {
         /*
         - Course 엔티티를 받아 데이터베이스에 저장합니다.
         - Course 엔티티 내에 포함된 CoursePart 리스트를 순회하며 각 빵집 ID의 유효성을 BakeryRepository.findById를 통해 확인합니다. (CoursePartService에서
@@ -39,10 +39,10 @@ public class CourseService {
         return null;
     }
 
-    public Course updateCourse(Long courseId, Long userId, Course updatedCourse) {
+    public Course updateCourse(Long courseId, Long memId, Course updatedCourse) {
         /*
         - courseId에 해당하는 코스를 updatedCourse 엔티티의 내용으로 수정하는 메소드입니다.
-        - userId가 해당 코스의 작성자인지 확인합니다.
+        - memId가 해당 코스의 작성자인지 확인합니다.
         - courseRepository.save를 호출하여 DB에 코스 기본 정보를 반영합니다.
         - coursePartService.updateCourseParts(courseId, updatedCourse.getCourseParts()) 를 호출하여 기존 코스 구성 요소를 삭제하고 새로운 구성 요소를 저장하는 작업을 위임합니다.
         - 수정된 엔티티를 반환합니다.
@@ -51,7 +51,7 @@ public class CourseService {
         return null;
     }
 
-    public void deleteCourse(Long courseId, Long userId) {
+    public void deleteCourse(Long courseId, Long memId) {
         /*
         - courseId에 해당하는 코스와 그와 관련된 모든 데이터를 삭제하는 메소드입니다.
         - 현재 사용자가 해당 코스의 작성자인지 검증합니다.
@@ -88,14 +88,14 @@ public class CourseService {
     }
 
     @Transactional(readOnly = true)
-    public CourseDetailDto getCourseDetail(Long courseId, Long userId) {
+    public CourseDetailDto getCourseDetail(Long courseId, Long memId) {
         /*
-        - courseId를 받아 코스 상세 정보를 조회하고, userId에 따라 리뷰 작성자 권한 정보를 추가하여 CourseDetailDto로 반환합니다.
+        - courseId를 받아 코스 상세 정보를 조회하고, memId에 따라 리뷰 작성자 권한 정보를 추가하여 CourseDetailDto로 반환합니다.
         - courseRepository.findById(courseId) 를 호출하여 코스 기본 정보를 가져옵니다.
         - favoriteCourseRepository.countByCourseId(courseId) 를 호출하여 좋아요 총 개수를 가져옵니다.
         - coursePartRepository.findByCourseId(courseId) 를 호출하여 코스에 포함된 빵집 목록 (경로) 을 가져옵니다.
         - courseReviewRepository.findByCourseId(courseId) 를 호출하여 해당 코스의 리뷰 목록을 가져옵니다.
-        - 각 리뷰에 대해 로그인한 사용자 (userId) 가 작성자인지 확인합니다.
+        - 각 리뷰에 대해 로그인한 사용자 (memId) 가 작성자인지 확인합니다.
         - 이 정보를 DTO에 포함합니다. (프론트엔드에서 수정 / 삭제 버튼을 띄울 수 있는지 판단할 수 있습니다.)
         - 가져온 모든 데이터를 CourseDetailDto 객체에 담아 반환합니다.
         */

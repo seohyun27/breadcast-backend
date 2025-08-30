@@ -30,7 +30,7 @@ public class ReviewService {
     // 사용자 인증 및 권한 확인 Service 추가로 필요
 
 
-    public MenuReview addMenuReview(Long userId, MenuReview menuReview) {
+    public MenuReview addMenuReview(Long memId, MenuReview menuReview) {
         /*
         -리뷰 엔티티를 받아 데이터베이스에 저장합니다.저장된 MenuReview 엔티티를 반환합니다.
         -menuRepository.findById() 를 호출하여 리뷰를 작성할 메뉴가 실제로 존재하는지 확인합니다.
@@ -41,12 +41,12 @@ public class ReviewService {
         return null;
     }
 
-    public MenuReview updateMenuReview(Long reviewId, MenuReview updatedMenuReview, Long userId) {
+    public MenuReview updateMenuReview(Long reviewId, MenuReview updatedMenuReview, Long memId) {
         /*
         -reviewId에 해당하는 리뷰를 updatedMenuReview 엔티티의 내용으로 수정하는 메소드입니다.
         - menuReviewRepository.findById를 호출하여 해당 리뷰가 존재하는지 확인합니다.
         - 존재하지 않으면 예외를 발생시킵니다.
-        - 조회된 리뷰 엔티티의 작성자 ID와 userId가 일치하는지 확인합니다.
+        - 조회된 리뷰 엔티티의 작성자 ID와 memId가 일치하는지 확인합니다.
         - 일치하지 않으면 수정 권한이 없으므로 예외를 발생시킵니다.
         -검증이 완료되면, 조회된 리뷰 엔티티에 updatedMenuReview의 새로운 내용을 반영합니다.
         -변경된 엔티티를 menuReviewRepository.save 메소드를 통해 데이터베이스에 저장합니다.
@@ -56,11 +56,11 @@ public class ReviewService {
         return null;
     }
 
-    public void deleteMenuReview(Long reviewId, Long userId){
+    public void deleteMenuReview(Long reviewId, Long memId){
         /*
-        - reviewId와 userId를 사용하여 리뷰를 삭제합니다.
+        - reviewId와 memId를 사용하여 리뷰를 삭제합니다.
         - menuReviewRepository.findById를 호출하여 해당 리뷰가 존재하는지 확인합니다.
-        - 조회된 리뷰 엔티티의 작성자 ID가 userId와 일치하는지 확인하여 삭제 권한을 검증합니다.
+        - 조회된 리뷰 엔티티의 작성자 ID가 memId와 일치하는지 확인하여 삭제 권한을 검증합니다.
         - 권한 확인이 끝나면 menuReviewRepository.deleteById를 호출하여 데이터베이스에서 리뷰를 삭제합니다.
         - 삭제에 성공하면 void 타입으로 처리됩니다.
         */
@@ -78,12 +78,12 @@ public class ReviewService {
         return null;
     }
 
-    public CourseReview updateCourseReview(Long courseReviewId, Long userId, CourseReview updatedCourseReview) {
+    public CourseReview updateCourseReview(Long courseReviewId, Long memId, CourseReview updatedCourseReview) {
         /*
         -reviewId에 해당하는 리뷰를 updatedCourseReview 엔티티의 내용으로 수정하는 메소드입니다.
         - courseReviewRepository.findById를 호출하여 해당 리뷰가 존재하는지 확인합니다.
         - 존재하지 않으면 예외를 발생시킵니다.
-        - 조회된 리뷰 엔티티의 작성자 ID가 userId와 일치하는지 확인합니다.
+        - 조회된 리뷰 엔티티의 작성자 ID가 memId와 일치하는지 확인합니다.
         - 일치하지 않으면 수정 권한이 없으므로 예외를 발생시킵니다.
         -검증이 끝나면 조회된 리뷰 엔티티에 updatedCourseReview의 새로운 내용을 반영합니다.
         -변경된 엔티티를 courseReviewRepository.save 메소드를 통해 데이터베이스에 저장합니다.
@@ -93,11 +93,11 @@ public class ReviewService {
         return null;
     }
 
-    public void deleteCourseReview(Long courseReviewId, Long userId) {
+    public void deleteCourseReview(Long courseReviewId, Long memId) {
        /*
         설명 : 특정 reviewId에 해당하는 리뷰를 삭제하는 메소드입니다.
         -courseReviewRepository.findById를 호출하여 해당 리뷰가 존재하는지 확인합니다.
-        - userId가 작성자와 일치하는지 검증합니다.
+        - memId가 작성자와 일치하는지 검증합니다.
         - 권한이 없으면 삭제를 진행하지 않습니다.
         -권한 확인이 완료되면, courseReviewRepository.deleteById를 호출하여 데이터베이스에서 리뷰를 삭제합니다.
         */
