@@ -61,4 +61,15 @@ public class MenuReview {
         menuReview.menu = menu;
         return menuReview;
     }
+
+
+    /// 세터 ///
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
 }

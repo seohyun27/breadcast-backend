@@ -50,4 +50,11 @@ public class CourseReview {
         courseReview.bakery = bakery;
         return courseReview;
     }
+
+
+    /// 세터 ///
+    public void setText(String text) {
+        this.text = text;
+    }
+
 }
