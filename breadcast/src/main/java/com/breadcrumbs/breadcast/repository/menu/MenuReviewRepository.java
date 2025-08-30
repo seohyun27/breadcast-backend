@@ -10,7 +10,7 @@ public interface MenuReviewRepository extends JpaRepository<MenuReview, Long> {
 
     // Member 기준으로 메뉴 리뷰 리스트 조회
     // 일단은 test 코드에서 사용 중!!!
-    List<MenuReview> findByMember(Member member);
+    List<MenuReview> findByMemberId(Long memberId);
 
     // 특정 메뉴에 대한 모든 리뷰 목록을 조회합니다.
     public List<MenuReview> findByMenuId(Long menuId);

@@ -42,7 +42,7 @@ class BreadCastApplicationTests {
 		menuReviewRepository.save(menuReview);
 
 		//then
-		List<MenuReview> reviews = menuReviewRepository.findByMember(member);
+		List<MenuReview> reviews = menuReviewRepository.findByMemberId(member.getId());
 		assertThat(reviews.get(0).getMember()).isEqualTo(member);
 
 		// em.remove(bakery);

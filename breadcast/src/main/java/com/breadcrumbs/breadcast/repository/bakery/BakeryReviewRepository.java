@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface BakeryReviewRepository extends JpaRepository<BakeryReview, Long> {
 
-    // Member 기준으로 빵집 리뷰 리스트 조회
-    List<BakeryReview> findByMemberOrderByDateDesc(Member member);
 }

@@ -7,6 +7,9 @@ import java.util.List;
 
 public interface FavoriteBakeryRepository extends JpaRepository<FavoriteBakery, Long> {
 
-    // Member 기준으로 즐겨찾기 빵집 리스트 조회
-    List<FavoriteBakery> findByMemberOrderByDateDesc(Member member);
+    List<FavoriteBakery> findByMemberId(Long memId);
+
+    boolean existsByMemberIdAndBakeryId(long memberId, long bakeryId);
+
+    void deleteByMemberIdAndBakeryId(Long memId, Long bakeryId);
 }
