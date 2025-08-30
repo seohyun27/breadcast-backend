@@ -13,9 +13,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    //읽기 전용에는 @Transactional(readOnly = true) 붙일 것
-
-    @Transactional
     public void deleteUser(Long memId){
         /*
         Member member = memberRepository.findById(memId);
@@ -23,7 +20,6 @@ public class MemberService {
          */
     }
 
-    @Transactional
     public Member updateNickname(Long memId, String newNickname){
         /*
         Member member = memberRepository.findById(memId);

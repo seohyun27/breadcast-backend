@@ -9,15 +9,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-    @Service
-    @Transactional(readOnly = true)
-    @RequiredArgsConstructor
-    public class MenuService {
+@Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
+public class MenuService {
 
-        private MenuRepository menuRepository;
-        private MenuReviewRepository menuReviewRepository;
+    private final MenuRepository menuRepository;
+    private final MenuReviewRepository menuReviewRepository;
 
-        public List<Menu> getMenus(Long bakeryId){
+    public List<Menu> getMenus(Long bakeryId) {
 
             /*
             List<Menu> munus = menuRepository.findByBakeryId(bakeryId);
@@ -26,10 +26,10 @@ import java.util.List;
              menuRepository.findByBakeryId(menuId);
              */
 
-            return null;
-        }
+        return null;
+    }
 
-        public Menu getMenuDetail(Long menuId){
+    public Menu getMenuDetail(Long menuId) {
 
             /*
             - menuRepository.findById를 사용해서 메뉴 정보를 가져옵니다.
@@ -40,17 +40,16 @@ import java.util.List;
             - 모든 정보가 반영된 Menu 엔티티를 반환합니다.
             */
 
-          return null;
-       }
+        return null;
+    }
 
-
-      private double getAverageRating(Long menuId){
+    private double getAverageRating(Long menuId) {
             /*
             - 서비스 레이어에서 직접 평균을 계산합니다.
             - MenuReviewRepository.findByMenuId를 호출하여 모든 리뷰 데이터를 가져옵니다.
             - 가져온 리뷰 데이터를 활용해 평균값을 계산하고 반환합니다.
             */
 
-            return 0;
-      }
+        return 0;
+    }
 }

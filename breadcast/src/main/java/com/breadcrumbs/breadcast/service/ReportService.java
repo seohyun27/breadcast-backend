@@ -9,16 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class ReportService {
 
-    private BakeryReportRepository bakeryReportRepository;
+    private final BakeryReportRepository bakeryReportRepository;
 
     // 사용자 인증 및 권한 확인 Service 추가로 필요
 
 
-
+    @Transactional(readOnly = true)
     public List<BakeryReport> getReports(Long bakeryId, Long userId, int page, int size) {
         /*
         -bakeryId에 해당하는 제보 목록을 조회하고, userId에 따라 추가 정보를 포함하여 엔티티 리스트를 반환합니다.
@@ -31,7 +31,6 @@ public class ReportService {
 
         return null;
     }
-
 
     public BakeryReport addReport(Long userId, BakeryReport bakeryReport) {
         /*
@@ -66,6 +65,4 @@ public class ReportService {
         -가져온 제보 목록을 bakeryReportRepository.deleteAll 메소드를 호출하여 데이터베이스에서 모두 삭제합니다.
         */
     }
-
-
 }

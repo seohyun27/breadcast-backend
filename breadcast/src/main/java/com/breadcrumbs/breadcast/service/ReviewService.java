@@ -17,16 +17,15 @@ import java.util.List;
 
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class ReviewService {
 
-    private MenuReviewRepository menuReviewRepository;
-    private MenuRepository menuRepository;
-    private MenuReview menuReview;
+    private final MenuReviewRepository menuReviewRepository;
+    private final MenuRepository menuRepository;
 
-    private CourseReviewRepository courseReviewRepository;
-    private CourseRepository courseRepository;
+    private final CourseReviewRepository courseReviewRepository;
+    private final CourseRepository courseRepository;
 
     // 사용자 인증 및 권한 확인 Service 추가로 필요
 

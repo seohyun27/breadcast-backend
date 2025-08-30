@@ -13,18 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class CourseService {
     // 코스 생성의 비즈니스 로직을 총괄
     // CourseRepository를 통해 코스 자체를 저장하고 삭제하며, CoursePartService에게 코스에 포함된 빵집 정보를 저장하도록 위임
     // 동시에 코스에 종속된 모든 관련 데이터(CoursePart, CourseLike, CourseReview)도 함께 삭제
 
-    private CourseRepository courseRepository;
-    private CoursePartService coursePartService;
-    private FavoriteCourseRepository favoriteCourseRepository;
-    private CoursePartRepository coursePartRepository;
-
+    private final CourseRepository courseRepository;
+    private final CoursePartService coursePartService;
+    private final FavoriteCourseRepository favoriteCourseRepository;
+    private final CoursePartRepository coursePartRepository;
 
 
     public Course createCourse(Long userId, Course course) {
@@ -62,6 +61,7 @@ public class CourseService {
         */
     }
 
+    @Transactional(readOnly = true)
     public List<Course> getPopularCourses(int page, int size) {
         /*
         설명:코스 목록을 조회하고, 각 코스의 좋아요 수를 계산하여 인기 순으로 정렬한 후 페이징 처리된 결과를 반환합니다.
@@ -74,6 +74,7 @@ public class CourseService {
         return null;
     }
 
+    @Transactional(readOnly = true)
     public List<Course> searchCourses(String keyword, int page, int size) {
         /*
         - 사용자가 입력한 keyword를 기반으로 빵지순례 코스를 검색하고, 좋아요 수를 포함한 엔티티 리스트를 반환합니다.
@@ -86,6 +87,7 @@ public class CourseService {
         return null;
     }
 
+    @Transactional(readOnly = true)
     public CourseDetailDto getCourseDetail(Long courseId, Long userId) {
         /*
         - courseId를 받아 코스 상세 정보를 조회하고, userId에 따라 리뷰 작성자 권한 정보를 추가하여 CourseDetailDto로 반환합니다.
