@@ -103,5 +103,14 @@ public class CourseService {
         return null;
     }
 
+    @Transactional(readOnly = true)
+    public List<Course> getMyCourse(Long memId) {
+        /*
+        - courseRepository.findByMemberId(memId)를 호출해 코스 목록을 가져온다
+        - 해당하는 모든 코스에 대해 코스 제목/첫 번째 코스 파트의 사진 1장을 DTO로 묶어 리턴한다
+        */
+
+        return null;
+    }
 
 }

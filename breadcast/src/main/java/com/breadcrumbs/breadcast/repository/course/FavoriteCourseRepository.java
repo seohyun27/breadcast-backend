@@ -12,7 +12,7 @@ public interface FavoriteCourseRepository extends JpaRepository<FavoriteCourse, 
     List<FavoriteCourse> findByMemberId(Long memberId);
 
     // courseId에 해당하는 좋아요의 개수를 세어 long 타입으로 반환
-    public long countByCourseId(Long courseId);
+    long countByCourseId(Long courseId);
 
     boolean existsByMemberIdAndCourseId(Long memberId, Long courseId) ;
 

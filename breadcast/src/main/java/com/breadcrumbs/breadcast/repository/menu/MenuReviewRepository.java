@@ -9,13 +9,12 @@ import java.util.List;
 public interface MenuReviewRepository extends JpaRepository<MenuReview, Long> {
 
     // Member 기준으로 메뉴 리뷰 리스트 조회
-    // 일단은 test 코드에서 사용 중!!!
-    List<MenuReview> findByMemberId(Long memberId);
+    List<MenuReview> findByMemberId(Long memId);
 
     // 특정 메뉴에 대한 모든 리뷰 목록을 조회합니다.
-    public List<MenuReview> findByMenuId(Long menuId);
+    List<MenuReview> findByMenuId(Long menuId);
 
     // 특정 메뉴의 리뷰 수를 계산합니다.
-    public long countByMenuId(Long menuId);
+    long countByMenuId(Long menuId);
 
 }

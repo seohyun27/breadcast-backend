@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface BakeryReviewRepository extends JpaRepository<BakeryReview, Long> {
 
+    List<BakeryReview> findByMemberId(Long memId);
+
 }

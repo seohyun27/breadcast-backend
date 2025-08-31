@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
-    List<Course> findByMemberId(Long memberId);
+    List<Course> findByMemberId(Long memId);
 
 
     // 제목 또는 키워드에 특정 문자열이 포함된 코스 목록을 검색합니다.

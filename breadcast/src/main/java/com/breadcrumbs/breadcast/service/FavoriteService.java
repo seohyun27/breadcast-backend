@@ -21,6 +21,7 @@ public class FavoriteService {
     public List<Bakery> getFavoriteBakeries(Long memId){
         /*
         - favoriteBakeryRepository.findByMemberId(memId) 호출
+        - 가게 사진 2장/가게 이름/가게 전화번호/주소
         - 조회된 엔티티 리스트를 FavoriteBakeryResponse DTO로 변환
         - 변환된 리스트를 컨트롤러로 반환
         - 현재 단계에서는 임시로 List<>를 반환하도록 작성함

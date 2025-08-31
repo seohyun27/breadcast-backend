@@ -1,7 +1,9 @@
 package com.breadcrumbs.breadcast.service;
 
+import com.breadcrumbs.breadcast.domain.bakery.BakeryReview;
 import com.breadcrumbs.breadcast.domain.course.CourseReview;
 import com.breadcrumbs.breadcast.domain.menu.MenuReview;
+import com.breadcrumbs.breadcast.repository.bakery.BakeryReviewRepository;
 import com.breadcrumbs.breadcast.repository.course.CourseRepository;
 import com.breadcrumbs.breadcast.repository.course.CourseReviewRepository;
 import com.breadcrumbs.breadcast.repository.menu.MenuRepository;
@@ -21,6 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewService {
 
+    private final BakeryReviewRepository bakeryReviewRepository;
+
     private final MenuReviewRepository menuReviewRepository;
     private final MenuRepository menuRepository;
 
@@ -29,6 +33,17 @@ public class ReviewService {
 
     // 사용자 인증 및 권한 확인 Service 추가로 필요
 
+
+
+    @Transactional(readOnly = true)
+    public List<BakeryReview> getMyBakeryReview(Long memId) {
+        /*
+        - bakeryReviewRepository.findByMemberId(memId); 를 호출해 빵집 리뷰 목록을 가져온다
+        - 해당하는 모든 리뷰에 대해 가게 사진 1 장 / 가게 이름 / 리뷰 내용을 DTO로 묶어 반환
+        */
+
+        return null;
+    }
 
     public MenuReview addMenuReview(Long memId, MenuReview menuReview) {
         /*
@@ -66,6 +81,16 @@ public class ReviewService {
         */
     }
 
+    @Transactional(readOnly = true)
+    public List<MenuReview> getMyMenuReview(Long memId) {
+        /*
+        -menuReviewRepository.findByMemberId(memId); 를 호출해 메뉴 리뷰 목록을 가져온다
+        - 해당하는 모든 리뷰에 대해 가게 이름 / 메뉴 이름 / 리뷰 내용을 DTO로 묶어 리턴한다
+        */
+
+        return null;
+    }
+
     public CourseReview addCourseReview(CourseReview courseReview) {
         /*
         -리뷰 엔티티를 받아 데이터베이스에 저장합니다.
@@ -101,5 +126,14 @@ public class ReviewService {
         - 권한이 없으면 삭제를 진행하지 않습니다.
         -권한 확인이 완료되면, courseReviewRepository.deleteById를 호출하여 데이터베이스에서 리뷰를 삭제합니다.
         */
+    }
+
+    public List<CourseReview> getMyCourseReview(Long memId) {
+        /*
+        - courseReviewRepository.findByMemberId(memId)를 호출해 메뉴 리뷰 목록을 가져온다
+        - 해당하는 모든 리뷰에 대해 루트 작성자 닉네임/루트 제목/내 닉네임/리뷰 내용을 DTO로 묶어 리턴한다
+        */
+
+        return null;
     }
 }

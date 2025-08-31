@@ -14,7 +14,7 @@ public interface BakeryReportRepository extends JpaRepository<BakeryReport, Long
     // Member 기준으로 빵집 제보 리스트 조회
     List<BakeryReport> findByMemberId(Long memId);
 
-    public Page<BakeryReport> findByBakeryIdOrderByCreatedAtDesc(Long bakeryId, Pageable pageable);
+    Page<BakeryReport> findByBakeryIdOrderByCreatedAtDesc(Long bakeryId, Pageable pageable);
     /*
     bakeryId와 일치하는 BakeryReport 엔티티들을 최신순으로 정렬하여 반환합니다.
     Pageable 객체를 파라미터로 받습니다.
@@ -22,6 +22,6 @@ public interface BakeryReportRepository extends JpaRepository<BakeryReport, Long
     */
 
     // createdAt으로 주어진 시각 이전에 생성된 모든 제보 글을 찾아 리스트로 반환
-    public List<BakeryReport> findByCreatedAtBefore(LocalDateTime createdAt);
+    List<BakeryReport> findByCreatedAtBefore(LocalDateTime createdAt);
 
 }
