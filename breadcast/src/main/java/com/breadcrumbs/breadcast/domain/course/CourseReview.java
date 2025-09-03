@@ -42,6 +42,16 @@ public class CourseReview {
     private Bakery bakery;
 
 
+
+    /// 코스랑 연결 추가 !!!!! ///
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id",
+            foreignKey = @ForeignKey(name = "FK_course_review_to_course",
+                    foreignKeyDefinition = "FOREIGN KEY (course_id) REFERENCES bakery(course_id) ON DELETE CASCADE"))
+    private Course course;
+
+
+
     /// 생성 메소드 ///
     public static CourseReview createCourseReview(String text, Member member, Bakery bakery) {
         CourseReview courseReview = new CourseReview();
