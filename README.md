@@ -15,7 +15,7 @@ Spring Boot application backend code
 ## member
 - 김서현
 - 박세은
-- 김서연
+-  김서연
 - 이지원
 - 김현지
 - 노은재
