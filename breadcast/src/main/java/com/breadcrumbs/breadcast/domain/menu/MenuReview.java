@@ -63,13 +63,9 @@ public class MenuReview {
     }
 
 
-    /// 세터 ///
-    public void setRating(double rating) {
+    /// 업데이트 메소드 ///
+    public void update(double rating, String text){
         this.rating = rating;
-    }
-
-    public void setText(String text) {
         this.text = text;
     }
-
 }

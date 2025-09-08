@@ -62,8 +62,8 @@ public class CourseReview {
     }
 
 
-    /// 세터 ///
-    public void setText(String text) {
+    /// 업데이트 메소드 ///
+    public void update(String text) {
         this.text = text;
     }
 

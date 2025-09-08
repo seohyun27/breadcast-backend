@@ -41,12 +41,14 @@ public class Course {
         return course;
     }
 
-    // 이 코드 빵지순례글 수정 코드에서 사용할 예정
-    public void updateCourse(String title, String subTitle, double allDistance, long allTravelMinute){
+    /// 업데이트 메소드 ///
+    public void update(String title, String subTitle, double allDistance, long allTravelMinute){
         this.title = title;
         this.subTitle = subTitle;
         this.allDistance = allDistance;
         this.allTravelMinute = allTravelMinute;
     }
+
+
 }
 

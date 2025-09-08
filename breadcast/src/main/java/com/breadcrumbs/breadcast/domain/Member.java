@@ -31,7 +31,8 @@ public class Member {
         return member;
     }
 
-    /// 구현 중
-    public static void setNickname(String newNickname) {
+    /// 업데이트 메소드 ///
+    public void update(String newNickname) {
+        this.nickname = newNickname;
     }
 }

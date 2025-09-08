@@ -56,15 +56,13 @@ public class ReviewService {
         return null;
     }
 
-    public MenuReview updateMenuReview(Long reviewId, MenuReview updatedMenuReview, Long memId) {
+    public MenuReview updateMenuReview(Long memId, Long reviewId, double rating, String text) {
         /*
-        -reviewId에 해당하는 리뷰를 updatedMenuReview 엔티티의 내용으로 수정하는 메소드입니다.
-        - menuReviewRepository.findById를 호출하여 해당 리뷰가 존재하는지 확인합니다.
-        - 존재하지 않으면 예외를 발생시킵니다.
-        - 조회된 리뷰 엔티티의 작성자 ID와 memId가 일치하는지 확인합니다.
+        - 해당 리뷰가 존재하는지 확인하고 존재하지 않으면 예외를 발생시킵니다.
+        - 만약 있다면 조회된 리뷰 엔티티의 작성자 ID와 memId가 일치하는지 확인합니다.
         - 일치하지 않으면 수정 권한이 없으므로 예외를 발생시킵니다.
-        -검증이 완료되면, 조회된 리뷰 엔티티에 updatedMenuReview의 새로운 내용을 반영합니다.
-        -변경된 엔티티를 menuReviewRepository.save 메소드를 통해 데이터베이스에 저장합니다.
+        - 검증이 완료되면 멤버 ID를 기준으로 DB 내 영속성 객체를 가져온다.
+        - 가져온 객체에 MenuReview.update 메소드를 이용해 조회된 리뷰 엔티티에 새로운 내용을 반영합니다.
         - 수정된 MenuReview 엔티티를 반환합니다.
         */
 
@@ -103,15 +101,13 @@ public class ReviewService {
         return null;
     }
 
-    public CourseReview updateCourseReview(Long courseReviewId, Long memId, CourseReview updatedCourseReview) {
+    public CourseReview updateCourseReview(Long courseReviewId, Long memId, String text) {
         /*
-        -reviewId에 해당하는 리뷰를 updatedCourseReview 엔티티의 내용으로 수정하는 메소드입니다.
-        - courseReviewRepository.findById를 호출하여 해당 리뷰가 존재하는지 확인합니다.
+        - 해당 리뷰가 존재하는지 확인합니다.
         - 존재하지 않으면 예외를 발생시킵니다.
         - 조회된 리뷰 엔티티의 작성자 ID가 memId와 일치하는지 확인합니다.
         - 일치하지 않으면 수정 권한이 없으므로 예외를 발생시킵니다.
-        -검증이 끝나면 조회된 리뷰 엔티티에 updatedCourseReview의 새로운 내용을 반영합니다.
-        -변경된 엔티티를 courseReviewRepository.save 메소드를 통해 데이터베이스에 저장합니다.
+        - 검증이 끝나면 courseReview.update를 통해 조회된 리뷰 엔티티에 새로운 내용을 반영합니다.
         - 수정된 CourseReview 엔티티를 반환합니다.
         */
 

@@ -75,7 +75,7 @@ public class MemberService {
         if (memberRepository.existsNickname(newNickname))
             //예외 발생
         else
-            Member.setNickname(newNickname);
+            Member.update(newNickname);
         return member;
          */
 
