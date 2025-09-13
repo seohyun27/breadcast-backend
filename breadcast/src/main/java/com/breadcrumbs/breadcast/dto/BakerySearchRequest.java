@@ -1,4 +1,4 @@
 package com.breadcrumbs.breadcast.dto;
 
-public class CourseDetailDto {
+public class BakerySearchRequest {
 }

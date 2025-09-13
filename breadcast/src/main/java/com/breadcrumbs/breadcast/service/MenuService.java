@@ -20,11 +20,11 @@ public class MenuService {
     public List<Menu> getMenus(Long bakeryId) {
 
             /*
-            List<Menu> munus = menuRepository.findByBakeryId(bakeryId);
-            //반복문을 돌며 각 메뉴에 대해 평균 별점과 리뷰 수를 계산
-              getAverageRating(menuId); // 평균 별점을 계산하는 private 메소드
-             menuRepository.findByBakeryId(menuId);
-             */
+            - List<Menu> munus = menuRepository.findByBakeryId(bakeryId);
+            - 반복문을 돌며 각 메뉴에 대해 평균 별점과 리뷰 수를 계산
+            - getAverageRating(menuId); // 평균 별점을 계산하는 private 메소드
+            - menuRepository.findByBakeryId(menuId);
+            */
 
         return null;
     }

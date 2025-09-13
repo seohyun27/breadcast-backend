@@ -1,10 +1,9 @@
 package com.breadcrumbs.breadcast.service;
 
 import com.breadcrumbs.breadcast.domain.course.Course;
-import com.breadcrumbs.breadcast.dto.CourseDetailDto;
+import com.breadcrumbs.breadcast.dto.CourseDetailResponse;
 import com.breadcrumbs.breadcast.repository.course.CoursePartRepository;
 import com.breadcrumbs.breadcast.repository.course.CourseRepository;
-import com.breadcrumbs.breadcast.repository.course.CourseReviewRepository;
 import com.breadcrumbs.breadcast.repository.course.FavoriteCourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -88,16 +87,16 @@ public class CourseService {
     }
 
     @Transactional(readOnly = true)
-    public CourseDetailDto getCourseDetail(Long courseId, Long memId) {
+    public CourseDetailResponse getCourseDetail(Long courseId, Long memId) {
         /*
-        - courseId를 받아 코스 상세 정보를 조회하고, memId에 따라 리뷰 작성자 권한 정보를 추가하여 CourseDetailDto로 반환합니다.
+        - courseId를 받아 코스 상세 정보를 조회하고, memId에 따라 리뷰 작성자 권한 정보를 추가하여 CourseDetailResponse로 반환합니다.
         - courseRepository.findById(courseId) 를 호출하여 코스 기본 정보를 가져옵니다.
         - favoriteCourseRepository.countByCourseId(courseId) 를 호출하여 좋아요 총 개수를 가져옵니다.
         - coursePartRepository.findByCourseId(courseId) 를 호출하여 코스에 포함된 빵집 목록 (경로) 을 가져옵니다.
         - courseReviewRepository.findByCourseId(courseId) 를 호출하여 해당 코스의 리뷰 목록을 가져옵니다.
         - 각 리뷰에 대해 로그인한 사용자 (memId) 가 작성자인지 확인합니다.
         - 이 정보를 DTO에 포함합니다. (프론트엔드에서 수정 / 삭제 버튼을 띄울 수 있는지 판단할 수 있습니다.)
-        - 가져온 모든 데이터를 CourseDetailDto 객체에 담아 반환합니다.
+        - 가져온 모든 데이터를 CourseDetailResponse 객체에 담아 반환합니다.
         */
 
         return null;

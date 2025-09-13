@@ -58,4 +58,11 @@ public class BakeryReview {
         bakeryReview.bakery = bakery;
         return bakeryReview;
     }
+
+    /// 업데이트 메소드 ///
+    public void update(double rating, String text, String photo){
+        this.rating = rating;
+        this.text = text;
+        this.photo = photo;
+    }
 }

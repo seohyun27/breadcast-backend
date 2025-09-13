@@ -3,6 +3,9 @@ package com.breadcrumbs.breadcast.service;
 import com.breadcrumbs.breadcast.domain.bakery.BakeryReview;
 import com.breadcrumbs.breadcast.domain.course.CourseReview;
 import com.breadcrumbs.breadcast.domain.menu.MenuReview;
+import com.breadcrumbs.breadcast.dto.BakeryReviewAddRequest;
+import com.breadcrumbs.breadcast.dto.BakeryReviewResponse;
+import com.breadcrumbs.breadcast.dto.BakeryReviewUpdateRequest;
 import com.breadcrumbs.breadcast.repository.bakery.BakeryReviewRepository;
 import com.breadcrumbs.breadcast.repository.course.CourseRepository;
 import com.breadcrumbs.breadcast.repository.course.CourseReviewRepository;
@@ -33,7 +36,46 @@ public class ReviewService {
 
     // 사용자 인증 및 권한 확인 Service 추가로 필요
 
+    public BakeryReview addBakeryReview(BakeryReviewAddRequest request) {
+        /*
+        -DTO 유효성 확인:내용 존재
+        -createBakeryReview(request) 호출하여 엔티티 생성
+        - bakeryReviewRepository.save(bakeryReview) 호출하여 DB에 저장
+        BakeryReview createReview (AddBakeryReviewRequest request) #변동 가능성
+         */
 
+        return null;
+    }
+
+    public BakeryReview updateBakeryReview(BakeryReviewUpdateRequest request) {
+        /*
+        -DTO 유효성 확인:내용 존재
+        -bakeryReview = bakeryReviewRepository.findById(request.getId()) 호출
+        - 해당 리뷰 ID가 없으면(삭제 등) 예외처리(.orElseThrow())
+        -BakeryReview.update(double rating, String text, String photo) 호출하여 수정 (더티 체크 적용됨)
+         */
+
+        return null;
+    }
+
+    public void deleteBakeryReview(Long bakeryRevieweId) {
+        /*
+        -bakeryReviewRepository.findById(bakeryReviewId) 호출하여 존재 여부 확인
+        -해당 리뷰 ID가 없으면 예외처리 (.orElseThrow())
+        -bakeryReviewRepository.deleteById(bakeryReviewId)
+        */
+    }
+
+
+    @Transactional(readOnly = true)
+    public BakeryReviewResponse getBakeryReviews(Long bakeryId) {
+        /*
+        -List <BakeryReview> bakeryReviewRepository.findAll(bakeryId) 호출
+        - DTO로 변환하여 컨트롤러로 반환
+        */
+
+        return null;
+    }
 
     @Transactional(readOnly = true)
     public List<BakeryReview> getMyBakeryReview(Long memId) {
