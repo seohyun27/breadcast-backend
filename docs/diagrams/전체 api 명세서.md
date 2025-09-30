@@ -107,7 +107,7 @@ Controller는 외부의 관점에서 리소스 중심으로(호출 시 연관을
 ## API 명세서
 컨트롤러 클래스 내부 메소드의 api만을 설계. 메소드명, 파라미터, 리턴 등은 추후 추가할 예정
 
-### ## 1. AuthController : 인증 API
+### 1. AuthController : 인증 API
 
 | 기능 | HTTP Method | API 경로         | 설명 |
 | :--- | :--- |:---------------| :--- |
@@ -118,7 +118,7 @@ Controller는 외부의 관점에서 리소스 중심으로(호출 시 연관을
 
 ---
 
-### ## 2. MemberController : 사용자 정보 및 활동 API
+### 2. MemberController : 사용자 정보 및 활동 API
 
 | 기능 | HTTP Method | API 경로 | 설명                                                 |
 | :--- | :--- | :--- |:---------------------------------------------------|
@@ -131,7 +131,7 @@ Controller는 외부의 관점에서 리소스 중심으로(호출 시 연관을
 
 ---
 
-### ## 3. BakeryController : 빵집 및 가게 리뷰 API
+### 3. BakeryController : 빵집 및 가게 리뷰 API
 
 | 기능          | HTTP Method | API 경로 | 설명 |
 |:------------| :--- | :--- | :--- |
@@ -146,7 +146,7 @@ Controller는 외부의 관점에서 리소스 중심으로(호출 시 연관을
 
 ---
 
-### ## 4. MenuController : 메뉴 및 메뉴 리뷰 API
+### 4. MenuController : 메뉴 및 메뉴 리뷰 API
 
 | 기능 | HTTP Method | API 경로 | 설명 |
 | :--- | :--- | :--- | :--- |
@@ -158,7 +158,7 @@ Controller는 외부의 관점에서 리소스 중심으로(호출 시 연관을
 
 ---
 
-### ## 5. ReportController : 제보 API
+### 5. ReportController : 제보 API
 
 | 기능 | HTTP Method | API 경로                    | 설명                    |
 | :--- | :--- |:--------------------------|:----------------------|
@@ -169,7 +169,7 @@ Controller는 외부의 관점에서 리소스 중심으로(호출 시 연관을
 
 ---
 
-### ## 6. CourseController : 빵지순례(루트) 및 루트 리뷰 API
+### 6. CourseController : 빵지순례(루트) 및 루트 리뷰 API
 
 | 기능 | HTTP Method | API 경로 | 설명 |
 | :--- | :--- | :--- | :--- |
@@ -184,7 +184,7 @@ Controller는 외부의 관점에서 리소스 중심으로(호출 시 연관을
 
 ---
 
-### ## 7. FavoriteController : 즐겨찾기(관심) 추가/삭제 API
+### 7. FavoriteController : 즐겨찾기(관심) 추가/삭제 API
 
 | 기능 | HTTP Method | API 경로 | 설명 |
 | :--- | :--- | :--- | :--- |
