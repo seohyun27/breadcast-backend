@@ -43,7 +43,6 @@ FavoriteController	|	즐겨찾기 관련 API|
 - 가게 검색하기 
 - 가게 정렬하기 
 
-- 가게 리뷰 보기 → 이거 없애기로 했었나????
 - 가게 리뷰 쓰기 
 - 가게 리뷰 수정하기 
 - 가게 리뷰 삭제하기
@@ -95,7 +94,6 @@ FavoriteController	|	즐겨찾기 관련 API|
 ## 클래스 설계
 Controller는 외부의 관점에서 리소스 중심으로(호출 시 연관을 가진 애들끼리) 통합하고, Service는 내부의 관점에서 기능 중심으로 분리
 
-
 ### 서비스 클래스와의 차이점
 1. ReviewController → 각 도메인 컨트롤러로 통합. 가게 리뷰는 가게에서 메뉴 리뷰는 메뉴에서 루트 리뷰는 리뷰에서 처리
 2. MenuController와 BakeryController는 분리된 채 사용. 단, 메뉴는 반드시 베이커리의 하위에서 존재해야 하므로 api 경로 상에서는 메뉴의 앞에 항상 베이커리가 존재해야 함
@@ -134,16 +132,15 @@ Controller는 외부의 관점에서 리소스 중심으로(호출 시 연관을
 
 ### 3. BakeryController : 빵집 및 가게 리뷰 API
 
-| 기능          | HTTP Method | API 경로 | 설명 |
-|:------------| :--- | :--- | :--- |
-| 가게 검색/정렬하기  | `GET` | `/api/bakeries` | `?name=` 또는 `?sort=` 같은 쿼리 스트링으로 검색 및 정렬합니다. |
-| 가게 정보 보기    | `GET` | `/api/bakeries/{bakeryId}` | 특정 가게의 상세 정보를 조회합니다. |
-| 가게 리뷰 목록 보기 | `GET` | `/api/bakeries/{bakeryId}/reviews` | 특정 가게에 달린 모든 리뷰 목록을 조회합니다. |
-| 가게 리뷰 쓰기    | `POST` | `/api/bakeries/{bakeryId}/reviews` | 특정 가게에 새로운 리뷰를 작성합니다. |
-| 가게 리뷰 수정하기  | `PATCH` | `/api/bakeries/{bakeryId}/reviews/{reviewId}` | 특정 가게 리뷰를 수정합니다. |
-| 가게 리뷰 삭제하기  | `DELETE` | `/api/bakeries/{bakeryId}/reviews/{reviewId}` | 특정 가게 리뷰를 삭제합니다. |
+| 기능         | HTTP Method | API 경로 | 설명                                           |
+|:-----------| :--- | :--- |:---------------------------------------------|
+| 가게 검색/정렬하기 | `GET` | `/api/bakeries` | `?name=` 또는 `?sort=` 같은 쿼리 스트링으로 검색 및 정렬합니다. |
+| 가게 정보 보기   | `GET` | `/api/bakeries/{bakeryId}` | 특정 가게의 상세 정보를 조회합니다. (리뷰 정보 포함)              |
+| 가게 리뷰 쓰기   | `POST` | `/api/bakeries/{bakeryId}/reviews` | 특정 가게에 새로운 리뷰를 작성합니다.                        |
+| 가게 리뷰 수정하기 | `PATCH` | `/api/bakeries/{bakeryId}/reviews/{reviewId}` | 특정 가게 리뷰를 수정합니다.                             |
+| 가게 리뷰 삭제하기 | `DELETE` | `/api/bakeries/{bakeryId}/reviews/{reviewId}` | 특정 가게 리뷰를 삭제합니다.                             |
 
-가게 리뷰 목록 보기가 가게 정보 보기에 통합됐던 것 같은데 이 부분 확실하지 않음. 만약 통합된 게 맞다면 가게 리뷰 목록 보기는 삭제할 것
+가게 리뷰 목록 보기의 경우 가게 정보 보기에 항상 포함되는 정보로 해당 api에 연결하였다
 
 ---
 
@@ -193,3 +190,6 @@ Controller는 외부의 관점에서 리소스 중심으로(호출 시 연관을
 | 관심 가게 삭제하기 | `DELETE` | `/api/favorites/bakeries/{bakeryId}` | 특정 가게를 즐겨찾기에서 삭제합니다. |
 | 관심 루트 추가하기 | `POST` | `/api/favorites/courses/{courseId}` | 특정 루트를 즐겨찾기에 추가합니다. |
 | 관심 루트 삭제하기 | `DELETE` | `/api/favorites/courses/{courseId}` | 특정 루트를 즐겨찾기에서 삭제합니다. |
+
+---
+
