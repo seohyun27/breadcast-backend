@@ -21,6 +21,8 @@ public class Member {
 
     private String nickname;
 
+    private boolean active;
+
 
     /// 생성 메소드 ///
     public static Member createMember(String loginId, String password, String nickname){
@@ -28,11 +30,16 @@ public class Member {
         member.loginId = loginId;
         member.password = password;
         member.nickname = nickname;
+        member.active = true;
         return member;
     }
 
     /// 업데이트 메소드 ///
     public void update(String newNickname) {
         this.nickname = newNickname;
+    }
+
+    public void deactivate() {
+        this.active = false;
     }
 }
