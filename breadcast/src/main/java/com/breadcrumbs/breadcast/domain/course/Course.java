@@ -18,9 +18,7 @@ public class Course {
 
     // Member가 삭제될 때 해당 Course도 함께 삭제되어야 함
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id",
-            foreignKey = @ForeignKey(name = "FK_course_to_member",
-                    foreignKeyDefinition = "FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE"))
+    @JoinColumn(name = "member_id")
     private Member member;
 
     private String title;

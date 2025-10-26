@@ -4,6 +4,7 @@ import com.breadcrumbs.breadcast.domain.course.Course;
 import com.breadcrumbs.breadcast.dto.CourseDetailResponse;
 import com.breadcrumbs.breadcast.repository.course.CoursePartRepository;
 import com.breadcrumbs.breadcast.repository.course.CourseRepository;
+import com.breadcrumbs.breadcast.repository.course.CourseReviewRepository;
 import com.breadcrumbs.breadcast.repository.course.FavoriteCourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class CourseService {
     private final CoursePartService coursePartService;
     private final FavoriteCourseRepository favoriteCourseRepository;
     private final CoursePartRepository coursePartRepository;
+    private final CourseReviewRepository courseReviewRepository;
 
 
     public Course createCourse(Long memId, Course course) {
@@ -55,7 +57,9 @@ public class CourseService {
         - courseId에 해당하는 코스와 그와 관련된 모든 데이터를 삭제하는 메소드입니다.
         - 현재 사용자가 해당 코스의 작성자인지 검증합니다.
         - 권한이 없으면 삭제를 진행하지 않습니다.
-        - ON DELETE CASCADE 옵션을 통한 자동 삭제.Course만을 삭제하면 그와 관련된 모든 데이터가 삭제된다.courseRepository.deleteById(courseId) 를 호출하여 코스를 삭제한다.
+//      - coursePartRepository.deleteAllByCourseId(courseId)를 호출하여 연관된 코스 파트를 모조리 삭제!!
+        - courseReviewRepository.deleteAllByCourseId(Long courseId)를 호출하여 연관된 코스 리뷰를 모조리 삭제!!
+        - 이후 courseRepository.deleteById(courseId) 를 호출하여 코스 자체를 삭제한다.
         - 성공적인 삭제 후 void를 반환합니다.
         */
     }

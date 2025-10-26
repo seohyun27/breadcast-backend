@@ -28,16 +28,12 @@ public class CoursePart {
 
     // Course가 삭제될 때 해당 CoursePart도 함께 삭제되어야 함
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id",
-            foreignKey = @ForeignKey(name = "FK_course_part_to_course",
-                    foreignKeyDefinition = "FOREIGN KEY (course_id) REFERENCES course(course_id) ON DELETE CASCADE"))
+    @JoinColumn(name = "course_id")
     private Course course;
 
     // Bakery가 삭제될 때 해당 CoursePart도 함께 삭제되어야 함
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bakery_id",
-            foreignKey = @ForeignKey(name = "FK_course_part_to_bakery",
-                    foreignKeyDefinition = "FOREIGN KEY (bakery_id) REFERENCES bakery(bakery_id) ON DELETE CASCADE"))
+    @JoinColumn(name = "bakery_id")
     private Bakery bakery;
 
 

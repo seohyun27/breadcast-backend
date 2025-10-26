@@ -30,24 +30,18 @@ public class CourseReview {
     private LocalDateTime date;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id",
-            foreignKey = @ForeignKey(name = "FK_course_review_to_member",
-                    foreignKeyDefinition = "FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE"))
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bakery_id",
-            foreignKey = @ForeignKey(name = "FK_course_review_to_bakery",
-                    foreignKeyDefinition = "FOREIGN KEY (bakery_id) REFERENCES bakery(bakery_id) ON DELETE CASCADE"))
+    @JoinColumn(name = "bakery_id")
     private Bakery bakery;
 
 
 
     /// 코스랑 연결 추가 !!!!! ///
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id",
-            foreignKey = @ForeignKey(name = "FK_course_review_to_course",
-                    foreignKeyDefinition = "FOREIGN KEY (course_id) REFERENCES bakery(course_id) ON DELETE CASCADE"))
+    @JoinColumn(name = "course_id")
     private Course course;
 
 

@@ -17,15 +17,11 @@ public class FavoriteBakery {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id",
-            foreignKey = @ForeignKey(name = "FK_favorite_bakery_to_member",
-                    foreignKeyDefinition = "FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE"))
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bakery_id",
-            foreignKey = @ForeignKey(name = "FK_favorite_bakery_to_bakery",
-                    foreignKeyDefinition = "FOREIGN KEY (bakery_id) REFERENCES bakery(bakery_id) ON DELETE CASCADE"))
+    @JoinColumn(name = "bakery_id")
     private Bakery bakery;
 
 

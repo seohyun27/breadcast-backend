@@ -33,21 +33,15 @@ public class MenuReview {
     private LocalDateTime date;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id",
-            foreignKey = @ForeignKey(name = "FK_menu_review_to_member",
-                    foreignKeyDefinition = "FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE"))
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bakery_id",
-            foreignKey = @ForeignKey(name = "FK_menu_review_to_bakery",
-                    foreignKeyDefinition = "FOREIGN KEY (bakery_id) REFERENCES bakery(bakery_id) ON DELETE CASCADE"))
+    @JoinColumn(name = "bakery_id")
     private Bakery bakery;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id",
-            foreignKey = @ForeignKey(name = "FK_menu_review_to_menu",
-                    foreignKeyDefinition = "FOREIGN KEY (menu_id) REFERENCES menu(menu_id) ON DELETE CASCADE"))
+    @JoinColumn(name = "menu_id")
     private Menu menu;
 
 
