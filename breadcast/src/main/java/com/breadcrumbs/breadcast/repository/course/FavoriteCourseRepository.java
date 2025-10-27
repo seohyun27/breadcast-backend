@@ -17,4 +17,6 @@ public interface FavoriteCourseRepository extends JpaRepository<FavoriteCourse, 
     boolean existsByMemberIdAndCourseId(Long memberId, Long courseId) ;
 
     void deleteByMemberIdAndCourseId(Long memId, Long courseId);
+
+    void deleteAllByCourseId(Long courseId);
 }
