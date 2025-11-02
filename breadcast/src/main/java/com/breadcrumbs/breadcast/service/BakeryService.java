@@ -1,8 +1,8 @@
 package com.breadcrumbs.breadcast.service;
 
-import com.breadcrumbs.breadcast.dto.BakeryDetailResponse;
-import com.breadcrumbs.breadcast.dto.BakerySearchRequest;
-import com.breadcrumbs.breadcast.dto.BakerySearchResponse;
+import com.breadcrumbs.breadcast.dto.bakery.BakeryDetailResponse;
+import com.breadcrumbs.breadcast.dto.bakery.SearchBakeryRequest;
+import com.breadcrumbs.breadcast.dto.bakery.SearchBakeryResponse;
 import com.breadcrumbs.breadcast.repository.bakery.BakeryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class BakeryService {
         return null;
     }
 
-    public BakerySearchResponse searchBakeries(BakerySearchRequest request) {
+    public SearchBakeryResponse searchBakeries(SearchBakeryRequest request) {
         /*
         -searchBakeries(request) 호출
         -DTO로 변환하여 컨트롤러로 반환

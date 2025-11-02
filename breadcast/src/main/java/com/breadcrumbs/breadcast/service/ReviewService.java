@@ -3,9 +3,8 @@ package com.breadcrumbs.breadcast.service;
 import com.breadcrumbs.breadcast.domain.bakery.BakeryReview;
 import com.breadcrumbs.breadcast.domain.course.CourseReview;
 import com.breadcrumbs.breadcast.domain.menu.MenuReview;
-import com.breadcrumbs.breadcast.dto.BakeryReviewAddRequest;
-import com.breadcrumbs.breadcast.dto.BakeryReviewResponse;
-import com.breadcrumbs.breadcast.dto.BakeryReviewUpdateRequest;
+import com.breadcrumbs.breadcast.dto.bakery.BakeryReviewRequest;
+import com.breadcrumbs.breadcast.dto.bakery.BakeryReviewResponse;
 import com.breadcrumbs.breadcast.repository.bakery.BakeryReviewRepository;
 import com.breadcrumbs.breadcast.repository.course.CourseRepository;
 import com.breadcrumbs.breadcast.repository.course.CourseReviewRepository;
@@ -36,7 +35,7 @@ public class ReviewService {
 
     // 사용자 인증 및 권한 확인 Service 추가로 필요
 
-    public BakeryReview addBakeryReview(BakeryReviewAddRequest request) {
+    public BakeryReview addBakeryReview(BakeryReviewRequest request) {
         /*
         -DTO 유효성 확인:내용 존재
         -createBakeryReview(request) 호출하여 엔티티 생성
@@ -47,7 +46,7 @@ public class ReviewService {
         return null;
     }
 
-    public BakeryReview updateBakeryReview(BakeryReviewUpdateRequest request) {
+    public BakeryReview updateBakeryReview(BakeryReviewRequest request) {
         /*
         -DTO 유효성 확인:내용 존재
         -bakeryReview = bakeryReviewRepository.findById(request.getId()) 호출

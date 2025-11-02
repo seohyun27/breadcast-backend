@@ -1,7 +1,7 @@
 package com.breadcrumbs.breadcast.service;
 
 import com.breadcrumbs.breadcast.domain.course.Course;
-import com.breadcrumbs.breadcast.dto.CourseDetailResponse;
+import com.breadcrumbs.breadcast.dto.course.CourseDetailResponse;
 import com.breadcrumbs.breadcast.repository.course.CoursePartRepository;
 import com.breadcrumbs.breadcast.repository.course.CourseRepository;
 import com.breadcrumbs.breadcast.repository.course.CourseReviewRepository;
