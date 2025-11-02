@@ -8,7 +8,6 @@
 Spring Boot application backend code
 #### 📁 docs
 - 📁 guides : Code writing guidelines and notes 
-- 📁 diagrams : Diagrams and descriptions
 
 <br/>
 
