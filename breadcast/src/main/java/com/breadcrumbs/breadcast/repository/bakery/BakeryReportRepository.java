@@ -1,6 +1,5 @@
 package com.breadcrumbs.breadcast.repository.bakery;
 
-import com.breadcrumbs.breadcast.domain.Member;
 import com.breadcrumbs.breadcast.domain.bakery.BakeryReport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
