@@ -1,5 +1,6 @@
 package com.breadcrumbs.breadcast;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -56,6 +57,23 @@ public class SecurityConfig {
 
                         // 나머지 모든 요청은 인증(로그인)이 필요함
                         .anyRequest().authenticated()
+                )
+
+                // 5. 로그아웃 설정
+                .logout(logout -> logout
+                        // 클라이언트가 호출할 로그아웃 URL
+                        .logoutUrl("/api/auth/logout")
+
+                        // 로그아웃 성공 시 반환할 HTTP 상태 코드 (200 OK)
+                        .logoutSuccessHandler((request, response, authentication) ->
+                                response.setStatus(HttpServletResponse.SC_OK)
+                        )
+
+                        // 세션 무효화
+                        .invalidateHttpSession(true)
+
+                        // JSESSIONID 쿠키 삭제
+                        .deleteCookies("JSESSIONID")
                 );
 
         return http.build();
