@@ -16,7 +16,7 @@ public class CourseResponse {
      * 빵지순례 글쓰기
      * 빵지순례 글 수정하기
      */
-    private String writer;			// 해당 글의 작성자(=본인 닉네임
+    private String writer;			// 해당 글의 작성자(=본인 닉네임)
     private String title;			// 글 제목
     private String subTitle;			// 부제목
     private double allDistance;		// 총길이

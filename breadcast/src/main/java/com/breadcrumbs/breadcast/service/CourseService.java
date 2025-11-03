@@ -28,6 +28,7 @@ public class CourseService {
 
 
     public CourseResponse createCourse(Long memId, CourseRequest request) {
+
         /*
         - Course 엔티티를 받아 데이터베이스에 저장합니다.
         - Course 엔티티 내에 포함된 CoursePart 리스트를 순회하며 각 빵집 ID의 유효성을 BakeryRepository.findById를 통해 확인합니다. (CoursePartService에서

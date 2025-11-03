@@ -21,6 +21,8 @@ public class CoursePartService {
     private final BakeryRepository bakeryRepository;
 
     public List<CoursePart> createCourseParts(Long courseId, List<CoursePart> courseParts) {
+        CoursePart coursePart;
+
         /*
         -코스 구성 요소 엔티티 리스트를 받아 데이터베이스에 일괄 저장합니다.
         -courseParts 리스트를 순회하며 각 빵집 ID가 유효한지 BakeryRepository.findById를 통해 확인합니다.
