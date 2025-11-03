@@ -16,7 +16,6 @@ public class ReportsResponse {
     /**
      * 제보글 보기
      * 제보글 쓰기
-     *
      */
     private long bakeryreport_id; 	// 제보 글 ID
     private String title; 		// 제보 글의 제목

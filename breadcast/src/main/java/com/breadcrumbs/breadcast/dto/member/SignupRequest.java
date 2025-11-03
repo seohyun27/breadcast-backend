@@ -15,3 +15,4 @@ public class SignupRequest {
     private String password; 	// 패스워드
     private String nickname; 	// 유저 닉네임
 }
+

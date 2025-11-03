@@ -1,6 +1,7 @@
 package com.breadcrumbs.breadcast.service;
 
-import com.breadcrumbs.breadcast.domain.bakery.BakeryReport;
+import com.breadcrumbs.breadcast.dto.report.AddReportRequest;
+import com.breadcrumbs.breadcast.dto.report.ReportsResponse;
 import com.breadcrumbs.breadcast.repository.bakery.BakeryReportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class ReportService {
 
 
     @Transactional(readOnly = true)
-    public List<BakeryReport> getReports(Long bakeryId, Long memId, int page, int size) {
+    public List<ReportsResponse> getReports(Long bakeryId, Long memId) {
         /*
         -bakeryId에 해당하는 제보 목록을 조회하고, memId에 따라 추가 정보를 포함하여 엔티티 리스트를 반환합니다.
         - bakeryReportRepository.findByBakeryIdOrderByCreatedAtDesc를 호출하여 특정 가게에 대한 제보 엔티티 목록을 가져옵니다.
@@ -32,7 +33,8 @@ public class ReportService {
         return null;
     }
 
-    public BakeryReport addReport(Long memId, BakeryReport bakeryReport) {
+    public ReportsResponse addReport(Long bakeryId, Long memId,
+                                     AddReportRequest request) {
         /*
         -memId와 BakeryReport 엔티티를 사용하여 제보를 데이터베이스에 저장합니다.
         -보고서에 필요한 필수 정보(빵집 ID, 사용자 ID 등) 가 올바른지 확인합니다.

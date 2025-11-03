@@ -1,6 +1,7 @@
 package com.breadcrumbs.breadcast.service;
 
-import com.breadcrumbs.breadcast.domain.menu.Menu;
+import com.breadcrumbs.breadcast.dto.menu.GetMenuDetailResponse;
+import com.breadcrumbs.breadcast.dto.menu.GetMenusResponse;
 import com.breadcrumbs.breadcast.repository.menu.MenuRepository;
 import com.breadcrumbs.breadcast.repository.menu.MenuReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuReviewRepository menuReviewRepository;
 
-    public List<Menu> getMenus(Long bakeryId) {
+    public List<GetMenusResponse> getMenus(Long bakeryId) {
 
             /*
             - List<Menu> munus = menuRepository.findByBakeryId(bakeryId);
@@ -29,7 +30,7 @@ public class MenuService {
         return null;
     }
 
-    public Menu getMenuDetail(Long menuId) {
+    public GetMenuDetailResponse getMenuDetail(Long menuId, Long memId) {
 
             /*
             - menuRepository.findById를 사용해서 메뉴 정보를 가져옵니다.
