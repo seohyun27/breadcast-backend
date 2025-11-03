@@ -1,6 +1,13 @@
 package com.breadcrumbs.breadcast.controller;
 
+import com.breadcrumbs.breadcast.dto.member.LoginRequest;
+import com.breadcrumbs.breadcast.dto.member.MemberResponse;
+import com.breadcrumbs.breadcast.dto.member.SignupRequest;
+import com.breadcrumbs.breadcast.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -15,5 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final MemberService memberService;
+
+    public ResponseEntity<MemberResponse> signup(@RequestBody @Valid SignupRequest request){
+        return null;
+    }
+
+    public ResponseEntity<MemberResponse> login(@RequestBody @Valid LoginRequest request){
+        return null;
+    }
 
 }
