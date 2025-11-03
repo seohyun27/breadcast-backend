@@ -1,12 +1,13 @@
 package com.breadcrumbs.breadcast.service;
 
-import com.breadcrumbs.breadcast.domain.bakery.BakeryReview;
-import com.breadcrumbs.breadcast.domain.course.CourseReview;
-import com.breadcrumbs.breadcast.domain.menu.MenuReview;
 import com.breadcrumbs.breadcast.dto.bakery.BakeryReviewRequest;
 import com.breadcrumbs.breadcast.dto.bakery.BakeryReviewResponse;
+import com.breadcrumbs.breadcast.dto.course.CourseReviewRequest;
+import com.breadcrumbs.breadcast.dto.course.CourseReviewResponse;
+import com.breadcrumbs.breadcast.dto.menu.AddMenuReviewRequest;
+import com.breadcrumbs.breadcast.dto.menu.MenuReviewResponse;
+import com.breadcrumbs.breadcast.dto.menu.UpdateMenuReviewRequest;
 import com.breadcrumbs.breadcast.dto.myPage.GetMyBakeryReviewResponse;
-import com.breadcrumbs.breadcast.dto.myPage.GetMyCourseResponse;
 import com.breadcrumbs.breadcast.dto.myPage.GetMyCourseReviewResponse;
 import com.breadcrumbs.breadcast.dto.myPage.GetMyMenuReviewResponse;
 import com.breadcrumbs.breadcast.repository.bakery.BakeryRepository;
@@ -88,7 +89,8 @@ public class ReviewService {
         return null;
     }
 
-    public MenuReview addMenuReview(Long memId, MenuReview menuReview) {
+    public MenuReviewResponse addMenuReview(Long menuId, Long memId,
+                                            AddMenuReviewRequest request) {
         /*
         -리뷰 엔티티를 받아 데이터베이스에 저장합니다.저장된 MenuReview 엔티티를 반환합니다.
         -menuRepository.findById() 를 호출하여 리뷰를 작성할 메뉴가 실제로 존재하는지 확인합니다.
@@ -99,7 +101,8 @@ public class ReviewService {
         return null;
     }
 
-    public MenuReview updateMenuReview(Long memId, Long reviewId, double rating, String text) {
+    public MenuReviewResponse updateMenuReview(Long menuReviewId, Long memId,
+                                               UpdateMenuReviewRequest request) {
         /*
         - 해당 리뷰가 존재하는지 확인하고 존재하지 않으면 예외를 발생시킵니다.
         - 만약 있다면 조회된 리뷰 엔티티의 작성자 ID와 memId가 일치하는지 확인합니다.
@@ -132,7 +135,8 @@ public class ReviewService {
         return null;
     }
 
-    public CourseReview addCourseReview(CourseReview courseReview) {
+    public CourseReviewResponse addCourseReview(Long courseId, Long memId,
+                                                CourseReviewRequest request) {
         /*
         -리뷰 엔티티를 받아 데이터베이스에 저장합니다.
         -courseRepository.findById(courseReview.getCourse().getId()) 를 호출하여 리뷰를 작성할 코스가 실제로 존재하는지 확인합니다.
@@ -144,7 +148,8 @@ public class ReviewService {
         return null;
     }
 
-    public CourseReview updateCourseReview(Long courseReviewId, Long memId, String text) {
+    public CourseReviewResponse updateCourseReview(Long courseReviewId, Long memId,
+                                                   CourseReviewRequest request) {
         /*
         - 해당 리뷰가 존재하는지 확인합니다.
         - 존재하지 않으면 예외를 발생시킵니다.

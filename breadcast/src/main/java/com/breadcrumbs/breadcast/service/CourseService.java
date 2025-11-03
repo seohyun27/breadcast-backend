@@ -1,7 +1,7 @@
 package com.breadcrumbs.breadcast.service;
 
 import com.breadcrumbs.breadcast.domain.course.Course;
-import com.breadcrumbs.breadcast.dto.course.CourseDetailResponse;
+import com.breadcrumbs.breadcast.dto.course.*;
 import com.breadcrumbs.breadcast.repository.course.CoursePartRepository;
 import com.breadcrumbs.breadcast.repository.course.CourseRepository;
 import com.breadcrumbs.breadcast.repository.course.CourseReviewRepository;
@@ -22,12 +22,12 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
     private final CoursePartService coursePartService;
+    private final CoursePartRepository coursePartRepository;    // 이것도 CoursePartService에서 사용하고 여기서는 사용하면 안 될 것 같음
     private final FavoriteCourseRepository favoriteCourseRepository;
-    private final CoursePartRepository coursePartRepository;
     private final CourseReviewRepository courseReviewRepository;
 
 
-    public Course createCourse(Long memId, Course course) {
+    public CourseResponse createCourse(Long memId, CourseRequest request) {
         /*
         - Course 엔티티를 받아 데이터베이스에 저장합니다.
         - Course 엔티티 내에 포함된 CoursePart 리스트를 순회하며 각 빵집 ID의 유효성을 BakeryRepository.findById를 통해 확인합니다. (CoursePartService에서
@@ -40,7 +40,8 @@ public class CourseService {
         return null;
     }
 
-    public Course updateCourse(Long courseId, Long memId, Course updatedCourse) {
+    public CourseResponse updateCourse(Long courseId, Long memId,
+                                       CourseRequest request) {
         /*
         - courseId에 해당하는 코스를 updatedCourse 엔티티의 내용으로 수정하는 메소드입니다.
         - memId가 해당 코스의 작성자인지 확인합니다.
@@ -65,7 +66,7 @@ public class CourseService {
     }
 
     @Transactional(readOnly = true)
-    public List<Course> getPopularCourses(int page, int size) {
+    public List<GetSimpleCoursesResponse> getPopularCourses() {
         /*
         설명:코스 목록을 조회하고, 각 코스의 좋아요 수를 계산하여 인기 순으로 정렬한 후 페이징 처리된 결과를 반환합니다.
         - courseRepository.findAll() 을 호출하여 모든 Course 엔티티를 가져옵니다.
@@ -78,7 +79,7 @@ public class CourseService {
     }
 
     @Transactional(readOnly = true)
-    public List<Course> searchCourses(String keyword, int page, int size) {
+    public List<GetSimpleCoursesResponse> searchCourses(SearchCourseRequest request) {
         /*
         - 사용자가 입력한 keyword를 기반으로 빵지순례 코스를 검색하고, 좋아요 수를 포함한 엔티티 리스트를 반환합니다.
         - courseRepository.findByTitleContainingOrKeywordContaining을 호출하여 제목이나 키워드에 검색어가 포함된 코스 목록을 가져옵니다.
