@@ -5,6 +5,11 @@ import com.breadcrumbs.breadcast.domain.course.CourseReview;
 import com.breadcrumbs.breadcast.domain.menu.MenuReview;
 import com.breadcrumbs.breadcast.dto.bakery.BakeryReviewRequest;
 import com.breadcrumbs.breadcast.dto.bakery.BakeryReviewResponse;
+import com.breadcrumbs.breadcast.dto.myPage.GetMyBakeryReviewResponse;
+import com.breadcrumbs.breadcast.dto.myPage.GetMyCourseResponse;
+import com.breadcrumbs.breadcast.dto.myPage.GetMyCourseReviewResponse;
+import com.breadcrumbs.breadcast.dto.myPage.GetMyMenuReviewResponse;
+import com.breadcrumbs.breadcast.repository.bakery.BakeryRepository;
 import com.breadcrumbs.breadcast.repository.bakery.BakeryReviewRepository;
 import com.breadcrumbs.breadcast.repository.course.CourseRepository;
 import com.breadcrumbs.breadcast.repository.course.CourseReviewRepository;
@@ -25,17 +30,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewService {
 
+    private final BakeryRepository bakeryRepository;
     private final BakeryReviewRepository bakeryReviewRepository;
-
     private final MenuReviewRepository menuReviewRepository;
     private final MenuRepository menuRepository;
-
     private final CourseReviewRepository courseReviewRepository;
     private final CourseRepository courseRepository;
 
-    // 사용자 인증 및 권한 확인 Service 추가로 필요
-
-    public BakeryReview addBakeryReview(BakeryReviewRequest request) {
+    public BakeryReviewResponse addBakeryReview(Long bakeryId, Long memId, BakeryReviewRequest request) {
         /*
         -DTO 유효성 확인:내용 존재
         -createBakeryReview(request) 호출하여 엔티티 생성
@@ -46,7 +48,7 @@ public class ReviewService {
         return null;
     }
 
-    public BakeryReview updateBakeryReview(BakeryReviewRequest request) {
+    public BakeryReviewResponse updateBakeryReview(Long bakeryReviewId, Long memId, BakeryReviewRequest request) {
         /*
         -DTO 유효성 확인:내용 존재
         -bakeryReview = bakeryReviewRepository.findById(request.getId()) 호출
@@ -57,7 +59,7 @@ public class ReviewService {
         return null;
     }
 
-    public void deleteBakeryReview(Long bakeryRevieweId) {
+    public void deleteBakeryReview(Long bakeryRevieweId, Long memId) {
         /*
         -bakeryReviewRepository.findById(bakeryReviewId) 호출하여 존재 여부 확인
         -해당 리뷰 ID가 없으면 예외처리 (.orElseThrow())
@@ -67,7 +69,7 @@ public class ReviewService {
 
 
     @Transactional(readOnly = true)
-    public BakeryReviewResponse getBakeryReviews(Long bakeryId) {
+    public List<BakeryReviewResponse> getBakeryReviews(Long bakeryId, Long memId) {
         /*
         -List <BakeryReview> bakeryReviewRepository.findAll(bakeryId) 호출
         - DTO로 변환하여 컨트롤러로 반환
@@ -77,7 +79,7 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public List<BakeryReview> getMyBakeryReview(Long memId) {
+    public List<GetMyBakeryReviewResponse> getMyBakeryReview(Long bakeryId, Long memId) {
         /*
         - bakeryReviewRepository.findByMemberId(memId); 를 호출해 빵집 리뷰 목록을 가져온다
         - 해당하는 모든 리뷰에 대해 가게 사진 1 장 / 가게 이름 / 리뷰 내용을 DTO로 묶어 반환
@@ -121,7 +123,7 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public List<MenuReview> getMyMenuReview(Long memId) {
+    public List<GetMyMenuReviewResponse> getMyMenuReview(Long memId) {
         /*
         -menuReviewRepository.findByMemberId(memId); 를 호출해 메뉴 리뷰 목록을 가져온다
         - 해당하는 모든 리뷰에 대해 가게 이름 / 메뉴 이름 / 리뷰 내용을 DTO로 묶어 리턴한다
@@ -165,7 +167,7 @@ public class ReviewService {
         */
     }
 
-    public List<CourseReview> getMyCourseReview(Long memId) {
+    public List<GetMyCourseReviewResponse> getMyCourseReview(Long memId) {
         /*
         - courseReviewRepository.findByMemberId(memId)를 호출해 메뉴 리뷰 목록을 가져온다
         - 해당하는 모든 리뷰에 대해 루트 작성자 닉네임/루트 제목/내 닉네임/리뷰 내용을 DTO로 묶어 리턴한다

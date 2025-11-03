@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -15,7 +17,7 @@ public class BakeryService {
 
     private final BakeryRepository bakeryRepository;
 
-    BakeryDetailResponse getBakeryDetail(Long bakeryId) {
+    public BakeryDetailResponse getBakeryDetail(Long bakeryId, Long memId) {
         /*
         -Bakery bakeryRepository.findByBakeryId(bakeryId) 호출
         - 호출한 Bakery를 DTO로 변환하여 컨트롤러로 반환
@@ -24,7 +26,7 @@ public class BakeryService {
         return null;
     }
 
-    public SearchBakeryResponse searchBakeries(SearchBakeryRequest request) {
+    public List<SearchBakeryResponse> searchBakeries(SearchBakeryRequest request) {
         /*
         -searchBakeries(request) 호출
         -DTO로 변환하여 컨트롤러로 반환

@@ -1,6 +1,9 @@
 package com.breadcrumbs.breadcast.service;
 
-import com.breadcrumbs.breadcast.domain.Member;
+import com.breadcrumbs.breadcast.dto.member.LoginRequest;
+import com.breadcrumbs.breadcast.dto.member.MemberResponse;
+import com.breadcrumbs.breadcast.dto.member.MemberUpdateRequest;
+import com.breadcrumbs.breadcast.dto.member.SignupRequest;
 import com.breadcrumbs.breadcast.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +20,7 @@ public class MemberService {
 
 
     @Transactional
-    public Member addMember(String loginId, String password, String nickname) {
+    public MemberResponse addMember(SignupRequest request) {
         /*
         // 유효성 검사 - 필요하다면 유효성 검사를 private으로 분리
         // 아이디의 길이가 5~20 사이이면서 영문과 숫자로만 이루어져있는지
@@ -42,7 +45,7 @@ public class MemberService {
         return null;
     }
 
-    public Member login(String loginId, String password) {
+    public MemberResponse registerMember(LoginRequest request) {
         /*
         // 1. 아이디로 DB에서 사용자 조회
         // Optional<Member> memberOptional = memberRepository.findByUsername(loginId);
@@ -69,7 +72,7 @@ public class MemberService {
          */
     }
 
-    public Member updateNickname(Long memId, String newNickname){
+    public MemberResponse updateNickname(Long memberId, MemberUpdateRequest request) {
         /*
         Member member = memberRepository.findById(memId);
         if (memberRepository.existsNickname(newNickname))

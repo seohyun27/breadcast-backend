@@ -1,6 +1,8 @@
 package com.breadcrumbs.breadcast.service;
 
 import com.breadcrumbs.breadcast.domain.bakery.Bakery;
+import com.breadcrumbs.breadcast.dto.myPage.GetFavoriteBakeriesResponse;
+import com.breadcrumbs.breadcast.dto.myPage.GetFavoriteCoursesResponse;
 import com.breadcrumbs.breadcast.repository.bakery.FavoriteBakeryRepository;
 import com.breadcrumbs.breadcast.repository.course.FavoriteCourseRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,7 @@ public class FavoriteService {
     private final FavoriteCourseRepository favoriteCourseRepository;
 
     @Transactional(readOnly = true)
-    public List<Bakery> getFavoriteBakeries(Long memId){
+    public List<GetFavoriteBakeriesResponse> getFavoriteBakeries(Long memberId){
         /*
         - favoriteBakeryRepository.findByMemberId(memId) 호출
         - 가게 사진 2장/가게 이름/가게 전화번호/주소
@@ -42,6 +44,11 @@ public class FavoriteService {
         - 존재 여부 검사 favoriteBakeryRepository.existsByMemberIdAndBakeryId(memId, bakeryId);
         - 삭제 메소드 호출 favoriteBakeryRepository.deleteByMemberIdAndBakeryId(memId, bakeryId);
         */
+    }
+
+    @Transactional(readOnly = true)
+    public List<GetFavoriteCoursesResponse> findFavoriteCourses(Long memId){
+        return null;
     }
 
     public void addFavoriteCourse(Long courseId, Long memId){
