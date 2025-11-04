@@ -34,24 +34,17 @@ public class CourseReview {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bakery_id")
-    private Bakery bakery;
-
-
-
-    /// 코스랑 연결 추가 !!!!! ///
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
     private Course course;
 
 
 
     /// 생성 메소드 ///
-    public static CourseReview createCourseReview(String text, Member member, Bakery bakery) {
+    public static CourseReview createCourseReview(String text, Member member, Course course) {
         CourseReview courseReview = new CourseReview();
         courseReview.text = text;
         courseReview.member = member;
-        courseReview.bakery = bakery;
+        courseReview.course = course;
         return courseReview;
     }
 
