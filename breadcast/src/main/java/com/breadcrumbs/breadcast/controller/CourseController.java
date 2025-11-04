@@ -21,7 +21,6 @@ public class CourseController {
 
     private final ReviewService reviewService;
     private final CourseService courseService;
-    private final CoursePartService coursePartService;    // 이건 컨트롤러 말고 CourseService가 사용하게 하는 편이 더 좋을 것 같음
 
     public ResponseEntity<CourseReviewResponse> addCourseReview(@PathVariable Long courseId,
                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails,
