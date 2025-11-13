@@ -29,13 +29,22 @@ public class BakeryService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다. ID: " + bakeryId));
         int favorite_count = favoriteBakeryRepository.countByBakeryId(bakeryId);
         int review_count = bakeryReviewRepository.countByBakeryId(bakeryId);
-        double averageRating = getAverageRating(bakeryId,review_count);
+        double rating = getAverageRating(bakeryId,review_count);
 
-        BakeryDetailResponse bakeryDetailResponse = new BakeryDetailResponse(
-                bakery.getId(),bakery.getName(), bakery.getAddress(),
-                bakery.getPhone(), bakery.getLatitude(), bakery.getLongitude(), bakery.getURL(),
-                bakery.getPhoto1(), bakery.getPhoto2(), averageRating, favorite_count, review_count      // 계산된 리뷰 수
-        );
+        BakeryDetailResponse bakeryDetailResponse = BakeryDetailResponse.builder()
+                .id(bakery.getId())
+                .name(bakery.getName())
+                .address(bakery.getAddress())
+                .phone(bakery.getPhone())
+                .latitude(bakery.getLatitude())
+                .longitude(bakery.getLongitude())
+                .URL(bakery.getURL())
+                .photo1(bakery.getPhoto1())
+                .photo2(bakery.getPhoto2())
+                .rating(rating)
+                .review_count(review_count)
+                .favorite_count(favorite_count)
+                .build();
 
         return bakeryDetailResponse;
         /*
