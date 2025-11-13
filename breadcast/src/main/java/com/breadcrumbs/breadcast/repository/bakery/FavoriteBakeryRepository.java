@@ -10,4 +10,6 @@ public interface FavoriteBakeryRepository extends JpaRepository<FavoriteBakery, 
     List<FavoriteBakery> findByMemberId(Long memId);
 
     void deleteByMemberIdAndBakeryId(Long memId, Long bakeryId);
+
+    int countByBakeryId(Long bakeryId);
 }

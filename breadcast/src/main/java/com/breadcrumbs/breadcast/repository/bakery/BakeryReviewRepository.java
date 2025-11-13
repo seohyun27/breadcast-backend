@@ -9,4 +9,7 @@ public interface BakeryReviewRepository extends JpaRepository<BakeryReview, Long
 
     List<BakeryReview> findByMemberId(Long memId);
 
+    int countByBakeryId(Long bakeryId);
+
+    List<BakeryReview> findByBakeryId(Long bakeryId);
 }

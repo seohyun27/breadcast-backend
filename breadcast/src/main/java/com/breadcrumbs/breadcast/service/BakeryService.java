@@ -1,14 +1,19 @@
 package com.breadcrumbs.breadcast.service;
 
+import com.breadcrumbs.breadcast.domain.bakery.Bakery;
+import com.breadcrumbs.breadcast.domain.bakery.BakeryReview;
 import com.breadcrumbs.breadcast.dto.bakery.BakeryDetailResponse;
 import com.breadcrumbs.breadcast.dto.bakery.SearchBakeryRequest;
 import com.breadcrumbs.breadcast.dto.bakery.SearchBakeryResponse;
 import com.breadcrumbs.breadcast.repository.bakery.BakeryRepository;
+import com.breadcrumbs.breadcast.repository.bakery.BakeryReviewRepository;
+import com.breadcrumbs.breadcast.repository.bakery.FavoriteBakeryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -16,14 +21,27 @@ import java.util.List;
 public class BakeryService {
 
     private final BakeryRepository bakeryRepository;
+    private final BakeryReviewRepository bakeryReviewRepository;
+    private final FavoriteBakeryRepository favoriteBakeryRepository;
 
     public BakeryDetailResponse getBakeryDetail(Long bakeryId, Long memId) {
+        Bakery bakery = bakeryRepository.findById(bakeryId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다. ID: " + bakeryId));
+        int favorite_count = favoriteBakeryRepository.countByBakeryId(bakeryId);
+        int review_count = bakeryReviewRepository.countByBakeryId(bakeryId);
+        double averageRating = getAverageRating(bakeryId,review_count);
+
+        BakeryDetailResponse bakeryDetailResponse = new BakeryDetailResponse(
+                bakery.getId(),bakery.getName(), bakery.getAddress(),
+                bakery.getPhone(), bakery.getLatitude(), bakery.getLongitude(), bakery.getURL(),
+                bakery.getPhoto1(), bakery.getPhoto2(), averageRating, favorite_count, review_count      // 계산된 리뷰 수
+        );
+
+        return bakeryDetailResponse;
         /*
         -Bakery bakeryRepository.findByBakeryId(bakeryId) 호출
         - 호출한 Bakery를 DTO로 변환하여 컨트롤러로 반환
         */
-
-        return null;
     }
 
     public List<SearchBakeryResponse> searchBakeries(SearchBakeryRequest request) {
@@ -38,5 +56,20 @@ public class BakeryService {
         return null;
     }
 
+    private double getAverageRating(Long bakeryId, int reviewCount){
+        List<BakeryReview> bakeryReviews = bakeryReviewRepository.findByBakeryId(bakeryId);
+        double ratingSum = 0.0;
 
+        if (bakeryReviews.isEmpty()) {
+            return ratingSum;
+        }
+
+        for (BakeryReview bakeryreview : bakeryReviews) {
+            ratingSum += bakeryreview.getRating();
+        }
+
+        double averageResult = ratingSum / (double) reviewCount;
+
+        return averageResult;
+    }
 }
