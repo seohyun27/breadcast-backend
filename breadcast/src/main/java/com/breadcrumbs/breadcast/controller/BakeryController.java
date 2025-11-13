@@ -23,7 +23,7 @@ public class BakeryController {
 
     public BakeryDetailResponse getBakeryDetail(@PathVariable Long bakeryId,
                                                 @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return null;
+        return bakeryService.getBakeryDetail(bakeryId, userDetails.getUserId());
     }
 
     public List<BakeryReviewResponse> getBakeryReviews(@PathVariable Long bakeryId,
