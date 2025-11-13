@@ -25,12 +25,14 @@ public class BakeryService {
     private final FavoriteBakeryRepository favoriteBakeryRepository;
 
     public BakeryDetailResponse getBakeryDetail(Long bakeryId, Long memId) {
+        //bakery entity와 스크랩 수, 빵집 리뷰 수, 평균 별점을 찾는다.
         Bakery bakery = bakeryRepository.findById(bakeryId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다. ID: " + bakeryId));
         int favorite_count = favoriteBakeryRepository.countByBakeryId(bakeryId);
         int review_count = bakeryReviewRepository.countByBakeryId(bakeryId);
         double rating = getAverageRating(bakeryId,review_count);
 
+        //찾은 정보들을 BakeryDetailResponse로 변환
         BakeryDetailResponse bakeryDetailResponse = BakeryDetailResponse.builder()
                 .id(bakery.getId())
                 .name(bakery.getName())
@@ -46,6 +48,7 @@ public class BakeryService {
                 .favorite_count(favorite_count)
                 .build();
 
+        //dto를 controller에게 반환
         return bakeryDetailResponse;
         /*
         -Bakery bakeryRepository.findByBakeryId(bakeryId) 호출
@@ -65,6 +68,7 @@ public class BakeryService {
         return null;
     }
 
+    //평균 별점을 구하는 함수(service 내부에서 쓸 것이라 private로 선언)
     private double getAverageRating(Long bakeryId, int reviewCount){
         List<BakeryReview> bakeryReviews = bakeryReviewRepository.findByBakeryId(bakeryId);
         double ratingSum = 0.0;

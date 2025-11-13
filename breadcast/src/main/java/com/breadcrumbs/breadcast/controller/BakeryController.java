@@ -22,10 +22,12 @@ public class BakeryController {
     private final BakeryService bakeryService;
     private final ReviewService reviewService;
 
+    //프론트에게 BakeryDetailResponse dto 전달
     @GetMapping("/api/bakeries/{bakeryId}")
     public BakeryDetailResponse getBakeryDetail(@PathVariable Long bakeryId,
                                                 @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return bakeryService.getBakeryDetail(bakeryId, userDetails.getUserId());
+        BakeryDetailResponse bakeryDetailResponse = bakeryService.getBakeryDetail(bakeryId, userDetails.getUserId());
+        return bakeryDetailResponse;
     }
 
     public List<BakeryReviewResponse> getBakeryReviews(@PathVariable Long bakeryId,
