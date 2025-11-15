@@ -28,9 +28,9 @@ public class BakeryService {
         //bakery entity와 스크랩 수, 빵집 리뷰 수, 평균 별점을 찾는다.
         Bakery bakery = bakeryRepository.findById(bakeryId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다. ID: " + bakeryId));
-        int favorite_count = favoriteBakeryRepository.countByBakeryId(bakeryId);
-        int review_count = bakeryReviewRepository.countByBakeryId(bakeryId);
-        double rating = getAverageRating(bakeryId,review_count);
+        int favoriteCount = favoriteBakeryRepository.countByBakeryId(bakeryId);
+        int reviewCount = bakeryReviewRepository.countByBakeryId(bakeryId);
+        double rating = getAverageRating(bakeryId);
 
         //찾은 정보들을 BakeryDetailResponse로 변환
         BakeryDetailResponse bakeryDetailResponse = BakeryDetailResponse.builder()
@@ -44,8 +44,8 @@ public class BakeryService {
                 .photo1(bakery.getPhoto1())
                 .photo2(bakery.getPhoto2())
                 .rating(rating)
-                .review_count(review_count)
-                .favorite_count(favorite_count)
+                .review_count(reviewCount)
+                .favorite_count(favoriteCount)
                 .build();
 
         //dto를 controller에게 반환
@@ -69,8 +69,9 @@ public class BakeryService {
     }
 
     //평균 별점을 구하는 함수(service 내부에서 쓸 것이라 private로 선언)
-    private double getAverageRating(Long bakeryId, int reviewCount){
+    private double getAverageRating(Long bakeryId){
         List<BakeryReview> bakeryReviews = bakeryReviewRepository.findByBakeryId(bakeryId);
+        int reviewCount = bakeryReviewRepository.countByBakeryId(bakeryId);
         double ratingSum = 0.0;
 
         if (bakeryReviews.isEmpty()) {
