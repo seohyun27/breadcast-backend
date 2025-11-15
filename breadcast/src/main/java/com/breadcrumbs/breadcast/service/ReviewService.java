@@ -1,5 +1,8 @@
 package com.breadcrumbs.breadcast.service;
 
+import com.breadcrumbs.breadcast.domain.bakery.BakeryReview;
+import com.breadcrumbs.breadcast.domain.menu.MenuReview;
+import com.breadcrumbs.breadcast.dto.bakery.BakeryDetailResponse;
 import com.breadcrumbs.breadcast.dto.bakery.BakeryReviewRequest;
 import com.breadcrumbs.breadcast.dto.bakery.BakeryReviewResponse;
 import com.breadcrumbs.breadcast.dto.course.CourseReviewRequest;
@@ -20,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -68,15 +72,36 @@ public class ReviewService {
         */
     }
 
-
+    //Controller에게 BakeryReview entity List를 BakeryReviewResponse dto List로 바꾸는 함수
     @Transactional(readOnly = true)
     public List<BakeryReviewResponse> getBakeryReviews(Long bakeryId, Long memId) {
+        List<BakeryReviewResponse> bakeryReviewResponseList = new ArrayList<>();
+        List<BakeryReview> bakeryReviewList = bakeryReviewRepository.findByBakeryId(bakeryId);
+        boolean isMine;
+
+        for(BakeryReview bakeryReview : bakeryReviewList){
+            //사용자와 리뷰 작성자가 동일한지 확인
+            isMine = (bakeryReview.getMember().getId() == memId);
+
+            //dto로 변환
+            BakeryReviewResponse bakeryReviewResponse = BakeryReviewResponse.builder()
+                    .writer(bakeryReview.getMember().getNickname())
+                    .rating(bakeryReview.getRating())
+                    .text(bakeryReview.getText())
+                    .photo(bakeryReview.getPhoto())
+                    .date(bakeryReview.getDate())
+                    .isMine(isMine)
+                    .build();
+
+            bakeryReviewResponseList.add(bakeryReviewResponse);
+        }
+
+        return bakeryReviewResponseList;
+
         /*
         -List <BakeryReview> bakeryReviewRepository.findAll(bakeryId) 호출
         - DTO로 변환하여 컨트롤러로 반환
         */
-
-        return null;
     }
 
     @Transactional(readOnly = true)
