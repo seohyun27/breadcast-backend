@@ -23,7 +23,8 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
     private final MenuReviewRepository menuReviewRepository;
-
+    
+    //dto로 바꿔서 controller에게 정보를 전달하는 함수
     public List<GetMenusResponse> getMenus(Long bakeryId) {
         List<Menu> menuList = menuRepository.findByBakeryId(bakeryId);
         List<GetMenusResponse> menusResponseList = new ArrayList<>();
@@ -31,6 +32,7 @@ public class MenuService {
         long reviewCount = 0;
         double rating = 0;
 
+        //Menu 엔티티를 getMenusResponse dto로 변경
         for (Menu menu : menuList){
             reviewCount = menuReviewRepository.countByMenuId(menu.getId());
             rating = getAverageRating(menu.getId());
@@ -68,6 +70,7 @@ public class MenuService {
         return null;
     }
 
+    //메뉴 별점 평균을 구하는 함수
     private double getAverageRating(Long menuId) {
         List<MenuReview> menuReviews = menuReviewRepository.findByMenuId(menuId);
         long reviewCount = menuReviewRepository.countByMenuId(menuId);
