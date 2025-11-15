@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,8 +22,11 @@ public class MenuController {
     private final MenuService menuService;
     private final ReviewService reviewService;
 
+    //프론트에게 GetMenusResponse dto로 이루어진 List 전달
+    @GetMapping("/api/bakeries/{bakeryId}/menus")
     public List<GetMenusResponse> getMenus(@PathVariable Long bakeryId){
-        return null;
+        List<GetMenusResponse> menuList = menuService.getMenus(bakeryId);
+        return menuList;
     }
 
     public GetMenuDetailResponse getMenuDetail(@PathVariable Long menuId,
