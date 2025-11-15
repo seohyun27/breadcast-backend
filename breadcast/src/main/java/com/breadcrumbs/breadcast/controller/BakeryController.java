@@ -7,10 +7,7 @@ import com.breadcrumbs.breadcast.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -30,9 +27,11 @@ public class BakeryController {
         return bakeryDetailResponse;
     }
 
+    @PostMapping("/api/bakeries/{bakeryId}/reviews")
     public List<BakeryReviewResponse> getBakeryReviews(@PathVariable Long bakeryId,
                                                        @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return null;
+        List<BakeryReviewResponse> bakeryReviewResponseList = reviewService.getBakeryReviews(bakeryId, userDetails.getUserId());
+        return bakeryReviewResponseList;
     }
 
     public ResponseEntity<BakeryReviewResponse> addBakeryReview(@PathVariable Long bakeryId,
