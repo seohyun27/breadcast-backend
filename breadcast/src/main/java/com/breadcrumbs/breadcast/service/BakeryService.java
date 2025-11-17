@@ -60,36 +60,42 @@ public class BakeryService {
     }
 
     //사용자가 빵집들을 검색할 수 있게 해주는 함수
-    public List<SearchBakeryResponse> searchBakeries(SearchBakeryRequest request) {
-        List<Bakery> bakeryList = bakeryRepository.findAll();
+    public List<SearchBakeryResponse> searchBakeries(String keyword, String sort) {
         List<SearchBakeryResponse> searchBakeryResponseList = new ArrayList<>();
-        String keyword = request.getText(); // DTO에서 검색어를 가져옴
-        int favoriteCount = 0;
-        int reviewCount = 0;
+        List<Object[]> bakeryList; // 쿼리 결과는 Object[] 목록으로 받음
         double rating = 0.0;
 
-        if (keyword != null) {
-            bakeryList = bakeryRepository.findByNameContainingIgnoreCase(keyword);
+        String cleanedSearchTerm = keyword.replaceAll("\\s+", "");
+
+        // 문자열을 대소문자 구분 없이 비교
+        if ("REVIEW".equalsIgnoreCase(sort)) {
+            // 이름 공백 무시 검색, 리뷰순 정렬 쿼리 호출
+            bakeryList = bakeryRepository.findByNameIgnoringSpacesAndSortReview(cleanedSearchTerm);
+        } else {
+            // "POPULAR" 또는 기타 문자열은 스크랩순(인기순)으로 처리
+            bakeryList = bakeryRepository.findByNameIgnoringSpacesAndSortFavorite(cleanedSearchTerm);
         }
 
-        for (Bakery bakery : bakeryList) {
-            favoriteCount = favoriteBakeryRepository.countByBakeryId(bakery.getId());
-            reviewCount = bakeryReviewRepository.countByBakeryId(bakery.getId());
+        for (Object[] row : bakeryList) {
+            Bakery bakery = (Bakery) row[0];
+
+            // 쿼리에서 계산된 COUNT 값을 사용 (Long -> int 변환)
+            Long reviewCountLong = (Long) row[1];
+            Long favoriteCountLong = (Long) row[2];
             rating = getAverageRating(bakery.getId());
+
             SearchBakeryResponse searchBakeryResponse = SearchBakeryResponse.builder()
                     .id(bakery.getId())
                     .name(bakery.getName())
                     .address(bakery.getAddress())
                     .photo1(bakery.getPhoto1())
                     .rating(rating)
-                    .review_count(reviewCount)
-                    .favorite_count(favoriteCount)
+                    .review_count(reviewCountLong.intValue())
+                    .favorite_count(favoriteCountLong.intValue())
                     .build();
 
             searchBakeryResponseList.add(searchBakeryResponse);
         }
-
-        searchBakeryResponseList.sort(createResponseComparator(request.getSortBy()));
 
         return searchBakeryResponseList;
 
@@ -119,19 +125,5 @@ public class BakeryService {
         double averageResult = ratingSum / (double) reviewCount;
 
         return averageResult;
-    }
-
-    //사용자가 정렬 기준을 변경할 수 있게 해주는 함수
-    private Comparator<SearchBakeryResponse> createResponseComparator(String sortBy) {
-
-        if ("review".equals(sortBy)) {
-            // 리뷰 순 (review_count 필드 기준 내림차순)
-            return Comparator.comparing(
-                    SearchBakeryResponse::getReview_count, Comparator.reverseOrder());
-        }
-
-        // 인기순 (favorite_count 필드 기준 내림차순) 및 기본값
-        return Comparator.comparing(
-                SearchBakeryResponse::getFavorite_count, Comparator.reverseOrder());
     }
 }
