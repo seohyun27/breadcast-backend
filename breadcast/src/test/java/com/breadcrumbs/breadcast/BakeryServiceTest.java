@@ -76,7 +76,7 @@ public class BakeryServiceTest {
         bakeryReviewRepository.save(BakeryReview.createBakeryReview(4, "굿", null, member1, bakeryA));
         bakeryReviewRepository.save(BakeryReview.createBakeryReview(5, "최고", null, member2, bakeryA));
         bakeryReviewRepository.save(BakeryReview.createBakeryReview(3, "쏘쏘", null, member3, bakeryA));
-        bakeryReviewRepository.save(BakeryReview.createBakeryReview(4, "다섯", null, member1, bakeryA));
+        bakeryReviewRepository.save(BakeryReview.createBakeryReview(4, "다섯", null, member4, bakeryA));
         bakeryReviewRepository.save(BakeryReview.createBakeryReview(5, "다섯", null, member2, bakeryA)); // 총 5개
 
         bakeryReviewRepository.save(BakeryReview.createBakeryReview(5, "맛있음", null, member1, bakeryB));
@@ -123,69 +123,41 @@ public class BakeryServiceTest {
     }
 
     @Test
-    @DisplayName("정렬 기준이 리뷰순(REVIEW)일 때 리뷰 수에 따라 내림차순 정렬되어야 한다")
-    void searchBakeries_sortByReview() {
-        // Given
-        SearchBakeryRequest request = new SearchBakeryRequest();
-        request.setText(null); // 전체 검색
-
-        // When
-        List<SearchBakeryResponse> result = bakeryService.searchBakeries(request);
-
-        // Then
-        assertNotNull(result);
-        assertEquals(3, result.size(), "총 3개의 빵집이 검색되어야 합니다.");
-
-        // 1. 정렬 순서 검증: A (리뷰 5개) -> B (리뷰 2개) 순
-        assertEquals(bakeryAId, result.get(0).getId(), "리뷰가 많은 A 빵집이 1등이어야 합니다.");
-        assertEquals(bakeryBId, result.get(2).getId(), "리뷰가 적은 B 빵집이 3등이어야 합니다.");
-
-        // 2. 데이터 검증 (A 빵집)
-        assertEquals(5, result.get(0).getReview_count());
-        assertEquals(3, result.get(0).getFavorite_count());
-    }
-
-    @Test
-    @DisplayName("정렬 기준이 인기순(FAVORITE)일 때 스크랩 수에 따라 내림차순 정렬되어야 한다")
-    void searchBakeries_sortByFavorite() {
-        // Given
-        SearchBakeryRequest request = new SearchBakeryRequest();
-        request.setText(null); // 전체 검색
-
-        // When
-        List<SearchBakeryResponse> result = bakeryService.searchBakeries(request);
-
-        // Then
-        assertNotNull(result);
-        assertEquals(3, result.size(), "총 3개의 빵집이 검색되어야 합니다.");
-
-        // 1. 정렬 순서 검증: B (스크랩 4개) -> A (스크랩 2개) 순
-        assertEquals(bakeryBId, result.get(0).getId(), "B 빵집이 1등이어야 합니다.");
-        assertEquals(bakeryAId, result.get(1).getId(), "A 빵집이 2등이어야 합니다.");
-
-        // 2. 데이터 검증 (B 빵집)
-        assertEquals(4, result.get(0).getFavorite_count());
-        assertEquals(2, result.get(0).getReview_count());
-    }
-
-    @Test
     @DisplayName("키워드 검색 시 해당 키워드를 포함하는 빵집만 정렬되어야 한다")
-    void searchBakeries_withKeyword() {
-        // Given
-        SearchBakeryRequest request = new SearchBakeryRequest();
-        request.setText("맛있는"); // A 빵집 이름 포함
-
+    void search_withKeyword() {
         // When
-        List<SearchBakeryResponse> result = bakeryService.searchBakeries(request);
+        List<SearchBakeryResponse> result = bakeryService.searchBakeries("빵", "");
 
         // Then
         assertNotNull(result);
-        assertEquals(1, result.size(), "A 빵집 1개만 검색되어야 합니다.");
+        assertEquals(3, result.size(), "빵집 3개가 검색되어야 합니다.");
 
         // 1. 검색 결과 검증
-        assertEquals(bakeryAId, result.get(0).getId(), "검색 결과는 A 빵집이어야 합니다.");
+        assertEquals(bakeryBId, result.get(0).getId(), "첫번째는 B 빵집이어야 합니다.");
+        assertEquals(bakeryAId, result.get(1).getId(), "두번째는 A 빵집이어야 합니다.");
 
         // 2. 데이터 검증
-        assertEquals(2, result.get(0).getFavorite_count(), "A 빵집의 스크랩 수는 2여야 합니다.");
+        assertEquals(4, result.get(0).getFavorite_count(), "B 빵집의 스크랩 수는 4여야 합니다.");
+        assertEquals(3, result.get(1).getFavorite_count(), "A 빵집의 스크랩 수는 3여야 합니다.");
+    }
+
+    @Test
+    @DisplayName("키워드 검색 시 해당 키워드를 포함하는 빵집과 리뷰순으로 정렬되어야 한다")
+    void search_withKeyword_andReview() {
+
+        // When
+        List<SearchBakeryResponse> result = bakeryService.searchBakeries("빵","review");
+
+        // Then
+        assertNotNull(result);
+        assertEquals(3, result.size(), "빵집 3개가 검색되어야 합니다.");
+
+        // 1. 검색 결과 검증
+        assertEquals(bakeryAId, result.get(0).getId(), "첫번째는 A 빵집이어야 합니다.");
+        assertEquals(bakeryId, result.get(1).getId(), "두번째는 테스트 빵집이어야 합니다.");
+
+        // 2. 데이터 검증
+        assertEquals(5, result.get(0).getReview_count(), "A 빵집의 리뷰 수는 5여야 합니다.");
+        assertEquals(3, result.get(1).getReview_count(), "테스트 빵집의 리뷰 수는 3여야 합니다.");
     }
 }
