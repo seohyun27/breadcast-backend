@@ -128,7 +128,6 @@ public class BakeryServiceTest {
         // Given
         SearchBakeryRequest request = new SearchBakeryRequest();
         request.setText(null); // 전체 검색
-        request.setSortBy("review"); // 리뷰 순 정렬 요청 (A: 5개, B: 2개)
 
         // When
         List<SearchBakeryResponse> result = bakeryService.searchBakeries(request);
@@ -152,7 +151,6 @@ public class BakeryServiceTest {
         // Given
         SearchBakeryRequest request = new SearchBakeryRequest();
         request.setText(null); // 전체 검색
-        request.setSortBy("favorite"); // 인기순 정렬 요청 (A: 2개, B: 4개)
 
         // When
         List<SearchBakeryResponse> result = bakeryService.searchBakeries(request);
@@ -176,7 +174,6 @@ public class BakeryServiceTest {
         // Given
         SearchBakeryRequest request = new SearchBakeryRequest();
         request.setText("맛있는"); // A 빵집 이름 포함
-        request.setSortBy("favorite"); // 정렬 기준은 FAVORITE로 설정
 
         // When
         List<SearchBakeryResponse> result = bakeryService.searchBakeries(request);
