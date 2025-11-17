@@ -60,6 +60,6 @@ public class BakeryController {
             @RequestParam String keyword,
             @RequestParam(required = false, defaultValue = "popular") String sort
     ) {
-        return null;
+        return bakeryService.searchBakeries(keyword, sort);
     }
 }
