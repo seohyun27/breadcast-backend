@@ -16,13 +16,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/members/me")
 public class MemberController {
 
     private final MemberService memberService;
@@ -31,27 +31,33 @@ public class MemberController {
     private final CourseRepository courseRepository;
     private final CourseReviewRepository courseReviewRepository;
 
+    @DeleteMapping()
     public ResponseEntity<Void> deleteMember(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return null;
     }
 
+    @PatchMapping()
     public ResponseEntity<MemberResponse> updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                   @RequestBody @Valid MemberUpdateRequest request){
         return null;
     }
 
+    @GetMapping("/bakery-reviews")
     public List<GetMyBakeryReviewResponse> getMyBakeryReview(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return null;
     }
 
+    @GetMapping("/menu-reviews")
     public List<GetMyMenuReviewResponse> getMyMenuReview(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return null;
     }
 
+    @GetMapping("/courses")
     public List<GetMyCourseResponse> getMyCourse(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return null;
     }
 
+    @GetMapping("/course-reviews")
     public List<GetMyCourseReviewResponse> getMyCourseReview(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return null;
     }
