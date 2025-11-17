@@ -14,45 +14,52 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class BakeryController {
 
     private final BakeryService bakeryService;
     private final ReviewService reviewService;
 
-    //프론트에게 BakeryDetailResponse dto 전달
-    @GetMapping("/api/bakeries/{bakeryId}")
+    @GetMapping("/bakeries/{bakeryId}")
     public BakeryDetailResponse getBakeryDetail(@PathVariable Long bakeryId,
                                                 @AuthenticationPrincipal UserDetailsImpl userDetails){
-        BakeryDetailResponse bakeryDetailResponse = bakeryService.getBakeryDetail(bakeryId, userDetails.getUserId());
-        return bakeryDetailResponse;
+        // 로그인 유저가 없으면 서비스로 null을 넘겨주도록 설계함
+        Long userId = (userDetails != null) ? userDetails.getUserId() : null;
+        return bakeryService.getBakeryDetail(bakeryId, userId);
     }
 
-    @PostMapping("/api/bakeries/{bakeryId}/reviews")
+    @GetMapping("/bakeries/{bakeryId}/bakery-reviews")
     public List<BakeryReviewResponse> getBakeryReviews(@PathVariable Long bakeryId,
                                                        @AuthenticationPrincipal UserDetailsImpl userDetails){
-        List<BakeryReviewResponse> bakeryReviewResponseList = reviewService.getBakeryReviews(bakeryId, userDetails.getUserId());
-        return bakeryReviewResponseList;
+        Long userId = (userDetails != null) ? userDetails.getUserId() : null;
+        return reviewService.getBakeryReviews(bakeryId, userId);
     }
 
+    @PostMapping("/bakeries/{bakeryId}/bakery-reviews")
     public ResponseEntity<BakeryReviewResponse> addBakeryReview(@PathVariable Long bakeryId,
                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                 @RequestBody @Valid BakeryReviewRequest request){
         return null;
     }
 
+    @PatchMapping("/bakery-reviews/{bakeryReviewId}")
     public ResponseEntity<BakeryReviewResponse> updateBakeryReview(@PathVariable Long bakeryReviewId,
                                                                    @AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                    @RequestBody @Valid BakeryReviewRequest request){
         return null;
     }
 
+    @DeleteMapping("/bakery-reviews/{bakeryReviewId}")
     public ResponseEntity<Void> bakeryReviewDelete(@PathVariable Long bakeryReviewId,
                                                    @AuthenticationPrincipal UserDetailsImpl userDetails){
         return null;
     }
 
-    public List<SearchBakeryResponse> searchBakeries(@RequestBody @Valid SearchBakeryRequest request){
+    @GetMapping("/bakeries")
+    public List<SearchBakeryResponse> searchBakeries(
+            @RequestParam String keyword,
+            @RequestParam(required = false, defaultValue = "popular") String sort
+    ) {
         return null;
     }
-
 }
