@@ -51,11 +51,8 @@ public class BakeryController {
         return null;
     }
 
-    @GetMapping("/api/bakeries?name=")
     public List<SearchBakeryResponse> searchBakeries(@RequestBody @Valid SearchBakeryRequest request){
-        List<SearchBakeryResponse> searchBakeryResponseList = bakeryService.searchBakeries(request);
-
-        return searchBakeryResponseList;
+        return bakeryService.searchBakeries(request);
     }
 
 }
