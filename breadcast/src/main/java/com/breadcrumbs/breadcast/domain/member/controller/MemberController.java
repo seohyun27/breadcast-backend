@@ -6,7 +6,7 @@ import com.breadcrumbs.breadcast.domain.member.dto.GetMyBakeryReviewResponse;
 import com.breadcrumbs.breadcast.domain.member.dto.GetMyCourseResponse;
 import com.breadcrumbs.breadcast.domain.member.dto.GetMyCourseReviewResponse;
 import com.breadcrumbs.breadcast.domain.member.dto.GetMyMenuReviewResponse;
-import com.breadcrumbs.breadcast.domain.bakery.repository.BakeryReviewRepository;
+import com.breadcrumbs.breadcast.domain.review.repository.BakeryReviewRepository;
 import com.breadcrumbs.breadcast.domain.course.repository.CourseRepository;
 import com.breadcrumbs.breadcast.domain.course.repository.CourseReviewRepository;
 import com.breadcrumbs.breadcast.domain.menu.repository.MenuReviewRepository;
