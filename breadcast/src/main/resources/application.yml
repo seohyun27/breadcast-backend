@@ -1,16 +1,29 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/breadcast
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
-        format_spl: true
+        format_sql: true
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${ACCESS-KEY}
+      secret-key: ${SECRET-KEY}
+    s3:
+      bucket: breadcast-images  # 1단계에서 생성한 내 버킷 이름
+    region:
+      static: ap-northeast-2   # 버킷을 생성한 리전 (서울)
+
+    stack:
+      auto: false  # S3 파일 URL을 쉽게 가져오기 위한 설정 (선택 사항)
 
 logging:
   level:
