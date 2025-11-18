@@ -137,8 +137,8 @@ public class BakeryServiceTest {
         assertEquals(bakeryAId, result.get(1).getId(), "두번째는 A 빵집이어야 합니다.");
 
         // 2. 데이터 검증
-        assertEquals(4, result.get(0).getFavorite_count(), "B 빵집의 스크랩 수는 4여야 합니다.");
-        assertEquals(3, result.get(1).getFavorite_count(), "A 빵집의 스크랩 수는 3여야 합니다.");
+        assertEquals(4, result.get(0).getFavoriteCount(), "B 빵집의 스크랩 수는 4여야 합니다.");
+        assertEquals(3, result.get(1).getFavoriteCount(), "A 빵집의 스크랩 수는 3여야 합니다.");
     }
 
     @Test
@@ -157,7 +157,7 @@ public class BakeryServiceTest {
         assertEquals(bakeryId, result.get(1).getId(), "두번째는 테스트 빵집이어야 합니다.");
 
         // 2. 데이터 검증
-        assertEquals(5, result.get(0).getReview_count(), "A 빵집의 리뷰 수는 5여야 합니다.");
-        assertEquals(3, result.get(1).getReview_count(), "테스트 빵집의 리뷰 수는 3여야 합니다.");
+        assertEquals(5, result.get(0).getReviewCount(), "A 빵집의 리뷰 수는 5여야 합니다.");
+        assertEquals(3, result.get(1).getReviewCount(), "테스트 빵집의 리뷰 수는 3여야 합니다.");
     }
 }

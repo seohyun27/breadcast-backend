@@ -23,6 +23,7 @@ public class BakeryDetailResponse {
     private String photo1; 		// 빵집 사진
     private String photo2;		// 빵집 사진
     private double rating;		// 빵집 평균 별점
-    private int favorite_count; 	//빵집 스크랩 수
-    private int review_count; 	//빵집 리뷰 수
+    private int favoriteCount; 	//빵집 스크랩 수
+    private int reviewCount; 	//빵집 리뷰 수
+    private boolean isFavorited; //사용자가 좋아요한 빵집인지 확인
 }

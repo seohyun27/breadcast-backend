@@ -97,8 +97,8 @@ public class BakeryService {
                     .address(bakery.getAddress())
                     .photo1(bakery.getPhoto1())
                     .rating(rating)
-                    .review_count(reviewCountLong.intValue())
-                    .favorite_count(favoriteCountLong.intValue())
+                    .reviewCount(reviewCountLong.intValue())
+                    .favoriteCount(favoriteCountLong.intValue())
                     .build();
 
             searchBakeryResponseList.add(searchBakeryResponse);

@@ -11,7 +11,7 @@ public class AddMenuReviewRequest {
     /**
      * 메뉴 리뷰 쓰기
      */
-    private long bakery_id;	//빵집 id
+    private long bakeryId;	//빵집 id
     private double rating;	// 별점
     private String text;	//리뷰 내용
 }
