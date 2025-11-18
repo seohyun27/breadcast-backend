@@ -77,11 +77,13 @@ public class ReviewService {
     public List<BakeryReviewResponse> getBakeryReviews(Long bakeryId, Long memId) {
         List<BakeryReviewResponse> bakeryReviewResponseList = new ArrayList<>();
         List<BakeryReview> bakeryReviewList = bakeryReviewRepository.findByBakeryId(bakeryId);
-        boolean isMine;
+        boolean isMine = false;
 
         for(BakeryReview bakeryReview : bakeryReviewList){
             //사용자와 리뷰 작성자가 동일한지 확인
-            isMine = (bakeryReview.getMember().getId() == memId);
+            if(memId != null){
+                isMine = (bakeryReview.getMember().getId() == memId);
+            }
 
             //dto로 변환
             BakeryReviewResponse bakeryReviewResponse = BakeryReviewResponse.builder()
