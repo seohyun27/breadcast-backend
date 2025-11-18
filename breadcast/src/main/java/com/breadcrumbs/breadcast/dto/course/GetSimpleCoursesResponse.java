@@ -14,7 +14,7 @@ public class GetSimpleCoursesResponse {
      * 빵지순례 목록 보기 (좋아요 순)
      * 빵지순례 검색하기
      */
-    private long course_id; 		// 루트 ID
+    private long courseId; 		// 루트 ID
     private String title; 			// 루트 제목
     private String description; 		// 루트 글 간략한 설명
     private String name; 			// 작성자 이름
