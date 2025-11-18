@@ -2,21 +2,18 @@ package com.breadcrumbs.breadcast.service;
 
 import com.breadcrumbs.breadcast.domain.bakery.Bakery;
 import com.breadcrumbs.breadcast.domain.bakery.BakeryReview;
+import com.breadcrumbs.breadcast.domain.bakery.FavoriteBakery;
 import com.breadcrumbs.breadcast.dto.bakery.BakeryDetailResponse;
-import com.breadcrumbs.breadcast.dto.bakery.SearchBakeryRequest;
 import com.breadcrumbs.breadcast.dto.bakery.SearchBakeryResponse;
 import com.breadcrumbs.breadcast.repository.bakery.BakeryRepository;
 import com.breadcrumbs.breadcast.repository.bakery.BakeryReviewRepository;
 import com.breadcrumbs.breadcast.repository.bakery.FavoriteBakeryRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -34,6 +31,15 @@ public class BakeryService {
         int favoriteCount = favoriteBakeryRepository.countByBakeryId(bakeryId);
         int reviewCount = bakeryReviewRepository.countByBakeryId(bakeryId);
         double rating = getAverageRating(bakeryId);
+        boolean isFavorited = false;
+
+        //사용자가 좋아요한 빵집인지 확인
+        if(memId != null) {
+            List<FavoriteBakery> favoriteBakeryList = favoriteBakeryRepository.findByMemberId(memId);
+            for(FavoriteBakery favoriteBakery : favoriteBakeryList){
+                isFavorited = (favoriteBakery.getMember().getId() == memId);
+            }
+        }
 
         //찾은 정보들을 BakeryDetailResponse로 변환
         BakeryDetailResponse bakeryDetailResponse = BakeryDetailResponse.builder()
@@ -47,8 +53,9 @@ public class BakeryService {
                 .photo1(bakery.getPhoto1())
                 .photo2(bakery.getPhoto2())
                 .rating(rating)
-                .review_count(reviewCount)
-                .favorite_count(favoriteCount)
+                .reviewCount(reviewCount)
+                .favoriteCount(favoriteCount)
+                .isFavorited(isFavorited)
                 .build();
 
         //dto를 controller에게 반환

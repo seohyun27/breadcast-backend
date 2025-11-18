@@ -5,7 +5,6 @@ import com.breadcrumbs.breadcast.domain.bakery.Bakery;
 import com.breadcrumbs.breadcast.domain.bakery.BakeryReview;
 import com.breadcrumbs.breadcast.domain.bakery.FavoriteBakery;
 import com.breadcrumbs.breadcast.dto.bakery.BakeryDetailResponse;
-import com.breadcrumbs.breadcast.dto.bakery.SearchBakeryRequest;
 import com.breadcrumbs.breadcast.dto.bakery.SearchBakeryResponse;
 import com.breadcrumbs.breadcast.repository.MemberRepository;
 import com.breadcrumbs.breadcast.repository.bakery.BakeryRepository;
@@ -102,14 +101,15 @@ public class BakeryServiceTest {
     @Test
     @DisplayName("가게 상세 정보 조회 시 모든 정보(리뷰, 스크랩, 평점)가 정확해야 한다")
     void getBakeryDetail_Success_With_Calculated_Data() {
-        BakeryDetailResponse response = bakeryService.getBakeryDetail(bakeryId, 999L);
+        BakeryDetailResponse response = bakeryService.getBakeryDetail(bakeryId, 1L);
 
         assertNotNull(response);
 
         assertEquals(bakeryId.longValue(), response.getId());
-        assertEquals(2, response.getFavorite_count(), "스크랩 수가 일치해야 합니다.");
-        assertEquals(3, response.getReview_count(), "리뷰 수가 일치해야 합니다.");
+        assertEquals(2, response.getFavoriteCount(), "스크랩 수가 일치해야 합니다.");
+        assertEquals(3, response.getReviewCount(), "리뷰 수가 일치해야 합니다.");
         assertEquals(4.0, response.getRating(), 0.01, "평균 별점이 4.0으로 일치해야 합니다.");
+        assertEquals(true, response.isFavorited(), "사용자가 좋아요를 표시했습니다.");
     }
 
     @Test
