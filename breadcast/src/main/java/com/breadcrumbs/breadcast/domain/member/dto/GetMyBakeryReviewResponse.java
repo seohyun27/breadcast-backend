@@ -16,9 +16,9 @@ public class GetMyBakeryReviewResponse {
     /**
      * 내가 작성한 가게 리뷰 보기
      */
-    private long bakery_id; 		//빵집 id
+    private long bakeryId; 		//빵집 id
     private String name; 		//빵집 이름
-    private long review_id;		//빵집 리뷰 id
+    private long reviewId;		//빵집 리뷰 id
     private String text; 		//빵집 리뷰 내용
     private double rating; 		//빵집 리뷰 별점
     private String photo; 		//빵집 리뷰 사진

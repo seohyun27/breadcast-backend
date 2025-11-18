@@ -23,4 +23,5 @@ public class CourseDetailResponse {
     private List<CoursePartResponse> parts;	// 해당하는 코스 파트들
     private List<CourseReviewResponse> reviews;	// 루트에 쓰인 리뷰들
     private boolean isMine	;		// 이 루트가 나의 글인지
+    private boolean isFavorited; //사용자 좋아요한 course인지 확인
 }

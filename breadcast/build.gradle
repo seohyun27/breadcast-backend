@@ -27,7 +27,7 @@ repositories {
 
 dependencies {
 	// API : web
-	// DB : JAP, H2, SQL
+	// DB : JAP, H2, MariaDB, S3
 	// 보조 도구 : devtools, lombok
     // 보안 : Spring Security
 
@@ -35,13 +35,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'com.mysql:mysql-connector-j'
+	runtimeOnly 'com.h2database:h2'                         // H2
+    implementation 'org.mariadb.jdbc:mariadb-java-client'   // MariaDB
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.springframework.boot:spring-boot-starter-security'   // 보안
     implementation 'org.springframework.boot:spring-boot-starter-validation' // Validation(유효성 검사)
+    implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.793') // aws의 S3를 사용하기 위한 설정
+    implementation 'com.amazonaws:aws-java-sdk-s3'
 }
 
 tasks.named('test') {
