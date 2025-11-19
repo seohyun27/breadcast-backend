@@ -144,7 +144,9 @@ public class SecurityConfig {
                 "http://localhost:3000",
                 "http://localhost:5173",
                 "http://43.200.233.19",
-                "http://43.200.233.19:*"
+                "http://43.200.233.19:*",
+                "http://breadcast-frontend-six.vercel.app",
+                "https://breadcast-frontend-six.vercel.app"
         ));
 
         // 허용할 HTTP 메서드 목록
