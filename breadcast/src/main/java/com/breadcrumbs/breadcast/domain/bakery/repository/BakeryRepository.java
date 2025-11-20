@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.repository.bakery;
+package com.breadcrumbs.breadcast.domain.bakery.repository;
 
 import com.breadcrumbs.breadcast.domain.bakery.Bakery;
 import com.breadcrumbs.breadcast.domain.bakery.BakeryReport;

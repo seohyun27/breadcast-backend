@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.service;
+package com.breadcrumbs.breadcast.domain.review.service;
 
 import com.breadcrumbs.breadcast.domain.bakery.BakeryReview;
 import com.breadcrumbs.breadcast.domain.menu.MenuReview;

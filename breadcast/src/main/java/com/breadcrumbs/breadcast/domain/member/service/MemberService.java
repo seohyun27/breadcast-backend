@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.service;
+package com.breadcrumbs.breadcast.domain.member.service;
 
 import com.breadcrumbs.breadcast.dto.member.LoginRequest;
 import com.breadcrumbs.breadcast.dto.member.MemberResponse;

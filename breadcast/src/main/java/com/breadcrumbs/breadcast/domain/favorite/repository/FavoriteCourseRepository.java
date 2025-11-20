@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.repository.course;
+package com.breadcrumbs.breadcast.domain.favorite.repository;
 
 import com.breadcrumbs.breadcast.domain.Member;
 import com.breadcrumbs.breadcast.domain.course.FavoriteCourse;

@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.controller;
+package com.breadcrumbs.breadcast.domain.member.controller;
 
 import com.breadcrumbs.breadcast.dto.member.MemberResponse;
 import com.breadcrumbs.breadcast.dto.member.MemberUpdateRequest;

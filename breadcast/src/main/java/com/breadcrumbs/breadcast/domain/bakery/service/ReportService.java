@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.service;
+package com.breadcrumbs.breadcast.domain.bakery.service;
 
 import com.breadcrumbs.breadcast.dto.report.AddReportRequest;
 import com.breadcrumbs.breadcast.dto.report.ReportsResponse;

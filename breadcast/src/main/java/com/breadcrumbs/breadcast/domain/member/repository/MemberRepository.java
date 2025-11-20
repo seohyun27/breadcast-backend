@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.repository;
+package com.breadcrumbs.breadcast.domain.member.repository;
 
 import com.breadcrumbs.breadcast.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;

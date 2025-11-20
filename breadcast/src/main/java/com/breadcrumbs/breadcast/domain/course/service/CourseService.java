@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.service;
+package com.breadcrumbs.breadcast.domain.course.service;
 
 import com.breadcrumbs.breadcast.domain.course.Course;
 import com.breadcrumbs.breadcast.dto.course.*;

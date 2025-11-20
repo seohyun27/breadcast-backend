@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.controller;
+package com.breadcrumbs.breadcast.domain.favorite.controller;
 
 import com.breadcrumbs.breadcast.dto.myPage.GetFavoriteBakeriesResponse;
 import com.breadcrumbs.breadcast.dto.myPage.GetFavoriteCoursesResponse;

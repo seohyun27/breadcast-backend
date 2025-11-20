@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.controller;
+package com.breadcrumbs.breadcast.domain.course.controller;
 
 import com.breadcrumbs.breadcast.dto.course.*;
 import com.breadcrumbs.breadcast.security.UserDetailsImpl;
