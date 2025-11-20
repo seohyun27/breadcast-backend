@@ -1,9 +1,9 @@
 package com.breadcrumbs.breadcast.domain.bakery.controller;
 
-import com.breadcrumbs.breadcast.dto.report.AddReportRequest;
-import com.breadcrumbs.breadcast.dto.report.ReportsResponse;
-import com.breadcrumbs.breadcast.security.UserDetailsImpl;
-import com.breadcrumbs.breadcast.service.ReportService;
+import com.breadcrumbs.breadcast.domain.bakery.dto.report.AddReportRequest;
+import com.breadcrumbs.breadcast.domain.bakery.dto.report.ReportsResponse;
+import com.breadcrumbs.breadcast.domain.bakery.service.ReportService;
+import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

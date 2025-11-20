@@ -1,7 +1,6 @@
 package com.breadcrumbs.breadcast.domain.bakery.repository;
 
-import com.breadcrumbs.breadcast.domain.bakery.Bakery;
-import com.breadcrumbs.breadcast.domain.bakery.BakeryReport;
+import com.breadcrumbs.breadcast.domain.bakery.entity.Bakery;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

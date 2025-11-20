@@ -1,9 +1,13 @@
 package com.breadcrumbs.breadcast.domain.menu.controller;
 
-import com.breadcrumbs.breadcast.dto.menu.*;
-import com.breadcrumbs.breadcast.security.UserDetailsImpl;
-import com.breadcrumbs.breadcast.service.MenuService;
-import com.breadcrumbs.breadcast.service.ReviewService;
+import com.breadcrumbs.breadcast.domain.menu.dto.GetMenuDetailResponse;
+import com.breadcrumbs.breadcast.domain.menu.dto.GetMenusResponse;
+import com.breadcrumbs.breadcast.domain.menu.service.MenuService;
+import com.breadcrumbs.breadcast.domain.review.dto.menu.AddMenuReviewRequest;
+import com.breadcrumbs.breadcast.domain.review.dto.menu.MenuReviewResponse;
+import com.breadcrumbs.breadcast.domain.review.dto.menu.UpdateMenuReviewRequest;
+import com.breadcrumbs.breadcast.domain.review.service.ReviewService;
+import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +37,8 @@ public class MenuController {
 
     @PostMapping("/menus/{menuId}/menu-reviews")
     public ResponseEntity<MenuReviewResponse> addMenuReview(@PathVariable Long menuId,
-                                                     @AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                     @RequestBody @Valid AddMenuReviewRequest request){
+                                                            @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                            @RequestBody @Valid AddMenuReviewRequest request){
         return null;
     }
 

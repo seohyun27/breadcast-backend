@@ -1,9 +1,9 @@
 package com.breadcrumbs.breadcast.domain.favorite.controller;
 
-import com.breadcrumbs.breadcast.dto.myPage.GetFavoriteBakeriesResponse;
-import com.breadcrumbs.breadcast.dto.myPage.GetFavoriteCoursesResponse;
-import com.breadcrumbs.breadcast.security.UserDetailsImpl;
-import com.breadcrumbs.breadcast.service.FavoriteService;
+import com.breadcrumbs.breadcast.domain.favorite.dto.GetFavoriteBakeriesResponse;
+import com.breadcrumbs.breadcast.domain.favorite.dto.GetFavoriteCoursesResponse;
+import com.breadcrumbs.breadcast.domain.favorite.service.FavoriteService;
+import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

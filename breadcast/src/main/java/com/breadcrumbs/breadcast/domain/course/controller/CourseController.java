@@ -1,10 +1,14 @@
 package com.breadcrumbs.breadcast.domain.course.controller;
 
-import com.breadcrumbs.breadcast.dto.course.*;
-import com.breadcrumbs.breadcast.security.UserDetailsImpl;
-import com.breadcrumbs.breadcast.service.CoursePartService;
-import com.breadcrumbs.breadcast.service.CourseService;
-import com.breadcrumbs.breadcast.service.ReviewService;
+import com.breadcrumbs.breadcast.domain.course.dto.CourseDetailResponse;
+import com.breadcrumbs.breadcast.domain.course.dto.CourseRequest;
+import com.breadcrumbs.breadcast.domain.course.dto.CourseResponse;
+import com.breadcrumbs.breadcast.domain.course.dto.GetSimpleCoursesResponse;
+import com.breadcrumbs.breadcast.domain.course.service.CourseService;
+import com.breadcrumbs.breadcast.domain.review.dto.course.CourseReviewRequest;
+import com.breadcrumbs.breadcast.domain.review.dto.course.CourseReviewResponse;
+import com.breadcrumbs.breadcast.domain.review.service.ReviewService;
+import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

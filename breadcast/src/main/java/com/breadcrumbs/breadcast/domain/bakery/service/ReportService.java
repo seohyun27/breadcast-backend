@@ -1,8 +1,8 @@
 package com.breadcrumbs.breadcast.domain.bakery.service;
 
-import com.breadcrumbs.breadcast.dto.report.AddReportRequest;
-import com.breadcrumbs.breadcast.dto.report.ReportsResponse;
-import com.breadcrumbs.breadcast.repository.bakery.BakeryReportRepository;
+import com.breadcrumbs.breadcast.domain.bakery.dto.report.AddReportRequest;
+import com.breadcrumbs.breadcast.domain.bakery.dto.report.ReportsResponse;
+import com.breadcrumbs.breadcast.domain.bakery.repository.BakeryReportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

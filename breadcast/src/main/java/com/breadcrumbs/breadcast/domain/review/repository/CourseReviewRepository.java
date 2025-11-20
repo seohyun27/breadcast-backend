@@ -1,7 +1,6 @@
 package com.breadcrumbs.breadcast.domain.review.repository;
 
-import com.breadcrumbs.breadcast.domain.Member;
-import com.breadcrumbs.breadcast.domain.course.CourseReview;
+import com.breadcrumbs.breadcast.domain.review.entity.CourseReview;
 import lombok.Lombok;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,10 +1,10 @@
 package com.breadcrumbs.breadcast.domain.member.service;
 
-import com.breadcrumbs.breadcast.dto.member.LoginRequest;
-import com.breadcrumbs.breadcast.dto.member.MemberResponse;
-import com.breadcrumbs.breadcast.dto.member.MemberUpdateRequest;
-import com.breadcrumbs.breadcast.dto.member.SignupRequest;
-import com.breadcrumbs.breadcast.repository.MemberRepository;
+import com.breadcrumbs.breadcast.domain.member.dto.LoginRequest;
+import com.breadcrumbs.breadcast.domain.member.dto.MemberResponse;
+import com.breadcrumbs.breadcast.domain.member.dto.MemberUpdateRequest;
+import com.breadcrumbs.breadcast.domain.member.dto.SignupRequest;
+import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

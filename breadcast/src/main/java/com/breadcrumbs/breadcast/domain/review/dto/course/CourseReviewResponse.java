@@ -17,7 +17,7 @@ public class CourseReviewResponse {
      * 빵지순례 리뷰 쓰기
      * 빵지순례 리뷰 수정하기
      */
-    private long reivewId;		// 리뷰 아이디
+    private long reviewId;		// 리뷰 아이디
     private String writer;		// 작성자
     private String text;		// 내용
 

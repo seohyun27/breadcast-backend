@@ -1,9 +1,12 @@
 package com.breadcrumbs.breadcast.domain.bakery.controller;
 
 import com.breadcrumbs.breadcast.domain.bakery.*;
+import com.breadcrumbs.breadcast.domain.bakery.dto.BakeryDetailResponse;
+import com.breadcrumbs.breadcast.domain.bakery.dto.SearchBakeryResponse;
+import com.breadcrumbs.breadcast.domain.bakery.service.BakeryService;
+import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewResponse;
+import com.breadcrumbs.breadcast.domain.review.service.ReviewService;
 import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
-import com.breadcrumbs.breadcast.service.BakeryService;
-import com.breadcrumbs.breadcast.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

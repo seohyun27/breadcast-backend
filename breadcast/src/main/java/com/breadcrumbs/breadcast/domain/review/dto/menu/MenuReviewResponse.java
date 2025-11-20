@@ -18,7 +18,7 @@ public class MenuReviewResponse {
      * 메뉴 리뷰 쓰기
      * 메뉴 리뷰 수정하기
      */
-    private long reivewId;		// 리뷰 아이디
+    private long reviewId;		// 리뷰 아이디
     private String writer;		// 작성자
     private double rating;		// 별점
     private String text;		// 내용

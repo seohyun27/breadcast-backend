@@ -1,9 +1,9 @@
 package com.breadcrumbs.breadcast.domain.member.controller;
 
-import com.breadcrumbs.breadcast.dto.member.LoginRequest;
-import com.breadcrumbs.breadcast.dto.member.MemberResponse;
-import com.breadcrumbs.breadcast.dto.member.SignupRequest;
-import com.breadcrumbs.breadcast.service.MemberService;
+import com.breadcrumbs.breadcast.domain.member.dto.LoginRequest;
+import com.breadcrumbs.breadcast.domain.member.dto.MemberResponse;
+import com.breadcrumbs.breadcast.domain.member.dto.SignupRequest;
+import com.breadcrumbs.breadcast.domain.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
