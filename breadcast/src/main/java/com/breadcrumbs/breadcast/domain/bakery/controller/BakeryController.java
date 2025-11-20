@@ -1,6 +1,5 @@
 package com.breadcrumbs.breadcast.domain.bakery.controller;
 
-import com.breadcrumbs.breadcast.domain.bakery.*;
 import com.breadcrumbs.breadcast.domain.bakery.dto.BakeryDetailResponse;
 import com.breadcrumbs.breadcast.domain.bakery.dto.SearchBakeryResponse;
 import com.breadcrumbs.breadcast.domain.bakery.service.BakeryService;
