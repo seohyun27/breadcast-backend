@@ -1,10 +1,9 @@
 package com.breadcrumbs.breadcast.domain.favorite.service;
 
-import com.breadcrumbs.breadcast.domain.bakery.Bakery;
-import com.breadcrumbs.breadcast.dto.myPage.GetFavoriteBakeriesResponse;
-import com.breadcrumbs.breadcast.dto.myPage.GetFavoriteCoursesResponse;
-import com.breadcrumbs.breadcast.repository.bakery.FavoriteBakeryRepository;
-import com.breadcrumbs.breadcast.repository.course.FavoriteCourseRepository;
+import com.breadcrumbs.breadcast.domain.favorite.dto.GetFavoriteBakeriesResponse;
+import com.breadcrumbs.breadcast.domain.favorite.dto.GetFavoriteCoursesResponse;
+import com.breadcrumbs.breadcast.domain.favorite.repository.FavoriteBakeryRepository;
+import com.breadcrumbs.breadcast.domain.favorite.repository.FavoriteCourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

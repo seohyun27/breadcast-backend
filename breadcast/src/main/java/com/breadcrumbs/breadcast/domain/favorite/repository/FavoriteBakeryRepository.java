@@ -1,7 +1,6 @@
 package com.breadcrumbs.breadcast.domain.favorite.repository;
 
-import com.breadcrumbs.breadcast.domain.Member;
-import com.breadcrumbs.breadcast.domain.bakery.FavoriteBakery;
+import com.breadcrumbs.breadcast.domain.favorite.entity.FavoriteBakery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package com.breadcrumbs.breadcast.domain.favorite.repository;
 
-import com.breadcrumbs.breadcast.domain.Member;
-import com.breadcrumbs.breadcast.domain.course.FavoriteCourse;
+import com.breadcrumbs.breadcast.domain.favorite.entity.FavoriteCourse;
 import lombok.Lombok;
 import org.springframework.data.jpa.repository.JpaRepository;
 

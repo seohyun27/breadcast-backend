@@ -4,6 +4,7 @@ import com.breadcrumbs.breadcast.domain.bakery.*;
 import com.breadcrumbs.breadcast.domain.bakery.dto.BakeryDetailResponse;
 import com.breadcrumbs.breadcast.domain.bakery.dto.SearchBakeryResponse;
 import com.breadcrumbs.breadcast.domain.bakery.service.BakeryService;
+import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewRequest;
 import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewResponse;
 import com.breadcrumbs.breadcast.domain.review.service.ReviewService;
 import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
