@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.domain.menu;
+package com.breadcrumbs.breadcast.domain.menu.entity;
 
 import com.breadcrumbs.breadcast.domain.bakery.Bakery;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.dto.myPage;
+package com.breadcrumbs.breadcast.domain.favorite.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

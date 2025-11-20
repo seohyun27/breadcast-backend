@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.dto.course;
+package com.breadcrumbs.breadcast.domain.review.dto.course;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

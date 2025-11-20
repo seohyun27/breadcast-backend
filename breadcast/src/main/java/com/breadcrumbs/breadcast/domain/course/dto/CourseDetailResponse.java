@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.dto.course;
+package com.breadcrumbs.breadcast.domain.course.dto;
 
 import java.util.List;
 

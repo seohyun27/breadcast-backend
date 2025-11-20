@@ -1,7 +1,7 @@
-package com.breadcrumbs.breadcast.controller;
+package com.breadcrumbs.breadcast.domain.bakery.controller;
 
-import com.breadcrumbs.breadcast.dto.bakery.*;
-import com.breadcrumbs.breadcast.security.UserDetailsImpl;
+import com.breadcrumbs.breadcast.domain.bakery.*;
+import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
 import com.breadcrumbs.breadcast.service.BakeryService;
 import com.breadcrumbs.breadcast.service.ReviewService;
 import lombok.RequiredArgsConstructor;

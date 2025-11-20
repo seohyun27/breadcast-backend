@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.domain.menu;
+package com.breadcrumbs.breadcast.domain.review.entity;
 
 import com.breadcrumbs.breadcast.domain.Member;
 import com.breadcrumbs.breadcast.domain.bakery.Bakery;

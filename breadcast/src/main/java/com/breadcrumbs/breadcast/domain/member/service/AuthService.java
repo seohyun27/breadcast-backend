@@ -1,8 +1,9 @@
-package com.breadcrumbs.breadcast.security;
+package com.breadcrumbs.breadcast.domain.member.service;
 
 import com.breadcrumbs.breadcast.domain.Member;
 import com.breadcrumbs.breadcast.dto.member.LoginRequest;
 import com.breadcrumbs.breadcast.dto.member.MemberResponse;
+import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
 import com.breadcrumbs.breadcast.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,7 +31,7 @@ public class AuthService implements UserDetailsService { // UserDetailsService �
     /**
      * 컨트롤러가 호출할 로그인 메서드
      */
-    @Transactional
+    /*@Transactional
     public MemberResponse login(LoginRequest loginRequest) {
 
         // (중요) Spring Security에게 이 ID와 PW로 인증 시도해 달라고 요청
@@ -54,7 +55,7 @@ public class AuthService implements UserDetailsService { // UserDetailsService �
 
         // MemberResponse DTO에 닉네임을 담아 반환
         return new MemberResponse(nickname);
-    }
+    }*/
 
 
     /**

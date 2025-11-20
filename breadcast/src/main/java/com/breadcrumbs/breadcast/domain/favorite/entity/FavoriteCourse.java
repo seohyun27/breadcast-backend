@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.domain.course;
+package com.breadcrumbs.breadcast.domain.favorite.entity;
 
 import com.breadcrumbs.breadcast.domain.Member;
 import jakarta.persistence.*;

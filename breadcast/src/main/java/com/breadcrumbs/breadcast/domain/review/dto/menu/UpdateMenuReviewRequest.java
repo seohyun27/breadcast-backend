@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.dto.menu;
+package com.breadcrumbs.breadcast.domain.review.dto.menu;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
