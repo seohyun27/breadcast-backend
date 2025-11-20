@@ -31,13 +31,18 @@ public class BakeryService {
         int favoriteCount = favoriteBakeryRepository.countByBakeryId(bakeryId);
         int reviewCount = bakeryReviewRepository.countByBakeryId(bakeryId);
         double rating = getAverageRating(bakeryId);
+        long favoriteId;
         boolean isFavorited = false;
 
         //사용자가 좋아요한 빵집인지 확인
         if(memId != null) {
             List<FavoriteBakery> favoriteBakeryList = favoriteBakeryRepository.findByMemberId(memId);
-            for(FavoriteBakery favoriteBakery : favoriteBakeryList){
-                isFavorited = (favoriteBakery.getMember().getId() == memId);
+            for (FavoriteBakery favoriteBakery : favoriteBakeryList) {
+                favoriteId = favoriteBakery.getBakery().getId();
+                if (favoriteId == bakeryId) {
+                    isFavorited = true;
+                    break; // 찾았으면 더 이상 루프를 돌 필요가 없습니다.
+                }
             }
         }
 
