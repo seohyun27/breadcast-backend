@@ -1,11 +1,11 @@
 package com.breadcrumbs.breadcast;
 
-import com.breadcrumbs.breadcast.domain.Member;
-import com.breadcrumbs.breadcast.domain.bakery.Bakery;
-import com.breadcrumbs.breadcast.domain.menu.Menu;
-import com.breadcrumbs.breadcast.domain.menu.MenuReview;
-import com.breadcrumbs.breadcast.repository.MemberRepository;
-import com.breadcrumbs.breadcast.repository.menu.MenuReviewRepository;
+import com.breadcrumbs.breadcast.domain.bakery.entity.Bakery;
+import com.breadcrumbs.breadcast.domain.member.entity.Member;
+import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
+import com.breadcrumbs.breadcast.domain.menu.entity.Menu;
+import com.breadcrumbs.breadcast.domain.review.entity.MenuReview;
+import com.breadcrumbs.breadcast.domain.review.repository.MenuReviewRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +22,10 @@ import java.util.List;
 class BreadCastApplicationTests {
 
 	@Autowired EntityManager em;
-	@Autowired MemberRepository memberRepository;
-	@Autowired MenuReviewRepository menuReviewRepository;
+	@Autowired
+    MemberRepository memberRepository;
+	@Autowired
+    MenuReviewRepository menuReviewRepository;
 
 	@Test
 	@Rollback(false)

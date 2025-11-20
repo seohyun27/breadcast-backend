@@ -1,16 +1,16 @@
 package com.breadcrumbs.breadcast;
 
-import com.breadcrumbs.breadcast.domain.Member;
-import com.breadcrumbs.breadcast.domain.bakery.Bakery;
-import com.breadcrumbs.breadcast.domain.bakery.BakeryReview;
-import com.breadcrumbs.breadcast.domain.bakery.FavoriteBakery;
-import com.breadcrumbs.breadcast.dto.bakery.BakeryDetailResponse;
-import com.breadcrumbs.breadcast.dto.bakery.SearchBakeryResponse;
-import com.breadcrumbs.breadcast.repository.MemberRepository;
-import com.breadcrumbs.breadcast.repository.bakery.BakeryRepository;
-import com.breadcrumbs.breadcast.repository.bakery.BakeryReviewRepository;
-import com.breadcrumbs.breadcast.repository.bakery.FavoriteBakeryRepository;
-import com.breadcrumbs.breadcast.service.BakeryService;
+import com.breadcrumbs.breadcast.domain.bakery.dto.BakeryDetailResponse;
+import com.breadcrumbs.breadcast.domain.bakery.dto.SearchBakeryResponse;
+import com.breadcrumbs.breadcast.domain.bakery.entity.Bakery;
+import com.breadcrumbs.breadcast.domain.bakery.repository.BakeryRepository;
+import com.breadcrumbs.breadcast.domain.bakery.service.BakeryService;
+import com.breadcrumbs.breadcast.domain.favorite.entity.FavoriteBakery;
+import com.breadcrumbs.breadcast.domain.favorite.repository.FavoriteBakeryRepository;
+import com.breadcrumbs.breadcast.domain.member.entity.Member;
+import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
+import com.breadcrumbs.breadcast.domain.review.entity.BakeryReview;
+import com.breadcrumbs.breadcast.domain.review.repository.BakeryReviewRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
