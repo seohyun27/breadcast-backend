@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.dto.member;
+package com.breadcrumbs.breadcast.domain.member.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

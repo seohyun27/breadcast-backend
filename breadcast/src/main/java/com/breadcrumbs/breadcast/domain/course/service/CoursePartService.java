@@ -1,10 +1,10 @@
-package com.breadcrumbs.breadcast.service;
+package com.breadcrumbs.breadcast.domain.course.service;
 
-import com.breadcrumbs.breadcast.domain.course.CoursePart;
-import com.breadcrumbs.breadcast.dto.course.CoursePartRequest;
-import com.breadcrumbs.breadcast.dto.course.CoursePartResponse;
-import com.breadcrumbs.breadcast.repository.bakery.BakeryRepository;
-import com.breadcrumbs.breadcast.repository.course.CoursePartRepository;
+import com.breadcrumbs.breadcast.domain.bakery.repository.BakeryRepository;
+import com.breadcrumbs.breadcast.domain.course.dto.CoursePartRequest;
+import com.breadcrumbs.breadcast.domain.course.dto.CoursePartResponse;
+import com.breadcrumbs.breadcast.domain.course.entity.CoursePart;
+import com.breadcrumbs.breadcast.domain.course.repository.CoursePartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

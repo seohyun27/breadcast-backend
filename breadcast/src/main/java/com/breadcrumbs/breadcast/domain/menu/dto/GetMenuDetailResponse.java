@@ -1,7 +1,8 @@
-package com.breadcrumbs.breadcast.dto.menu;
+package com.breadcrumbs.breadcast.domain.menu.dto;
 
 import java.util.List;
 
+import com.breadcrumbs.breadcast.domain.review.dto.menu.MenuReviewResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,6 +1,6 @@
-package com.breadcrumbs.breadcast.security;
+package com.breadcrumbs.breadcast.global.security;
 
-import com.breadcrumbs.breadcast.domain.Member;
+import com.breadcrumbs.breadcast.domain.member.entity.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

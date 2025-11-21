@@ -1,25 +1,27 @@
 package com.breadcrumbs.breadcast;
 
-import com.breadcrumbs.breadcast.domain.Member;
-import com.breadcrumbs.breadcast.domain.bakery.Bakery;
-import com.breadcrumbs.breadcast.domain.bakery.BakeryReview;
-import com.breadcrumbs.breadcast.dto.bakery.BakeryReviewResponse;
-import com.breadcrumbs.breadcast.repository.MemberRepository;
-import com.breadcrumbs.breadcast.repository.bakery.BakeryRepository;
-import com.breadcrumbs.breadcast.repository.bakery.BakeryReviewRepository;
-import com.breadcrumbs.breadcast.service.ReviewService;
+import com.breadcrumbs.breadcast.domain.bakery.entity.Bakery;
+import com.breadcrumbs.breadcast.domain.bakery.repository.BakeryRepository;
+import com.breadcrumbs.breadcast.domain.member.entity.Member;
+import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
+import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewResponse;
+import com.breadcrumbs.breadcast.domain.review.entity.BakeryReview;
+import com.breadcrumbs.breadcast.domain.review.repository.BakeryReviewRepository;
+import com.breadcrumbs.breadcast.domain.review.service.ReviewService;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @Transactional
 public class ReviewServiceTest {
 

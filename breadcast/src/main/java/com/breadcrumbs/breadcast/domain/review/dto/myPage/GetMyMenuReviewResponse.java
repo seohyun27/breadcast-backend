@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.dto.myPage;
+package com.breadcrumbs.breadcast.domain.review.dto.myPage;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +20,7 @@ public class GetMyMenuReviewResponse {
     private long menuId; 		//메뉴 id
     private long reviewId; 		//메뉴 리뷰 id
     private String bakeryName; 	//빵집 이름
-    private String meunName; 	//메뉴 이름
+    private String menuName; 	//메뉴 이름
     private String text; 		//메뉴 리뷰 내용
     private double rating; 		//메뉴 리뷰 별점
 

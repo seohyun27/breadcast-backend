@@ -1,15 +1,15 @@
 package com.breadcrumbs.breadcast;
 
-import com.breadcrumbs.breadcast.domain.Member;
-import com.breadcrumbs.breadcast.domain.bakery.Bakery;
-import com.breadcrumbs.breadcast.domain.menu.Menu;
-import com.breadcrumbs.breadcast.domain.menu.MenuReview;
-import com.breadcrumbs.breadcast.dto.menu.GetMenusResponse;
-import com.breadcrumbs.breadcast.repository.MemberRepository;
-import com.breadcrumbs.breadcast.repository.bakery.BakeryRepository;
-import com.breadcrumbs.breadcast.repository.menu.MenuRepository;
-import com.breadcrumbs.breadcast.repository.menu.MenuReviewRepository;
-import com.breadcrumbs.breadcast.service.MenuService;
+import com.breadcrumbs.breadcast.domain.bakery.entity.Bakery;
+import com.breadcrumbs.breadcast.domain.bakery.repository.BakeryRepository;
+import com.breadcrumbs.breadcast.domain.member.entity.Member;
+import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
+import com.breadcrumbs.breadcast.domain.menu.dto.GetMenusResponse;
+import com.breadcrumbs.breadcast.domain.menu.entity.Menu;
+import com.breadcrumbs.breadcast.domain.menu.repository.MenuRepository;
+import com.breadcrumbs.breadcast.domain.menu.service.MenuService;
+import com.breadcrumbs.breadcast.domain.review.entity.MenuReview;
+import com.breadcrumbs.breadcast.domain.review.repository.MenuReviewRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @Transactional
 // @Rollback(false) // 테스트 후 DB 롤백이 기본 동작이므로 주석 처리
 public class MenuServiceTest {

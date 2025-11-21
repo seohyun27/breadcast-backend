@@ -1,6 +1,6 @@
-package com.breadcrumbs.breadcast.domain.course;
+package com.breadcrumbs.breadcast.domain.course.entity;
 
-import com.breadcrumbs.breadcast.domain.Member;
+import com.breadcrumbs.breadcast.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

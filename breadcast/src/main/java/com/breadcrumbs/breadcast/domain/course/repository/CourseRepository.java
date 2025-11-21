@@ -1,7 +1,6 @@
-package com.breadcrumbs.breadcast.repository.course;
+package com.breadcrumbs.breadcast.domain.course.repository;
 
-import com.breadcrumbs.breadcast.domain.Member;
-import com.breadcrumbs.breadcast.domain.course.Course;
+import com.breadcrumbs.breadcast.domain.course.entity.Course;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

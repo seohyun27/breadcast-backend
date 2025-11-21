@@ -1,7 +1,8 @@
-package com.breadcrumbs.breadcast.dto.course;
+package com.breadcrumbs.breadcast.domain.course.dto;
 
 import java.util.List;
 
+import com.breadcrumbs.breadcast.domain.review.dto.course.CourseReviewResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

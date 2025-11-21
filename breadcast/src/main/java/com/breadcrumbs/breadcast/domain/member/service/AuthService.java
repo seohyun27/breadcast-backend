@@ -1,9 +1,10 @@
-package com.breadcrumbs.breadcast.security;
+package com.breadcrumbs.breadcast.domain.member.service;
 
-import com.breadcrumbs.breadcast.domain.Member;
-import com.breadcrumbs.breadcast.dto.member.LoginRequest;
-import com.breadcrumbs.breadcast.dto.member.MemberResponse;
-import com.breadcrumbs.breadcast.repository.MemberRepository;
+import com.breadcrumbs.breadcast.domain.member.dto.LoginRequest;
+import com.breadcrumbs.breadcast.domain.member.dto.MemberResponse;
+import com.breadcrumbs.breadcast.domain.member.entity.Member;
+import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
+import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

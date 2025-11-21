@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.security;
+package com.breadcrumbs.breadcast.global.security;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;

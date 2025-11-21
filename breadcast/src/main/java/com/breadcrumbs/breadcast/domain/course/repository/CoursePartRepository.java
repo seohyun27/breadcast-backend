@@ -1,6 +1,6 @@
-package com.breadcrumbs.breadcast.repository.course;
+package com.breadcrumbs.breadcast.domain.course.repository;
 
-import com.breadcrumbs.breadcast.domain.course.CoursePart;
+import com.breadcrumbs.breadcast.domain.course.entity.CoursePart;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,24 +1,22 @@
-package com.breadcrumbs.breadcast.service;
+package com.breadcrumbs.breadcast.domain.review.service;
 
-import com.breadcrumbs.breadcast.domain.bakery.BakeryReview;
-import com.breadcrumbs.breadcast.domain.menu.MenuReview;
-import com.breadcrumbs.breadcast.dto.bakery.BakeryDetailResponse;
-import com.breadcrumbs.breadcast.dto.bakery.BakeryReviewRequest;
-import com.breadcrumbs.breadcast.dto.bakery.BakeryReviewResponse;
-import com.breadcrumbs.breadcast.dto.course.CourseReviewRequest;
-import com.breadcrumbs.breadcast.dto.course.CourseReviewResponse;
-import com.breadcrumbs.breadcast.dto.menu.AddMenuReviewRequest;
-import com.breadcrumbs.breadcast.dto.menu.MenuReviewResponse;
-import com.breadcrumbs.breadcast.dto.menu.UpdateMenuReviewRequest;
-import com.breadcrumbs.breadcast.dto.myPage.GetMyBakeryReviewResponse;
-import com.breadcrumbs.breadcast.dto.myPage.GetMyCourseReviewResponse;
-import com.breadcrumbs.breadcast.dto.myPage.GetMyMenuReviewResponse;
-import com.breadcrumbs.breadcast.repository.bakery.BakeryRepository;
-import com.breadcrumbs.breadcast.repository.bakery.BakeryReviewRepository;
-import com.breadcrumbs.breadcast.repository.course.CourseRepository;
-import com.breadcrumbs.breadcast.repository.course.CourseReviewRepository;
-import com.breadcrumbs.breadcast.repository.menu.MenuRepository;
-import com.breadcrumbs.breadcast.repository.menu.MenuReviewRepository;
+import com.breadcrumbs.breadcast.domain.bakery.repository.BakeryRepository;
+import com.breadcrumbs.breadcast.domain.course.repository.CourseRepository;
+import com.breadcrumbs.breadcast.domain.menu.repository.MenuRepository;
+import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewRequest;
+import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewResponse;
+import com.breadcrumbs.breadcast.domain.review.dto.course.CourseReviewRequest;
+import com.breadcrumbs.breadcast.domain.review.dto.course.CourseReviewResponse;
+import com.breadcrumbs.breadcast.domain.review.dto.menu.AddMenuReviewRequest;
+import com.breadcrumbs.breadcast.domain.review.dto.menu.MenuReviewResponse;
+import com.breadcrumbs.breadcast.domain.review.dto.menu.UpdateMenuReviewRequest;
+import com.breadcrumbs.breadcast.domain.review.dto.myPage.GetMyBakeryReviewResponse;
+import com.breadcrumbs.breadcast.domain.review.dto.myPage.GetMyCourseReviewResponse;
+import com.breadcrumbs.breadcast.domain.review.dto.myPage.GetMyMenuReviewResponse;
+import com.breadcrumbs.breadcast.domain.review.entity.BakeryReview;
+import com.breadcrumbs.breadcast.domain.review.repository.BakeryReviewRepository;
+import com.breadcrumbs.breadcast.domain.review.repository.CourseReviewRepository;
+import com.breadcrumbs.breadcast.domain.review.repository.MenuReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,7 +62,7 @@ public class ReviewService {
         return null;
     }
 
-    public void deleteBakeryReview(Long bakeryRevieweId, Long memId) {
+    public void deleteBakeryReview(Long bakeryReviewId, Long memId) {
         /*
         -bakeryReviewRepository.findById(bakeryReviewId) 호출하여 존재 여부 확인
         -해당 리뷰 ID가 없으면 예외처리 (.orElseThrow())

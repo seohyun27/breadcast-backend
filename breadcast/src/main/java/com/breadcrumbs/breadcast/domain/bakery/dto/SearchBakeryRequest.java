@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.dto.bakery;
+package com.breadcrumbs.breadcast.domain.bakery.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

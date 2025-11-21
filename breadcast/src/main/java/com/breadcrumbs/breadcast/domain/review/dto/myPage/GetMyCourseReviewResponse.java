@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcast.dto.myPage;
+package com.breadcrumbs.breadcast.domain.review.dto.myPage;
 
 import java.time.LocalDateTime;
 

@@ -1,7 +1,6 @@
-package com.breadcrumbs.breadcast.repository.menu;
+package com.breadcrumbs.breadcast.domain.review.repository;
 
-import com.breadcrumbs.breadcast.domain.Member;
-import com.breadcrumbs.breadcast.domain.menu.MenuReview;
+import com.breadcrumbs.breadcast.domain.review.entity.MenuReview;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

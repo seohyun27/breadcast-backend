@@ -1,6 +1,7 @@
-package com.breadcrumbs.breadcast.domain.bakery;
+package com.breadcrumbs.breadcast.domain.favorite.entity;
 
-import com.breadcrumbs.breadcast.domain.Member;
+import com.breadcrumbs.breadcast.domain.bakery.entity.Bakery;
+import com.breadcrumbs.breadcast.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

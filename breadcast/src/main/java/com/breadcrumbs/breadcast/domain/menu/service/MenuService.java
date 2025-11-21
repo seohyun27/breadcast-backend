@@ -1,14 +1,11 @@
-package com.breadcrumbs.breadcast.service;
+package com.breadcrumbs.breadcast.domain.menu.service;
 
-import com.breadcrumbs.breadcast.domain.bakery.Bakery;
-import com.breadcrumbs.breadcast.domain.bakery.BakeryReview;
-import com.breadcrumbs.breadcast.domain.menu.Menu;
-import com.breadcrumbs.breadcast.domain.menu.MenuReview;
-import com.breadcrumbs.breadcast.dto.bakery.BakeryDetailResponse;
-import com.breadcrumbs.breadcast.dto.menu.GetMenuDetailResponse;
-import com.breadcrumbs.breadcast.dto.menu.GetMenusResponse;
-import com.breadcrumbs.breadcast.repository.menu.MenuRepository;
-import com.breadcrumbs.breadcast.repository.menu.MenuReviewRepository;
+import com.breadcrumbs.breadcast.domain.menu.dto.GetMenuDetailResponse;
+import com.breadcrumbs.breadcast.domain.menu.dto.GetMenusResponse;
+import com.breadcrumbs.breadcast.domain.menu.entity.Menu;
+import com.breadcrumbs.breadcast.domain.menu.repository.MenuRepository;
+import com.breadcrumbs.breadcast.domain.review.entity.MenuReview;
+import com.breadcrumbs.breadcast.domain.review.repository.MenuReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

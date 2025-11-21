@@ -1,17 +1,17 @@
-package com.breadcrumbs.breadcast.controller;
+package com.breadcrumbs.breadcast.domain.member.controller;
 
-import com.breadcrumbs.breadcast.dto.member.MemberResponse;
-import com.breadcrumbs.breadcast.dto.member.MemberUpdateRequest;
-import com.breadcrumbs.breadcast.dto.myPage.GetMyBakeryReviewResponse;
-import com.breadcrumbs.breadcast.dto.myPage.GetMyCourseResponse;
-import com.breadcrumbs.breadcast.dto.myPage.GetMyCourseReviewResponse;
-import com.breadcrumbs.breadcast.dto.myPage.GetMyMenuReviewResponse;
-import com.breadcrumbs.breadcast.repository.bakery.BakeryReviewRepository;
-import com.breadcrumbs.breadcast.repository.course.CourseRepository;
-import com.breadcrumbs.breadcast.repository.course.CourseReviewRepository;
-import com.breadcrumbs.breadcast.repository.menu.MenuReviewRepository;
-import com.breadcrumbs.breadcast.security.UserDetailsImpl;
-import com.breadcrumbs.breadcast.service.MemberService;
+import com.breadcrumbs.breadcast.domain.course.dto.GetMyCourseResponse;
+import com.breadcrumbs.breadcast.domain.course.repository.CourseRepository;
+import com.breadcrumbs.breadcast.domain.member.dto.MemberResponse;
+import com.breadcrumbs.breadcast.domain.member.dto.MemberUpdateRequest;
+import com.breadcrumbs.breadcast.domain.member.service.MemberService;
+import com.breadcrumbs.breadcast.domain.review.dto.myPage.GetMyBakeryReviewResponse;
+import com.breadcrumbs.breadcast.domain.review.dto.myPage.GetMyCourseReviewResponse;
+import com.breadcrumbs.breadcast.domain.review.dto.myPage.GetMyMenuReviewResponse;
+import com.breadcrumbs.breadcast.domain.review.repository.BakeryReviewRepository;
+import com.breadcrumbs.breadcast.domain.review.repository.CourseReviewRepository;
+import com.breadcrumbs.breadcast.domain.review.repository.MenuReviewRepository;
+import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +38,7 @@ public class MemberController {
 
     @PatchMapping()
     public ResponseEntity<MemberResponse> updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                  @RequestBody @Valid MemberUpdateRequest request){
+                                                         @RequestBody @Valid MemberUpdateRequest request){
         return null;
     }
 
