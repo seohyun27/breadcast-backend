@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,8 +32,10 @@ public class ReviewServiceTest {
     @Autowired BakeryReviewRepository bakeryReviewRepository;
     @Autowired MemberRepository memberRepository;
 
+    private Long reviewId;
     private Long bakeryId;
     private Long currentMemId; // 현재 로그인한 사용자 ID
+    private Long otherMemId;
 
     @BeforeEach
     void setup() {
@@ -49,11 +52,13 @@ public class ReviewServiceTest {
         memberRepository.save(member1);
         memberRepository.save(member2);
         currentMemId = member1.getId();
+        otherMemId = member2.getId();
 
         // 3. BakeryReview 3개 저장 (평균: 4.0)
-        bakeryReviewRepository.save(BakeryReview.createBakeryReview(5.0, "굿", null, member1, bakery));
+        BakeryReview review1 = bakeryReviewRepository.save(BakeryReview.createBakeryReview(5.0, "굿", null, member1, bakery));
         bakeryReviewRepository.save(BakeryReview.createBakeryReview(4.0, "최고", null, member2, bakery));
         bakeryReviewRepository.save(BakeryReview.createBakeryReview(3.0, "쏘쏘", null, member1, bakery));
+        reviewId = review1.getId();
 
         em.flush();
         em.clear();
@@ -80,6 +85,55 @@ public class ReviewServiceTest {
         assertEquals("유저2", otherReviewResponse.getWriter(), "두 번째 리뷰는 다른 사용자의 닉네임이어야 합니다.");
         assertEquals(4.0, otherReviewResponse.getRating(), 0.01);
         assertFalse(otherReviewResponse.isMine(), "현재 사용자 ID와 작성자 ID가 다르므로 isMine은 false여야 합니다.");
+    }
+
+    @Test
+    @DisplayName("리뷰 삭제 성공 시, DB에서 해당 리뷰가 제거되어야 한다")
+    void deleteBakeryReview_Success() {
+        // GIVEN: 초기 리뷰 개수 확인
+        assertEquals(3, bakeryReviewRepository.count(), "삭제 전 리뷰는 3개여야 합니다.");
+
+        // WHEN: 작성자 본인(currentMemId)이 리뷰 삭제 서비스 호출
+        reviewService.deleteBakeryReview(reviewId, currentMemId);
+
+        // THEN:
+        // 1. DB에서 리뷰가 제거되었는지 확인
+        Optional<BakeryReview> deletedReview = bakeryReviewRepository.findById(reviewId);
+        assertFalse(deletedReview.isPresent(), "삭제 후 DB에서 리뷰를 찾을 수 없어야 합니다.");
+
+        // 2. 전체 리뷰 개수 확인
+        assertEquals(2, bakeryReviewRepository.count(), "삭제 후 리뷰는 2개여야 합니다.");
+    }
+
+    @Test
+    @DisplayName("리뷰 삭제 시 권한이 없는 사용자가 시도하면 예외가 발생해야 한다")
+    void deleteBakeryReview_Failure_NoAuthority() {
+        // WHEN/THEN: 권한이 없는 사용자(otherMemId)가 삭제 서비스 호출 시 IllegalStateException 발생
+        // (ReviewService의 권한 체크 로직에 따라 IllegalStateException 발생을 가정)
+        assertThrows(IllegalStateException.class, () -> {
+            reviewService.deleteBakeryReview(
+                    reviewId,
+                    otherMemId // 💡 권한 없는 사용자 ID
+            );
+        }, "작성자가 아닌 사용자가 삭제 시도 시 IllegalStateException이 발생해야 합니다.");
+
+        // 삭제 실패 후 리뷰가 DB에 남아있는지 확인
+        assertTrue(bakeryReviewRepository.findById(reviewId).isPresent(), "삭제 실패 후 리뷰는 DB에 남아있어야 합니다.");
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 리뷰 ID로 삭제 시도 시 예외가 발생해야 한다")
+    void deleteBakeryReview_Failure_NotFound() {
+        // GIVEN: 존재하지 않는 ID
+        Long nonExistentId = 9999L;
+
+        // WHEN/THEN: IllegalArgumentException 발생 (ReviewService의 .orElseThrow() 로직)
+        assertThrows(IllegalArgumentException.class, () -> {
+            reviewService.deleteBakeryReview(
+                    nonExistentId,
+                    currentMemId
+            );
+        }, "존재하지 않는 리뷰 ID 삭제 시 IllegalArgumentException이 발생해야 합니다.");
     }
 
     @Test
