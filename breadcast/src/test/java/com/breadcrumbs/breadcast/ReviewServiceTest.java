@@ -4,6 +4,7 @@ import com.breadcrumbs.breadcast.domain.bakery.entity.Bakery;
 import com.breadcrumbs.breadcast.domain.bakery.repository.BakeryRepository;
 import com.breadcrumbs.breadcast.domain.member.entity.Member;
 import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
+import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewRequest;
 import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewResponse;
 import com.breadcrumbs.breadcast.domain.review.entity.BakeryReview;
 import com.breadcrumbs.breadcast.domain.review.repository.BakeryReviewRepository;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -96,5 +98,29 @@ public class ReviewServiceTest {
         // THEN
         assertNotNull(responseList);
         assertTrue(responseList.isEmpty(), "리뷰가 없으면 빈 리스트가 반환되어야 합니다.");
+    }
+
+    @Test
+    @DisplayName("리뷰 쓰기 성공 시, DB에 저장되고 응답 DTO가 정확해야 한다.")
+    void addBakeryReview_Success() {
+        // GIVEN: 새로운 리뷰 요청 데이터
+        BakeryReviewRequest request = new BakeryReviewRequest();
+        request.setRating(4.5);
+        request.setText("새로 쓴 리뷰 내용");
+        request.setPhoto("new_photo_url");
+
+        // WHEN: 리뷰 작성 서비스 호출
+        BakeryReviewResponse response = reviewService.addBakeryReview(
+                bakeryId,
+                currentMemId,
+                request
+        );
+
+        // THEN:
+        // 응답 DTO 검증
+        assertEquals(request.getRating(), response.getRating(), "별점이 일치해야 합니다.");
+        assertEquals(request.getText(), response.getText(), "리뷰 내용이 일치해야 합니다.");
+        assertEquals("유저1", response.getWriter(), "작성자 닉네임이 일치해야 합니다.");
+        assertTrue(response.isMine(), "작성 직후이므로 isMine은 true여야 합니다.");
     }
 }
