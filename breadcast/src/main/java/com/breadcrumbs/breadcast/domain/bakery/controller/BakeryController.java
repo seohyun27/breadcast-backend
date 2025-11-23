@@ -49,7 +49,13 @@ public class BakeryController {
     public ResponseEntity<BakeryReviewResponse> updateBakeryReview(@PathVariable Long bakeryReviewId,
                                                                    @AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                    @RequestBody @Valid BakeryReviewRequest request) {
-        return null;
+        Long userId = (userDetails != null) ? userDetails.getUserId() : null;
+        BakeryReviewResponse bakeryReviewResponse = reviewService.updateBakeryReview(
+                bakeryReviewId,
+                userId,
+                request
+        );
+        return ResponseEntity.ok(bakeryReviewResponse);
     }
 
     @DeleteMapping("/bakery-reviews/{bakeryReviewId}")
