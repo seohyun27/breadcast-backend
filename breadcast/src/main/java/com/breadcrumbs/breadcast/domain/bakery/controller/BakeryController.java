@@ -8,6 +8,7 @@ import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewResponse;
 import com.breadcrumbs.breadcast.domain.review.service.ReviewService;
 import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,9 @@ public class BakeryController {
     public ResponseEntity<BakeryReviewResponse> addBakeryReview(@PathVariable Long bakeryId,
                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                 @RequestBody @Valid BakeryReviewRequest request) {
-        return null;
+        Long userId = (userDetails != null) ? userDetails.getUserId() : null;
+        BakeryReviewResponse bakeryReviewResponse = reviewService.addBakeryReview(bakeryId, userId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(bakeryReviewResponse);
     }
 
     @PatchMapping("/bakery-reviews/{bakeryReviewId}")
