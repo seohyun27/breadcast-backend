@@ -14,6 +14,7 @@ import com.breadcrumbs.breadcast.domain.review.repository.MenuReviewRepository;
 import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,8 @@ public class MemberController {
     @PatchMapping()
     public ResponseEntity<MemberResponse> updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                          @RequestBody @Valid MemberUpdateRequest request){
-        return null;
+        MemberResponse memberResponse = memberService.updateNickname(userDetails.getUserId(), request);
+        return ResponseEntity.status(HttpStatus.OK).body(memberResponse);
     }
 
     @GetMapping("/bakery-reviews")
