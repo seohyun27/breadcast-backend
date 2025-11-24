@@ -40,35 +40,26 @@ public class BakeryController {
     }
 
     @PostMapping("/bakeries/{bakeryId}/bakery-reviews")
-    public ResponseEntity<BakeryReviewResponse> addBakeryReview(@PathVariable Long bakeryId,
+    public BakeryReviewResponse addBakeryReview(@PathVariable Long bakeryId,
                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                 @RequestBody @Valid BakeryReviewRequest request) {
         Long userId = (userDetails != null) ? userDetails.getUserId() : null;
-        BakeryReviewResponse bakeryReviewResponse = reviewService.addBakeryReview(bakeryId, userId, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(bakeryReviewResponse);
+        return reviewService.addBakeryReview(bakeryId, userId, request);
     }
 
     @PatchMapping("/bakery-reviews/{bakeryReviewId}")
-    public ResponseEntity<BakeryReviewResponse> updateBakeryReview(@PathVariable Long bakeryReviewId,
+    public BakeryReviewResponse updateBakeryReview(@PathVariable Long bakeryReviewId,
                                                                    @AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                    @RequestBody @Valid BakeryReviewRequest request) {
         Long userId = (userDetails != null) ? userDetails.getUserId() : null;
-        BakeryReviewResponse bakeryReviewResponse = reviewService.updateBakeryReview(
-                bakeryReviewId,
-                userId,
-                request
-        );
-        return ResponseEntity.ok(bakeryReviewResponse);
+        return reviewService.updateBakeryReview(bakeryReviewId, userId, request);
     }
 
     @DeleteMapping("/bakery-reviews/{bakeryReviewId}")
-    public ResponseEntity<Void> bakeryReviewDelete(@PathVariable Long bakeryReviewId,
+    public void bakeryReviewDelete(@PathVariable Long bakeryReviewId,
                                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = (userDetails != null) ? userDetails.getUserId() : null;
         reviewService.deleteBakeryReview(bakeryReviewId, userId);
-
-        //204 No Content 응답 반환 (성공적으로 처리되었으나 돌려줄 내용이 없음)
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/bakeries")

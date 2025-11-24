@@ -36,23 +36,22 @@ public class MenuController {
     }
 
     @PostMapping("/menus/{menuId}/menu-reviews")
-    public ResponseEntity<MenuReviewResponse> addMenuReview(@PathVariable Long menuId,
+    public MenuReviewResponse addMenuReview(@PathVariable Long menuId,
                                                             @AuthenticationPrincipal UserDetailsImpl userDetails,
                                                             @RequestBody @Valid AddMenuReviewRequest request){
         return null;
     }
 
     @PatchMapping("/menu-reviews/{menuReviewId}")
-    public ResponseEntity<MenuReviewResponse> updateMenuReview(@PathVariable Long menuReviewId,
+    public MenuReviewResponse updateMenuReview(@PathVariable Long menuReviewId,
                                                         @AuthenticationPrincipal UserDetailsImpl userDetails,
                                                         @RequestBody @Valid UpdateMenuReviewRequest request){
         return null;
     }
 
     @DeleteMapping("/menu-reviews/{menuReviewId}")
-    public ResponseEntity<Void> deleteMenuReview(@PathVariable Long menuReviewId,
+    public void deleteMenuReview(@PathVariable Long menuReviewId,
                                                  @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return null;
     }
 
 }

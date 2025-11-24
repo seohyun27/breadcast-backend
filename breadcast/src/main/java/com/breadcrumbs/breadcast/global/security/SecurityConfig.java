@@ -52,8 +52,9 @@ public class SecurityConfig {
 
                 // 4. (중요!!!!!) URL별 접근 권한 설정
                 .authorizeHttpRequests(authorize -> authorize
-                        // "/api/auth/**" 경로는 모두 허용 (로그인, 회원가입 등)
-                        .requestMatchers("/api/auth/**").permitAll()
+                        // 인증 없이 사용 가능한 경로들
+                        .requestMatchers("/auth/**").permitAll() // 로그인 회원 가입을 위한 경로
+                        .requestMatchers("/api/**").permitAll()
 
                         // 나머지 모든 요청은 인증(로그인)이 필요함
                         .anyRequest().authenticated()
