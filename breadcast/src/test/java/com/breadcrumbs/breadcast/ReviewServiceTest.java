@@ -4,6 +4,7 @@ import com.breadcrumbs.breadcast.domain.bakery.entity.Bakery;
 import com.breadcrumbs.breadcast.domain.bakery.repository.BakeryRepository;
 import com.breadcrumbs.breadcast.domain.member.entity.Member;
 import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
+import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewRequest;
 import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewResponse;
 import com.breadcrumbs.breadcast.domain.review.entity.BakeryReview;
 import com.breadcrumbs.breadcast.domain.review.repository.BakeryReviewRepository;
@@ -35,7 +36,8 @@ public class ReviewServiceTest {
     private Long reviewId;
     private Long bakeryId;
     private Long currentMemId; // 현재 로그인한 사용자 ID
-    private Long otherMemId;
+    private Long otherMemId; // 유저2 ID
+    private Long reviewId;
 
     @BeforeEach
     void setup() {
@@ -56,12 +58,84 @@ public class ReviewServiceTest {
 
         // 3. BakeryReview 3개 저장 (평균: 4.0)
         BakeryReview review1 = bakeryReviewRepository.save(BakeryReview.createBakeryReview(5.0, "굿", null, member1, bakery));
-        bakeryReviewRepository.save(BakeryReview.createBakeryReview(4.0, "최고", null, member2, bakery));
-        bakeryReviewRepository.save(BakeryReview.createBakeryReview(3.0, "쏘쏘", null, member1, bakery));
+        BakeryReview review2 = bakeryReviewRepository.save(BakeryReview.createBakeryReview(4.0, "최고", null, member2, bakery));
+        BakeryReview review3 = bakeryReviewRepository.save(BakeryReview.createBakeryReview(3.0, "쏘쏘", null, member1, bakery));
         reviewId = review1.getId();
 
         em.flush();
         em.clear();
+    }
+
+    @Test
+    @DisplayName("리뷰 수정 성공 시, DB에 반영되고 수정된 DTO가 반환되어야 한다")
+    void updateBakeryReview_Success() {
+        // GIVEN: 새로운 수정 요청 데이터 (별점, 내용 변경)
+        BakeryReviewRequest updateRequest = new BakeryReviewRequest();
+        updateRequest.setRating(1.5);
+        updateRequest.setText("수정된 내용입니다.");
+        updateRequest.setPhoto("updated_photo_url");
+
+        // WHEN: 권한이 있는 사용자(currentMemId)가 리뷰 수정 서비스 호출
+        BakeryReviewResponse response = reviewService.updateBakeryReview(
+                reviewId,
+                currentMemId,
+                updateRequest
+        );
+
+        // THEN:
+        // 1. 응답 DTO 검증
+        assertEquals(updateRequest.getRating(), response.getRating(), "별점이 수정된 값과 일치해야 합니다.");
+        assertEquals(updateRequest.getText(), response.getText(), "내용이 수정된 값과 일치해야 합니다.");
+        assertTrue(response.isMine(), "수정 권한이 있는 사용자이므로 isMine은 true여야 합니다.");
+
+        // 2. DB 반영 검증 (더티 체킹 확인)
+        em.flush();
+        em.clear();
+        Optional<BakeryReview> savedReview = bakeryReviewRepository.findById(reviewId);
+
+        assertTrue(savedReview.isPresent(), "수정된 리뷰가 DB에 존재해야 합니다.");
+        assertEquals(updateRequest.getRating(), savedReview.get().getRating(), 0.01, "DB에 수정된 별점이 반영되어야 합니다.");
+        assertEquals(updateRequest.getText(), savedReview.get().getText(), "DB에 수정된 내용이 반영되어야 합니다.");
+    }
+
+    @Test
+    @DisplayName("리뷰 수정 시 권한이 없는 사용자가 시도하면 예외가 발생해야 한다")
+    void updateBakeryReview_Failure_NoAuthority() {
+        // GIVEN: 수정 요청 데이터
+        BakeryReviewRequest updateRequest = new BakeryReviewRequest();
+        updateRequest.setRating(1.0);
+        updateRequest.setText("권한 없음 테스트");
+        updateRequest.setPhoto("url");
+
+        // WHEN/THEN: 권한이 없는 사용자(otherMemId)가 수정 서비스 호출 시 IllegalStateException 발생
+        // (ReviewService의 권한 체크 로직에 따라 IllegalStateException 발생을 가정)
+        assertThrows(IllegalStateException.class, () -> {
+            reviewService.updateBakeryReview(
+                    reviewId,
+                    otherMemId, // 💡 권한 없는 사용자 ID
+                    updateRequest
+            );
+        }, "작성자가 아닌 사용자가 수정 시도 시 IllegalStateException이 발생해야 합니다.");
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 리뷰 ID로 수정 시도 시 예외가 발생해야 한다")
+    void updateBakeryReview_Failure_NotFound() {
+        // GIVEN: 존재하지 않는 ID와 요청 데이터
+        Long nonExistentId = 9999L;
+        BakeryReviewRequest updateRequest = new BakeryReviewRequest();
+        updateRequest.setRating(1.0);
+        updateRequest.setText("존재하지 않음 테스트");
+        updateRequest.setPhoto("url");
+
+        // WHEN/THEN: IllegalArgumentException 발생 (ReviewService의 .orElseThrow() 로직)
+        assertThrows(IllegalArgumentException.class, () -> {
+            reviewService.updateBakeryReview(
+                    nonExistentId,
+                    currentMemId,
+                    updateRequest
+            );
+        }, "존재하지 않는 리뷰 ID 수정 시 IllegalArgumentException이 발생해야 합니다.");
     }
 
     @Test
@@ -150,5 +224,29 @@ public class ReviewServiceTest {
         // THEN
         assertNotNull(responseList);
         assertTrue(responseList.isEmpty(), "리뷰가 없으면 빈 리스트가 반환되어야 합니다.");
+    }
+
+    @Test
+    @DisplayName("리뷰 쓰기 성공 시, DB에 저장되고 응답 DTO가 정확해야 한다.")
+    void addBakeryReview_Success() {
+        // GIVEN: 새로운 리뷰 요청 데이터
+        BakeryReviewRequest request = new BakeryReviewRequest();
+        request.setRating(4.5);
+        request.setText("새로 쓴 리뷰 내용");
+        request.setPhoto("new_photo_url");
+
+        // WHEN: 리뷰 작성 서비스 호출
+        BakeryReviewResponse response = reviewService.addBakeryReview(
+                bakeryId,
+                currentMemId,
+                request
+        );
+
+        // THEN:
+        // 응답 DTO 검증
+        assertEquals(request.getRating(), response.getRating(), "별점이 일치해야 합니다.");
+        assertEquals(request.getText(), response.getText(), "리뷰 내용이 일치해야 합니다.");
+        assertEquals("유저1", response.getWriter(), "작성자 닉네임이 일치해야 합니다.");
+        assertTrue(response.isMine(), "작성 직후이므로 isMine은 true여야 합니다.");
     }
 }

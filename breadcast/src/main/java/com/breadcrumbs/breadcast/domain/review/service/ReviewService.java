@@ -1,7 +1,10 @@
 package com.breadcrumbs.breadcast.domain.review.service;
 
+import com.breadcrumbs.breadcast.domain.bakery.entity.Bakery;
 import com.breadcrumbs.breadcast.domain.bakery.repository.BakeryRepository;
 import com.breadcrumbs.breadcast.domain.course.repository.CourseRepository;
+import com.breadcrumbs.breadcast.domain.member.entity.Member;
+import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
 import com.breadcrumbs.breadcast.domain.menu.repository.MenuRepository;
 import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewRequest;
 import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewResponse;
@@ -39,27 +42,99 @@ public class ReviewService {
     private final MenuRepository menuRepository;
     private final CourseReviewRepository courseReviewRepository;
     private final CourseRepository courseRepository;
+    private final MemberRepository memberRepository;
 
     public BakeryReviewResponse addBakeryReview(Long bakeryId, Long memId, BakeryReviewRequest request) {
+        boolean isMine = false;
+
+        if (memId == null) {
+            // 비회원은 리뷰를 작성할 수 없으므로 권한 없음 예외를 발생시킵니다.
+            // Spring Security 컨텍스트 밖에서 직접 처리 시 IllegalStateException 사용
+            throw new IllegalStateException("로그인한 사용자만 리뷰를 작성할 수 있습니다.");
+            // (이 예외는 GlobalExceptionHandler에서 401 Unauthorized 또는 403 Forbidden으로 처리되도록 설정해야 합니다.)
+        }
+
+        Bakery bakery = bakeryRepository.findById(bakeryId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 빵집 ID입니다. ID: " + bakeryId));
+
+        Member member = memberRepository.findById(memId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원 ID입니다. ID: " + memId));
+
+        // 2. BakeryReview 엔티티 생성
+        // (BakeryReview 엔티티에 createBakeryReview 정적 팩토리 메서드가 있다고 가정)
+        BakeryReview bakeryReview = BakeryReview.createBakeryReview(
+                request.getRating(),
+                request.getText(),
+                request.getPhoto(),
+                member,
+                bakery
+        );
+
+        // 3. DB에 저장
+        BakeryReview savedReview = bakeryReviewRepository.save(bakeryReview);
+
+        isMine = (savedReview.getMember().getId() == (memId));
+
+        // 4. 응답 DTO로 변환하여 반환
+        return BakeryReviewResponse.builder()
+                .writer(savedReview.getMember().getNickname()) // Member 엔티티에서 닉네임 조회 가정
+                .rating(savedReview.getRating())
+                .text(savedReview.getText())
+                .photo(savedReview.getPhoto())
+                .date(savedReview.getDate())
+                .isMine(isMine)
+                .build();
+
         /*
         -DTO 유효성 확인:내용 존재
         -createBakeryReview(request) 호출하여 엔티티 생성
         - bakeryReviewRepository.save(bakeryReview) 호출하여 DB에 저장
         BakeryReview createReview (AddBakeryReviewRequest request) #변동 가능성
          */
-
-        return null;
     }
 
     public BakeryReviewResponse updateBakeryReview(Long bakeryReviewId, Long memId, BakeryReviewRequest request) {
+        if (memId == null) {
+            // 비회원은 리뷰를 수정할 수 없으므로 권한 없음 예외를 발생시킵니다.
+            // Spring Security 컨텍스트 밖에서 직접 처리 시 IllegalStateException 사용
+            throw new IllegalStateException("로그인한 사용자만 리뷰를 작성할 수 있습니다.");
+            // (이 예외는 GlobalExceptionHandler에서 401 Unauthorized 또는 403 Forbidden으로 처리되도록 설정해야 합니다.)
+        }
+
+        // 1. 리뷰 엔티티 조회 (없으면 404 Not Found)
+        BakeryReview bakeryReview = bakeryReviewRepository.findById(bakeryReviewId)
+                .orElseThrow(() -> new IllegalArgumentException("수정하려는 리뷰를 찾을 수 없습니다. ID: " + bakeryReviewId));
+
+        // 2. 권한 확인 (작성자 불일치 시 예외 발생 -> 409 Conflict 또는 403 Forbidden)
+        if (bakeryReview.getMember().getId() != memId) {
+            // IllegalStateException은 GlobalExceptionHandler에서 409 Conflict 등으로 처리됨
+            throw new IllegalStateException("해당 리뷰를 수정할 권한이 없습니다.");
+        }
+
+        // 3. 엔티티 수정 (더티 체킹)
+        bakeryReview.update(
+                request.getRating(),
+                request.getText(),
+                request.getPhoto()
+        );
+
+        // 4. 수정된 엔티티를 DTO로 변환하여 반환
+        // 수정 후이므로 isMine은 당연히 true입니다.
+        return BakeryReviewResponse.builder()
+                .writer(bakeryReview.getMember().getNickname())
+                .rating(bakeryReview.getRating())
+                .text(bakeryReview.getText())
+                .photo(bakeryReview.getPhoto())
+                .date(bakeryReview.getDate())
+                .isMine(true)
+                .build();
+
         /*
         -DTO 유효성 확인:내용 존재
         -bakeryReview = bakeryReviewRepository.findById(request.getId()) 호출
         - 해당 리뷰 ID가 없으면(삭제 등) 예외처리(.orElseThrow())
         -BakeryReview.update(double rating, String text, String photo) 호출하여 수정 (더티 체크 적용됨)
          */
-
-        return null;
     }
 
     public void deleteBakeryReview(Long bakeryReviewId, Long memId) {
