@@ -4,11 +4,13 @@ import com.breadcrumbs.breadcast.domain.member.dto.LoginRequest;
 import com.breadcrumbs.breadcast.domain.member.dto.MemberResponse;
 import com.breadcrumbs.breadcast.domain.member.dto.MemberUpdateRequest;
 import com.breadcrumbs.breadcast.domain.member.dto.SignupRequest;
+import com.breadcrumbs.breadcast.domain.member.entity.Member;
 import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 @Transactional
@@ -72,19 +74,24 @@ public class MemberService {
          */
     }
 
-    public MemberResponse updateNickname(Long memberId, MemberUpdateRequest request) {
-        /*
-        Member member = memberRepository.findById(memId);
-        if (memberRepository.existsNickname(newNickname))
-            //예외 발생
-        else
-            Member.update(newNickname);
-        return member;
-         */
+    public MemberResponse updateNickname(Long memId, MemberUpdateRequest request) {
+        // 1. 닉네임 중복 검사
+        if (memberRepository.existsByNickname(request.getNickname())){
+            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
+        }
 
-        // 이후 컨트롤러에서 세션 처리 : session.setAttribute("member", member);
+        // 2. Member 객체 조회 및 유무 확인
+        Member member = memberRepository.findById(memId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 멤버를 찾을 수 없습니다."));
 
-        return null;
-    };
+        // 3. Member 엔티티의 update 메소드 호출
+        member.update(request.getNickname());
 
+        // 4. 응답 객체 생성
+        MemberResponse memberResponse = MemberResponse.builder()
+                .nickname(member.getNickname())
+                .build();
+
+        return memberResponse;
+    }
 }
