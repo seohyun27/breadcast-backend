@@ -52,7 +52,7 @@ public class MenuServiceTest {
         // 2. Bakery 및 Menu 생성 및 저장
         Bakery bakery = Bakery.createBakery(
                 "테스트 빵집", "테스트 주소", "010-0000-0000", 37.0, 127.0,
-                "http://test.com", "p1", "p2");
+                "http://test.com", "p1", "p2", "테스트 맛집", "10:00 - 17:00");
         bakeryRepository.save(bakery);
         bakeryId = bakery.getId();
 

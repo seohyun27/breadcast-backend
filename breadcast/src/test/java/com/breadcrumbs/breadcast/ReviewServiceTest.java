@@ -37,14 +37,13 @@ public class ReviewServiceTest {
     private Long bakeryId;
     private Long currentMemId; // 현재 로그인한 사용자 ID
     private Long otherMemId; // 유저2 ID
-    private Long reviewId;
 
     @BeforeEach
     void setup() {
         // 1. Bakery Entity 생성 및 저장
         Bakery bakery = Bakery.createBakery(
                 "테스트 빵집", "주소", "010-0000-0000", 37.0, 127.0,
-                "url", "p1", "p2");
+                "url", "p1", "p2", "테스트 맛집", "13:00 - 18:00");
         bakeryRepository.save(bakery);
         bakeryId = bakery.getId();
 
@@ -214,7 +213,8 @@ public class ReviewServiceTest {
     @DisplayName("리뷰가 없는 가게 ID로 조회 시 빈 리스트를 반환해야 한다")
     void getBakeryReviews_ReturnsEmptyList_IfNoReviews() {
         // GIVEN: 리뷰가 없는 새로운 빵집 ID
-        Bakery bakeryEmpty = Bakery.createBakery("빈 빵집", "주소", "0", 0, 0, "url", "p1", "p2");
+        Bakery bakeryEmpty = Bakery.createBakery("빈 빵집", "주소", "0", 0, 0,
+                "url", "p1", "p2", "비어있는 유명한 집", "15:00 - 16:00");
         bakeryRepository.save(bakeryEmpty);
         Long emptyBakeryId = bakeryEmpty.getId();
 

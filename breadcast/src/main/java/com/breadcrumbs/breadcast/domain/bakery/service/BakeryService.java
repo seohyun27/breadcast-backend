@@ -61,6 +61,8 @@ public class BakeryService {
                 .reviewCount(reviewCount)
                 .favoriteCount(favoriteCount)
                 .isFavorited(isFavorited)
+                .operatingHours(bakery.getOperatingHours())
+                .inform(bakery.getText())
                 .build();
 
         //dto를 controller에게 반환

@@ -18,6 +18,9 @@ public class Bakery {
     @Column(name = "bakery_name")
     private String name;
 
+    @Column(name = "bakery_text")
+    private String text;
+
     private String address;
     private String phone;
     private double latitude;  // 위도 (y좌표)
@@ -25,10 +28,11 @@ public class Bakery {
     private String URL;
     private String photo1;
     private String photo2;
+    private String operatingHours;
 
     /// 생성 메소드 ///
     public static Bakery createBakery(String name, String address, String phone, double latitude, double longitude,
-                                      String URL, String photo1, String photo2) {
+                                      String URL, String photo1, String photo2, String text, String operatingHours) {
         Bakery bakery = new Bakery();
         bakery.name = name;
         bakery.address = address;
@@ -38,6 +42,8 @@ public class Bakery {
         bakery.URL = URL;
         bakery.photo1 = photo1;
         bakery.photo2 = photo2;
+        bakery.text = text;
+        bakery.operatingHours = operatingHours;
         return bakery;
     }
 }
