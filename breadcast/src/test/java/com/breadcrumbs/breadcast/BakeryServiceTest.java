@@ -46,13 +46,13 @@ public class BakeryServiceTest {
         // 1. Bakery Entity 생성 및 저장
         Bakery bakery = Bakery.createBakery(
                 "테스트 빵집", "테스트 주소", "010-0000-0000", 37.0, 127.0,
-                "http://test.com", "p1", "p2");
+                "http://test.com", "p1", "p2", "세상에서 제일 맛있는 빵집입니다.", "11:00 - 21:00");
         Bakery bakeryA = Bakery.createBakery(
                 "맛있는 빵 A", "강남대로", "010-1111-1111", 37.5, 127.1,
-                "pA", "pA1", "pA2");;
+                "pA", "pA1", "pA2", "놀러오세요", "10:00 - 12:00");;
         Bakery bakeryB = Bakery.createBakery(
                 "최고의 빵 B", "판교대로", "010-2222-2222", 37.4, 127.2,
-                "pB", "pB1", "pB2");
+                "pB", "pB1", "pB2", "인기가 많습니다", "12:00 - 16:00");
         bakeryRepository.save(bakery);
         bakeryRepository.save(bakeryA);
         bakeryRepository.save(bakeryB);

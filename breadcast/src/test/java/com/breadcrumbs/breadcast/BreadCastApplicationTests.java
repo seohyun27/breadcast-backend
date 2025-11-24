@@ -35,7 +35,8 @@ class BreadCastApplicationTests {
 		//given
 		Member member = Member.createMember("yu1234", "yu1234", "yu");
 		Bakery bakery = Bakery.createBakery("영남 빵집", "대구 광역시", "010-1234-1234",
-				1.4, 1.5 , "hello/bakery", "photo1", "photo2");
+				1.4, 1.5 , "hello/bakery", "photo1", "photo2", "영남대 빵 맛집",
+                "11:00 - 15:00");
 		Menu menu = Menu.createMenu("소금빵", 3000, "바삭바삭 소금빵", "photo", bakery);
 		MenuReview menuReview = MenuReview.createMenuReview(4.5, "맛있어요", member, bakery, menu);
 
