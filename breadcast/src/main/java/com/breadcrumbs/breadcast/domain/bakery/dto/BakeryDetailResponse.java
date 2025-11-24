@@ -20,6 +20,8 @@ public class BakeryDetailResponse {
     private double latitude;  	// 빵집의 위도 (y좌표)
     private double longitude; 	// 빵집의 경도 (x좌표)
     private String URL;		// 빵집 사이트
+    private String operatingHours; //빵집 시간
+    private String inform;  //빵집 한줄 설명
     private String photo1; 		// 빵집 사진
     private String photo2;		// 빵집 사진
     private double rating;		// 빵집 평균 별점
