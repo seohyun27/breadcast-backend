@@ -28,12 +28,12 @@ public class AuthController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseEntity<MemberResponse> signup(@RequestBody @Valid SignupRequest request){
+    public MemberResponse signup(@RequestBody @Valid SignupRequest request){
         return null;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<MemberResponse> login(@RequestBody @Valid LoginRequest request){
+    public MemberResponse login(@RequestBody @Valid LoginRequest request){
         return null;
     }
 

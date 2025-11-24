@@ -26,16 +26,15 @@ public class ReportController {
     }
 
     @PostMapping("/bakeries/{bakeryId}/reports")
-    public ResponseEntity<ReportsResponse> addReport(@PathVariable Long bakeryId,
+    public ReportsResponse addReport(@PathVariable Long bakeryId,
                                               @AuthenticationPrincipal UserDetailsImpl userDetails,
                                               @RequestBody @Valid AddReportRequest request){
         return null;
     }
 
     @DeleteMapping("/reports/{bakeryReportId}")
-    public ResponseEntity<Void> deleteBakeryReport(@PathVariable Long bakeryReportId,
+    public void deleteBakeryReport(@PathVariable Long bakeryReportId,
                                                    @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return null;
     }
 
 }

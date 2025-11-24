@@ -24,15 +24,13 @@ public class FavoriteController {
     }
 
     @PostMapping("/bakeries/{bakeryId}")
-    public ResponseEntity<Void> addFavoriteBakery(@PathVariable Long bakeryId,
+    public void addFavoriteBakery(@PathVariable Long bakeryId,
                                                   @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return null;
     }
 
     @DeleteMapping("/bakeries/{bakeryId}")
-    public ResponseEntity<Void> deleteFavoriteBakery(@PathVariable Long bakeryId,
+    public void deleteFavoriteBakery(@PathVariable Long bakeryId,
                                               @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return null;
     }
 
     @GetMapping("/courses")
@@ -41,15 +39,13 @@ public class FavoriteController {
     }
 
     @PostMapping("/courses/{courseId}")
-    public ResponseEntity<Void> addFavoriteCourse(@PathVariable Long courseId,
+    public void addFavoriteCourse(@PathVariable Long courseId,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return null;
     }
 
     @DeleteMapping("/courses/{courseId}")
-    public ResponseEntity<Void> deleteFavoriteCourse(@PathVariable Long courseId,
+    public void deleteFavoriteCourse(@PathVariable Long courseId,
                                               @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return null;
     }
 
 }

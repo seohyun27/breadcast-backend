@@ -33,15 +33,13 @@ public class MemberController {
     private final CourseReviewRepository courseReviewRepository;
 
     @DeleteMapping()
-    public ResponseEntity<Void> deleteMember(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return null;
+    public void deleteMember(@AuthenticationPrincipal UserDetailsImpl userDetails){
     }
 
     @PatchMapping()
-    public ResponseEntity<MemberResponse> updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails,
+    public MemberResponse updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                          @RequestBody @Valid MemberUpdateRequest request){
-        MemberResponse memberResponse = memberService.updateNickname(userDetails.getUserId(), request);
-        return ResponseEntity.status(HttpStatus.OK).body(memberResponse);
+        return memberService.updateNickname(userDetails.getUserId(), request);
     }
 
     @GetMapping("/bakery-reviews")
