@@ -64,7 +64,11 @@ public class BakeryController {
     @DeleteMapping("/bakery-reviews/{bakeryReviewId}")
     public ResponseEntity<Void> bakeryReviewDelete(@PathVariable Long bakeryReviewId,
                                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return null;
+        Long userId = (userDetails != null) ? userDetails.getUserId() : null;
+        reviewService.deleteBakeryReview(bakeryReviewId, userId);
+
+        //204 No Content 응답 반환 (성공적으로 처리되었으나 돌려줄 내용이 없음)
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/bakeries")
