@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${DB_URL}
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.mariadb.jdbc.Driver
@@ -18,7 +18,7 @@ cloud:
       access-key: ${ACCESS-KEY}
       secret-key: ${SECRET-KEY}
     s3:
-      bucket: breadcast-images  # 1단계에서 생성한 내 버킷 이름
+      bucket: breadcast-image-bucket  # 1단계에서 생성한 내 버킷 이름
     region:
       static: ap-northeast-2   # 버킷을 생성한 리전 (서울)
 
