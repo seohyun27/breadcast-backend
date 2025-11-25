@@ -79,15 +79,20 @@ public class BakeryService {
         List<Object[]> bakeryList; // 쿼리 결과는 Object[] 목록으로 받음
         double rating = 0.0;
 
-        String cleanedSearchTerm = keyword.replaceAll("\\s+", "");
+        if(keyword == null){
+            bakeryList = bakeryRepository.findAllPopularBakeries();
+        }
+        else {
+            String cleanedSearchTerm = keyword.replaceAll("\\s+", "");
 
-        // 문자열을 대소문자 구분 없이 비교
-        if ("REVIEW".equalsIgnoreCase(sort)) {
-            // 이름 공백 무시 검색, 리뷰순 정렬 쿼리 호출
-            bakeryList = bakeryRepository.findByNameIgnoringSpacesAndSortReview(cleanedSearchTerm);
-        } else {
-            // "POPULAR" 또는 기타 문자열은 스크랩순(인기순)으로 처리
-            bakeryList = bakeryRepository.findByNameIgnoringSpacesAndSortFavorite(cleanedSearchTerm);
+            // 문자열을 대소문자 구분 없이 비교
+            if ("REVIEW".equalsIgnoreCase(sort)) {
+                // 이름 공백 무시 검색, 리뷰순 정렬 쿼리 호출
+                bakeryList = bakeryRepository.findByNameIgnoringSpacesAndSortReview(cleanedSearchTerm);
+            } else {
+                // "POPULAR" 또는 기타 문자열은 스크랩순(인기순)으로 처리
+                bakeryList = bakeryRepository.findByNameIgnoringSpacesAndSortFavorite(cleanedSearchTerm);
+            }
         }
 
         for (Object[] row : bakeryList) {
