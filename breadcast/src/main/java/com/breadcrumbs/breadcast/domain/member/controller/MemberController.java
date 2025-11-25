@@ -11,11 +11,10 @@ import com.breadcrumbs.breadcast.domain.review.dto.myPage.GetMyMenuReviewRespons
 import com.breadcrumbs.breadcast.domain.review.repository.BakeryReviewRepository;
 import com.breadcrumbs.breadcast.domain.review.repository.CourseReviewRepository;
 import com.breadcrumbs.breadcast.domain.review.repository.MenuReviewRepository;
+import com.breadcrumbs.breadcast.global.apiPayload.ApiResponse;
 import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,28 +36,29 @@ public class MemberController {
     }
 
     @PatchMapping()
-    public MemberResponse updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                         @RequestBody @Valid MemberUpdateRequest request){
-        return memberService.updateNickname(userDetails.getUserId(), request);
+    public ApiResponse<MemberResponse> updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                      @RequestBody @Valid MemberUpdateRequest request){
+        return ApiResponse.onSuccess("닉네임 변경에 성공하였습니다.",
+                memberService.updateNickname(userDetails.getUserId(), request));
     }
 
     @GetMapping("/bakery-reviews")
-    public List<GetMyBakeryReviewResponse> getMyBakeryReview(@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ApiResponse<List<GetMyBakeryReviewResponse>> getMyBakeryReview(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return null;
     }
 
     @GetMapping("/menu-reviews")
-    public List<GetMyMenuReviewResponse> getMyMenuReview(@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ApiResponse<List<GetMyMenuReviewResponse>> getMyMenuReview(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return null;
     }
 
     @GetMapping("/courses")
-    public List<GetMyCourseResponse> getMyCourse(@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ApiResponse<List<GetMyCourseResponse>> getMyCourse(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return null;
     }
 
     @GetMapping("/course-reviews")
-    public List<GetMyCourseReviewResponse> getMyCourseReview(@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ApiResponse<List<GetMyCourseReviewResponse>> getMyCourseReview(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return null;
     }
 
