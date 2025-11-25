@@ -4,9 +4,9 @@ import com.breadcrumbs.breadcast.domain.member.dto.LoginRequest;
 import com.breadcrumbs.breadcast.domain.member.dto.MemberResponse;
 import com.breadcrumbs.breadcast.domain.member.dto.SignupRequest;
 import com.breadcrumbs.breadcast.domain.member.service.MemberService;
+import com.breadcrumbs.breadcast.global.apiPayload.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,12 +28,12 @@ public class AuthController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public MemberResponse signup(@RequestBody @Valid SignupRequest request){
+    public ApiResponse<MemberResponse> signup(@RequestBody @Valid SignupRequest request){
         return null;
     }
 
     @PostMapping("/login")
-    public MemberResponse login(@RequestBody @Valid LoginRequest request){
+    public ApiResponse<MemberResponse> login(@RequestBody @Valid LoginRequest request){
         return null;
     }
 
