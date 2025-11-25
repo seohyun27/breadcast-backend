@@ -8,6 +8,7 @@ import com.breadcrumbs.breadcast.domain.favorite.entity.FavoriteBakery;
 import com.breadcrumbs.breadcast.domain.favorite.repository.FavoriteBakeryRepository;
 import com.breadcrumbs.breadcast.domain.review.entity.BakeryReview;
 import com.breadcrumbs.breadcast.domain.review.repository.BakeryReviewRepository;
+import com.breadcrumbs.breadcast.global.apiPayload.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class BakeryService {
     public BakeryDetailResponse getBakeryDetail(Long bakeryId, Long memId) {
         //bakery entity와 스크랩 수, 빵집 리뷰 수, 평균 별점을 찾는다.
         Bakery bakery = bakeryRepository.findById(bakeryId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다. ID: " + bakeryId));
+                .orElseThrow(() -> new GeneralException("해당 가게를 찾을 수 없습니다. ID: " + bakeryId));
         int favoriteCount = favoriteBakeryRepository.countByBakeryId(bakeryId);
         int reviewCount = bakeryReviewRepository.countByBakeryId(bakeryId);
         double rating = getAverageRating(bakeryId);

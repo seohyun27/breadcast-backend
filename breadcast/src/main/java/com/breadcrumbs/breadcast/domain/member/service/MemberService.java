@@ -6,6 +6,7 @@ import com.breadcrumbs.breadcast.domain.member.dto.MemberUpdateRequest;
 import com.breadcrumbs.breadcast.domain.member.dto.SignupRequest;
 import com.breadcrumbs.breadcast.domain.member.entity.Member;
 import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
+import com.breadcrumbs.breadcast.global.apiPayload.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -77,12 +78,12 @@ public class MemberService {
     public MemberResponse updateNickname(Long memId, MemberUpdateRequest request) {
         // 1. 닉네임 중복 검사
         if (memberRepository.existsByNickname(request.getNickname())){
-            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
+            throw new GeneralException("이미 사용 중인 닉네임입니다.");
         }
 
         // 2. Member 객체 조회 및 유무 확인
         Member member = memberRepository.findById(memId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 멤버를 찾을 수 없습니다."));
+                .orElseThrow(() -> new GeneralException("해당 ID의 멤버를 찾을 수 없습니다."));
 
         // 3. Member 엔티티의 update 메소드 호출
         member.update(request.getNickname());
