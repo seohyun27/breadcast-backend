@@ -4,6 +4,7 @@ import com.breadcrumbs.breadcast.domain.member.dto.LoginRequest;
 import com.breadcrumbs.breadcast.domain.member.dto.MemberResponse;
 import com.breadcrumbs.breadcast.domain.member.entity.Member;
 import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
+import com.breadcrumbs.breadcast.global.apiPayload.exception.GeneralException;
 import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -69,7 +70,7 @@ public class AuthService implements UserDetailsService { // UserDetailsService �
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
         // DB에서 loginId로 Member를 조회
         Member member = memberRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + loginId));
+                .orElseThrow(() -> new GeneralException("사용자를 찾을 수 없습니다: " + loginId));
 
         // 찾아낸 Member를 어댑터(UserDetailsImpl)로 감싸서 반환
         return new UserDetailsImpl(member);

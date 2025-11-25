@@ -20,6 +20,7 @@ import com.breadcrumbs.breadcast.domain.review.entity.BakeryReview;
 import com.breadcrumbs.breadcast.domain.review.repository.BakeryReviewRepository;
 import com.breadcrumbs.breadcast.domain.review.repository.CourseReviewRepository;
 import com.breadcrumbs.breadcast.domain.review.repository.MenuReviewRepository;
+import com.breadcrumbs.breadcast.global.apiPayload.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,19 +97,18 @@ public class ReviewService {
     public BakeryReviewResponse updateBakeryReview(Long bakeryReviewId, Long memId, BakeryReviewRequest request) {
         if (memId == null) {
             // 비회원은 리뷰를 수정할 수 없으므로 권한 없음 예외를 발생시킵니다.
-            // Spring Security 컨텍스트 밖에서 직접 처리 시 IllegalStateException 사용
-            throw new IllegalStateException("로그인한 사용자만 리뷰를 작성할 수 있습니다.");
+            // Spring Security 컨텍스트 밖에서 직접 처리 시 GeneralException 사용
+            throw new GeneralException("로그인한 사용자만 리뷰를 작성할 수 있습니다.");
             // (이 예외는 GlobalExceptionHandler에서 401 Unauthorized 또는 403 Forbidden으로 처리되도록 설정해야 합니다.)
         }
 
         // 1. 리뷰 엔티티 조회 (없으면 404 Not Found)
         BakeryReview bakeryReview = bakeryReviewRepository.findById(bakeryReviewId)
-                .orElseThrow(() -> new IllegalArgumentException("수정하려는 리뷰를 찾을 수 없습니다. ID: " + bakeryReviewId));
+                .orElseThrow(() -> new GeneralException("수정하려는 리뷰를 찾을 수 없습니다. ID: " + bakeryReviewId));
 
         // 2. 권한 확인 (작성자 불일치 시 예외 발생 -> 409 Conflict 또는 403 Forbidden)
         if (bakeryReview.getMember().getId() != memId) {
-            // IllegalStateException은 GlobalExceptionHandler에서 409 Conflict 등으로 처리됨
-            throw new IllegalStateException("해당 리뷰를 수정할 권한이 없습니다.");
+            throw new GeneralException("해당 리뷰를 수정할 권한이 없습니다.");
         }
 
         // 3. 엔티티 수정 (더티 체킹)
@@ -140,19 +140,16 @@ public class ReviewService {
     public void deleteBakeryReview(Long bakeryReviewId, Long memId) {
         if (memId == null) {
             // 비회원은 리뷰를 삭제할 수 없으므로 권한 없음 예외를 발생시킵니다.
-            // Spring Security 컨텍스트 밖에서 직접 처리 시 IllegalStateException 사용
-            throw new IllegalStateException("로그인한 사용자만 리뷰를 작성할 수 있습니다.");
-            // (이 예외는 GlobalExceptionHandler에서 401 Unauthorized 또는 403 Forbidden으로 처리되도록 설정해야 합니다.)
+            throw new GeneralException("로그인한 사용자만 리뷰를 작성할 수 있습니다.");
         }
 
         // 1. 리뷰 엔티티 조회 (없으면 404 Not Found)
         BakeryReview bakeryReview = bakeryReviewRepository.findById(bakeryReviewId)
-                .orElseThrow(() -> new IllegalArgumentException("삭제하려는 리뷰를 찾을 수 없습니다. ID: " + bakeryReviewId));
+                .orElseThrow(() -> new GeneralException("삭제하려는 리뷰를 찾을 수 없습니다. ID: " + bakeryReviewId));
 
         // 2. 권한 확인 (작성자 불일치 시 예외 발생 -> 409 Conflict 또는 403 Forbidden)
         if (bakeryReview.getMember().getId() != memId) {
-            // IllegalStateException은 GlobalExceptionHandler에서 409 Conflict 등으로 처리됨
-            throw new IllegalStateException("해당 리뷰를 삭제할 권한이 없습니다.");
+            throw new GeneralException("해당 리뷰를 삭제할 권한이 없습니다.");
         }
 
         // 3. 리뷰 삭제

@@ -3,10 +3,10 @@ package com.breadcrumbs.breadcast.domain.bakery.controller;
 import com.breadcrumbs.breadcast.domain.bakery.dto.report.AddReportRequest;
 import com.breadcrumbs.breadcast.domain.bakery.dto.report.ReportsResponse;
 import com.breadcrumbs.breadcast.domain.bakery.service.ReportService;
+import com.breadcrumbs.breadcast.global.apiPayload.ApiResponse;
 import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,21 +20,22 @@ public class ReportController {
     private final ReportService reportService;
 
     @GetMapping("/bakeries/{bakeryId}/reports")
-    public List<ReportsResponse> getReports(@PathVariable Long bakeryId,
-                                            @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ApiResponse<List<ReportsResponse>> getReports(@PathVariable Long bakeryId,
+                                                         @AuthenticationPrincipal UserDetailsImpl userDetails){
         return null;
     }
 
     @PostMapping("/bakeries/{bakeryId}/reports")
-    public ReportsResponse addReport(@PathVariable Long bakeryId,
+    public ApiResponse<ReportsResponse> addReport(@PathVariable Long bakeryId,
                                               @AuthenticationPrincipal UserDetailsImpl userDetails,
                                               @RequestBody @Valid AddReportRequest request){
         return null;
     }
 
     @DeleteMapping("/reports/{bakeryReportId}")
-    public void deleteBakeryReport(@PathVariable Long bakeryReportId,
+    public ApiResponse<Void> deleteBakeryReport(@PathVariable Long bakeryReportId,
                                                    @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return null;
     }
 
 }
