@@ -29,5 +29,15 @@ public interface BakeryRepository extends JpaRepository<Bakery, Long> {
             "ORDER BY COUNT(DISTINCT f.id) DESC, COUNT(DISTINCT r.id) DESC")
     // 반환 타입을 List<Object[]>로 변경
     List<Object[]> findByNameIgnoringSpacesAndSortFavorite(@Param("cleanedSearchTerm") String cleanedSearchTerm);
+
+    // 3. 모든 가게를 인기순(스크랩 수)으로 정렬 쿼리 (검색어 없음)
+    @Query("SELECT b, COUNT(DISTINCT r.id), COUNT(DISTINCT f.id) FROM Bakery b " +
+            "LEFT JOIN BakeryReview r ON r.bakery = b " +
+            "LEFT JOIN FavoriteBakery f ON f.bakery = b " +
+            // WHERE 절을 삭제하여 모든 가게를 대상으로 합니다.
+            "GROUP BY b.id, b.name, b.address, b.phone, b.latitude, b.longitude, b.URL, b.photo1, b.photo2 " +
+            // 스크랩 수(f) 내림차순, 리뷰 수(r) 내림차순으로 정렬합니다.
+            "ORDER BY COUNT(DISTINCT f.id) DESC, COUNT(DISTINCT r.id) DESC")
+    List<Object[]> findAllPopularBakeries(); // 새로운 메서드 이름
 }
 
