@@ -1,5 +1,7 @@
-INSERT INTO bakery (bakery_id, bakery_name, address, phone, latitude, longitude, url, photo1, photo2)
-VALUES (1, '그리다빵 영남대본점', '경상북도 경산시 조영동 583-1', '0507-1401-2788', 35.8386542860074, 128.753310857291, 'https://www.instagram.com/gridabread/', '', '');
+INSERT INTO bakery (bakery_id, bakery_name, bakery_text, address, phone, latitude, longitude, url, photo1, photo2, operatingHours)
+VALUES (1, '그리다빵 영남대본점', '편안함이 있는 베이커리 공간',
+        '경상북도 경산시 조영동 583-1','0507-1401-2788', 35.8386542860074, 128.753310857291,
+        'https://www.instagram.com/gridabread/', '', '', '9:00 - 23:00');
 
 INSERT INTO menu (menu_id, menu_name, price, inform, menu_photo, bakery_id)
 VALUES (1, '그리다빵', 3700, '복숭아과즙이 콕콕 씹히는 100% 우유생크림빵 그리다빵 인기생크림빵', '', 1);
@@ -12,8 +14,10 @@ VALUES (4, '딸기 타르트', 7200, '크림치즈와 우유생크림으로 만�
 
 
 
-INSERT INTO bakery (bakery_id, bakery_name, address, phone, latitude, longitude, url, photo1, photo2)
-VALUES (2, '코너커피', '경북 경산시 청운로 31 (조영동) 1층 코너커피', '0507-1347-2477', 35.8382196131202, 128.754191608447, 'https://www.instagram.com/cornercake.house', '', '');
+INSERT INTO bakery (bakery_id, bakery_name, bakery_text, address, phone, latitude, longitude, url, photo1, photo2, operatingHours)
+VALUES (2, '코너커피', '휘낭시에 맛집으로 소문난 감성 카페',
+        '경북 경산시 청운로 31 (조영동) 1층 코너커피', '0507-1347-2477', 35.8382196131202, 128.754191608447,
+        'https://www.instagram.com/cornercake.house', '', '', '12:00 - 24:00');
 
 INSERT INTO menu (menu_id, menu_name, price, inform, menu_photo, bakery_id)
 VALUES (5, '플레인휘낭시에', 2900, '기본이 맛있어야 된다, 그 기본에 충실했습니다 버터의 풍미가 가아득한 플레인 휘낭시에', '', 2);
@@ -30,8 +34,10 @@ VALUES (10, '초코버터크로플', 4500, '크로플 위에 초코소스와 쿠
 
 
 
-INSERT INTO bakery (bakery_id, bakery_name, address, phone, latitude, longitude, url, photo1, photo2)
-VALUES (3, '밀로우', '경북 경산시 청운로 57-5 1층', '0507-1487-7028', 35.8399169164116, 128.755842329982, 'https://www.instagram.com/meal.low', '', '');
+INSERT INTO bakery (bakery_id, bakery_name, bakery_text, address, phone, latitude, longitude, url, photo1, photo2, operatingHours)
+VALUES (3, '밀로우', '딸기 크레이프 케이크의 부드러운 매력',
+        '경북 경산시 청운로 57-5 1층', '0507-1487-7028', 35.8399169164116, 128.755842329982,
+        'https://www.instagram.com/meal.low', '', '', '18:00 - 22:00');
 
 INSERT INTO menu (menu_id, menu_name, price, inform, menu_photo, bakery_id)
 VALUES (11, '후르츠크레이프', 9800, '바닐라빈이들어간 디플로마크림에 제철과일 4-5가지가 들오가는 후르츠크레이프', '', 3);
@@ -46,8 +52,10 @@ VALUES (15, '캐릭터마들렌', 6500, '레몬, 초코마들렌 구성', '', 3)
 
 
 
-INSERT INTO bakery (bakery_id, bakery_name, address, phone, latitude, longitude, url, photo1, photo2)
-VALUES (4, 'CAFE101', '경북 경산시 청운로 30 2층', '0507-1303-7673', 35.8379255199456, 128.754232497484, 'https://www.instagram.com/cafe101_official', '', '');
+INSERT INTO bakery (bakery_id, bakery_name, bakery_text, address, phone, latitude, longitude, url, photo1, photo2, operatingHours)
+VALUES (4, 'CAFE101', '친절한 사장님이 맞이하는 편안한 공간',
+        '경북 경산시 청운로 30 2층', '0507-1303-7673', 35.8379255199456, 128.754232497484,
+        'https://www.instagram.com/cafe101_official', '', '', '10:00 - 23:00');
 
 INSERT INTO menu (menu_id, menu_name, price, inform, menu_photo, bakery_id)
 VALUES (16, '생과일 홍콩에그와플', 9900, '(에그와플+생크림)+생과일', '', 4);
@@ -62,8 +70,10 @@ VALUES (20, '브뤼셀 와플 + 생크림(메이플/누텔라 반반 와플)', 8
 
 
 
-INSERT INTO bakery (bakery_id, bakery_name, address, phone, latitude, longitude, url, photo1, photo2)
-VALUES (5, '위켄드프로젝트', '경북 경산시 조영길 9 1층 101호,102호', '0507-1354-2210', 35.8382175486755, 128.757175595772, 'https://www.instagram.com/weekend_project_official', '', '');
+INSERT INTO bakery (bakery_id, bakery_name, bakery_text, address, phone, latitude, longitude, url, photo1, photo2, operatingHours)
+VALUES (5, '위켄드프로젝트', '케이크전문',
+        '경북 경산시 조영길 9 1층 101호,102호', '0507-1354-2210', 35.8382175486755, 128.757175595772,
+        'https://www.instagram.com/weekend_project_official', '', '', '12:00 - 19:00');
 
 INSERT INTO menu (menu_id, menu_name, price, inform, menu_photo, bakery_id)
 VALUES (21, '계절 생과일 케이크', 7000, '수제 바닐라 케이크 시트+신선한 계절 과일+고소한 우유 크림 or 치즈생크림', '', 5);
@@ -76,8 +86,10 @@ VALUES (24, '치즈 케이크', 5000, '고급 식빵 + 신선한 과일 + 마스
 
 
 
-INSERT INTO bakery (bakery_id, bakery_name, address, phone, latitude, longitude, url, photo1, photo2)
-VALUES (6, '사오 경산점', '경북 경산시 대학로 285 1층', '0507-1367-2796', 35.8367881680931, 128.753352672328, '', '', '');
+INSERT INTO bakery (bakery_id, bakery_name, bakery_text, address, phone, latitude, longitude, url, photo1, photo2, operatingHours)
+VALUES (6, '사오 경산점', '크림 가득 담긴 크로칸슈의 유혹',
+        '경북 경산시 대학로 285 1층', '0507-1367-2796', 35.8367881680931, 128.753352672328,
+        '', '', '', '12:00 - 23:00');
 
 INSERT INTO menu (menu_id, menu_name, price, inform, menu_photo, bakery_id)
 VALUES (25, '크로칸슈', 3000, '바삭한 슈에 고소하고 달달한 커스터드 크림이 가득', '', 6);
@@ -92,8 +104,10 @@ VALUES (29, '클래식스콘', 3200, '담백하고 바삭한 스콘', '', 6);
 
 
 
-INSERT INTO bakery (bakery_id, bakery_name, address, phone, latitude, longitude, url, photo1, photo2)
-VALUES (7, '오브픽', '경북 경산시 계양로37길 16 1층 오브픽', '0507-1341-8421', 35.8322311993968, 128.747270708605, 'https://www.instagram.com/ovpick_dessert', '', '');
+INSERT INTO bakery (bakery_id, bakery_name, bakery_text, address, phone, latitude, longitude, url, photo1, photo2, operatingHours)
+VALUES (7, '오브픽', '예약으로 더 특별해지는 생일 케이크',
+        '경북 경산시 계양로37길 16 1층 오브픽', '0507-1341-8421', 35.8322311993968, 128.747270708605,
+        'https://www.instagram.com/ovpick_dessert', '', '', '11:00 - 19:00');
 
 INSERT INTO menu (menu_id, menu_name, price, inform, menu_photo, bakery_id)
 VALUES (30, '초코 골든키위', 8500, '초코시트+100%동물성생크림+골든키위생과', '', 7);
@@ -108,8 +122,10 @@ VALUES (34, '요거트생크림', 8800, '바닐라시트+무가당요거트+100%
 
 
 
-INSERT INTO bakery (bakery_id, bakery_name, address, phone, latitude, longitude, url, photo1, photo2)
-VALUES (8, '카페 브라우니', '경북 경산시 청운로 14-3', '053-817-6006', 35.8370351044826, 128.753301335946, '', '', '');
+INSERT INTO bakery (bakery_id, bakery_name, bakery_text, address, phone, latitude, longitude, url, photo1, photo2, operatingHours)
+VALUES (8, '카페 브라우니', '요거트와플과 함께 즐기는 상큼한 하루',
+        '경북 경산시 청운로 14-3', '053-817-6006', 35.8370351044826, 128.753301335946,
+        '', '', '', '11:00 - 23:00');
 
 INSERT INTO menu (menu_id, menu_name, price, inform, menu_photo, bakery_id)
 VALUES (35, '바닐라앤탑-두바이', 8000, '바삭달콤와플 + 피스타치오초콜릿스프레드 + 바닐라아이스크림 + 그래놀라', '', 8);
