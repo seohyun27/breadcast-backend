@@ -165,4 +165,35 @@ public class BakeryServiceTest {
         assertEquals(5, result.get(0).getReviewCount(), "A 빵집의 리뷰 수는 5여야 합니다.");
         assertEquals(3, result.get(1).getReviewCount(), "테스트 빵집의 리뷰 수는 3여야 합니다.");
     }
+
+    @Test
+    @DisplayName("검색 키워드 없이 전체 가게 조회 시 인기순(스크랩 수)으로 정렬되어야 한다")
+    void getAllBakeries_SortedByPopularity() {
+        // GIVEN:
+        // 스크랩 수 순서: 빵B (4) > 빵A (3) > 테스트 빵집 (2)
+
+        // WHEN: 키워드 없이, "POPULAR" 정렬 기준으로 서비스 호출 (또는 전용 메서드 호출)
+        // NOTE: 기존 searchBakeries 메서드를 재활용하여 keyword="", sort="POPULAR"로 호출하거나,
+        // 새로운 findAllPopularBakeries 메서드를 호출한다고 가정하고 테스트를 작성합니다.
+
+        // 여기서는 기존 searchBakeries 메서드 로직을 확장하여 테스트합니다. (keyword="" + sort="")
+        List<SearchBakeryResponse> result = bakeryService.searchBakeries("", "");
+
+        // THEN:
+        assertNotNull(result);
+        assertEquals(3, result.size(), "DB에 저장된 빵집 3개가 모두 조회되어야 합니다.");
+
+        // 1. 정렬 순서 검증 (스크랩 수: 4 > 3 > 2)
+        // 1위: 빵B (스크랩 4개)
+        assertEquals(bakeryBId, result.get(0).getId(), "첫 번째는 스크랩 수가 가장 많은 B 빵집이어야 합니다.");
+        assertEquals(4, result.get(0).getFavoriteCount(), "B 빵집의 스크랩 수는 4여야 합니다.");
+
+        // 2위: 빵A (스크랩 3개)
+        assertEquals(bakeryAId, result.get(1).getId(), "두 번째는 스크랩 수 3개인 A 빵집이어야 합니다.");
+        assertEquals(3, result.get(1).getFavoriteCount(), "A 빵집의 스크랩 수는 3여야 합니다.");
+
+        // 3위: 테스트 빵집 (스크랩 2개)
+        assertEquals(bakeryId, result.get(2).getId(), "세 번째는 스크랩 수 2개인 테스트 빵집이어야 합니다.");
+        assertEquals(2, result.get(2).getFavoriteCount(), "테스트 빵집의 스크랩 수는 2여야 합니다.");
+    }
 }
