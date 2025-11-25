@@ -11,6 +11,6 @@ public class LoginRequest {
     /**
      * 로그인하기
      */
-    private String LoginId; 		// 유저 로그인 id
+    private String loginId; 		// 유저 로그인 id
     private String password; 	// 패스워드
 }

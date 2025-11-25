@@ -23,28 +23,33 @@ public class MemberService {
 
     @Transactional
     public MemberResponse addMember(SignupRequest request) {
-        /*
-        // 유효성 검사 - 필요하다면 유효성 검사를 private으로 분리
-        // 아이디의 길이가 5~20 사이이면서 영문과 숫자로만 이루어져있는지
-        // 닉네임의 길이가 2~20자 사이이면서 영문과 숫자, 한글로만 이루어져 있는지
-        // 비밀번호의 길이가 8~20자 사이이면서 영문+숫자+특수문자가 모두 1개 이상 포함되어 있는지
-        // 이메일 중복 검사
-        // 닉네임 중복 검사
-        // 비밀번호 재확인 일치 여부
+        // 1. 아이디 중복 검사
+        if (memberRepository.findByLoginId(request.getLoginId()).isPresent()) {
+            throw new IllegalArgumentException("이미 사용 중인 아이디입니다");
+        }
 
+        // 2. 닉네임 중복 검사
+        if (memberRepository.existsByNickname(request.getNickname())) {
+            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다");
+        }
 
-        // 1. 비밀번호 암호화
-        String encodedPassword = passwordEncoder.encode(password);
+        // 3. 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
 
-        // 2. Member 엔티티 생성
-        // 이때 비밀번호는 encodedPassword로 집어넣을 것
-        Member member = Member.createMember();
+        // 4. Member 엔티티 생성
+        Member member = Member.createMember(
+                request.getLoginId(),
+                encodedPassword,
+                request.getNickname()
+        );
 
-        // 3. UserRepository에 저장
+        // 5. MemberRepository에 저장
         memberRepository.save(member);
-        */
 
-        return null;
+        // 6. MemberResponse 반환
+        return MemberResponse.builder()
+                .nickname(member.getNickname())
+                .build();
     }
 
     public MemberResponse registerMember(LoginRequest request) {

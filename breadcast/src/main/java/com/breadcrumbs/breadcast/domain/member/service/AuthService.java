@@ -5,14 +5,18 @@ import com.breadcrumbs.breadcast.domain.member.dto.MemberResponse;
 import com.breadcrumbs.breadcast.domain.member.entity.Member;
 import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
 import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,22 +24,16 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthService implements UserDetailsService { // UserDetailsService 구현
 
-    // (Member를 찾아올 Repository)
     private final MemberRepository memberRepository;
-
-    // (Spring Security가 제공하는 인증 관리자 - Config 파일에서 Bean으로 등록해야 함)
     private final AuthenticationManager authenticationManager;
-    // (비밀번호 암호화 - Config 파일에서 Bean으로 등록해야 함)
-    // private final PasswordEncoder passwordEncoder;
 
     /**
-     * 컨트롤러가 호출할 로그인 메서드
+     * 로그인 메서드
+     * Spring Security를 사용하여 인증을 수행하고 세션을 생성
      */
-    @Transactional
-    public MemberResponse login(LoginRequest loginRequest) {
-
-        // (중요) Spring Security에게 이 ID와 PW로 인증 시도해 달라고 요청
-        // 해당 이 코드가 실행되면, Spring Security가 아래의 loadUserByUsername을 호출한다!!!
+    @Transactional(readOnly = true)
+    public MemberResponse login(LoginRequest loginRequest, HttpServletRequest httpRequest) {
+        // 1. Spring Security 인증 수행
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getLoginId(),
@@ -43,18 +41,23 @@ public class AuthService implements UserDetailsService { // UserDetailsService �
                 )
         );
 
-        // 인증 성공 -> SecurityContext에 인증 정보 저장
-        // (이후 Spring Security가 알아서 HttpSession에 저장함)
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        // 2. SecurityContext 생성 및 인증 정보 설정
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(authentication);
+        SecurityContextHolder.setContext(securityContext);
 
-        // 인증 객체에서 UserDetailsImpl을 꺼냄
+        // 3. 세션 생성 및 SecurityContext 저장
+        HttpSession session = httpRequest.getSession(true);
+        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+
+        // 4. 인증된 사용자 정보에서 닉네임 추출
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-        // UserDetailsImpl에서 Member 객체의 닉네임을 꺼냄
         String nickname = userDetails.getMember().getNickname();
 
-        // MemberResponse DTO에 닉네임을 담아 반환
-        return new MemberResponse(nickname);
+        // 5. MemberResponse 반환
+        return MemberResponse.builder()
+                .nickname(nickname)
+                .build();
     }
 
 

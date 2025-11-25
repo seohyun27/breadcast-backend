@@ -1,5 +1,6 @@
 package com.breadcrumbs.breadcast.global.security;
 
+import com.breadcrumbs.breadcast.domain.member.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -31,8 +33,18 @@ public class SecurityConfig {
     }
 
     /**
+     * UserDetailsService Bean 등록
+     * AuthService가 UserDetailsService를 구현하고 있으므로 이를 반환
+     * 메서드 주입을 통해 순환 참조 방지
+     */
+    @Bean
+    public UserDetailsService userDetailsService(AuthService authService) {
+        return authService;
+    }
+
+    /**
      * 인증 관리자 (AuthenticationManager)
-     * AuthService의 login() 메서드에서 주입받아 사용
+     * AuthController와 AuthService에서 주입받아 사용
      */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -71,7 +83,7 @@ public class SecurityConfig {
                 // 5. 로그아웃 설정
                 .logout(logout -> logout
                         // 클라이언트가 호출할 로그아웃 URL
-                        .logoutUrl("/api/auth/logout")
+                        .logoutUrl("/auth/logout")
 
                         // 로그아웃 성공 시 반환할 HTTP 상태 코드 (200 OK)
                         .logoutSuccessHandler((request, response, authentication) ->
