@@ -11,6 +11,7 @@ import com.breadcrumbs.breadcast.domain.member.entity.Member;
 import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
 import com.breadcrumbs.breadcast.domain.review.entity.BakeryReview;
 import com.breadcrumbs.breadcast.domain.review.repository.BakeryReviewRepository;
+import com.breadcrumbs.breadcast.global.apiPayload.exception.GeneralException;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -122,9 +123,9 @@ public class BakeryServiceTest {
     void getBakeryDetail_ThrowsException_IfNotFound() {
         Long nonExistentId = 9999L;
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(GeneralException.class, () -> {
             bakeryService.getBakeryDetail(nonExistentId, 1L);
-        }, "존재하지 않는 ID 조회 시 IllegalArgumentException이 발생해야 합니다.");
+        }, "존재하지 않는 ID 조회 시 GeneralException이 발생해야 합니다.");
     }
 
     @Test
