@@ -24,15 +24,8 @@ public class MemberService {
 
     @Transactional
     public MemberResponse addMember(SignupRequest request) {
-        // 1. 아이디 중복 검사
-        if (memberRepository.findByLoginId(request.getLoginId()).isPresent()) {
-            throw new IllegalArgumentException("이미 사용 중인 아이디입니다");
-        }
-
-        // 2. 닉네임 중복 검사
-        if (memberRepository.existsByNickname(request.getNickname())) {
-            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다");
-        }
+        // 1. 아이디 중복 검사는 @Valid의 @UniqueLoginId에서 처리됨
+        // 2. 닉네임 중복 검사는 @Valid의 @UniqueNickname에서 처리됨
 
         // 3. 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(request.getPassword());
