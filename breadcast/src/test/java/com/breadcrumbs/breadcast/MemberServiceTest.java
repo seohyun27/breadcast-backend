@@ -64,6 +64,7 @@ public class MemberServiceTest {
         assertEquals(NEW_NICKNAME, response.getNickname(), "반환된 DTO의 닉네임이 새 닉네임이어야 합니다.");
 
         // 2. DB에 실제로 변경되었는지 검증 (영속성 컨텍스트 초기화 후 조회)
+        em.flush();  // 변경사항을 DB에 반영
         em.clear();
         Member foundMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new AssertionError("멤버를 찾을 수 없습니다."));
@@ -79,7 +80,7 @@ public class MemberServiceTest {
         // Given
         // 이미 다른 멤버가 사용 중인 닉네임으로 변경 요청
         MemberUpdateRequest request = new MemberUpdateRequest();
-        request.setNickname(NEW_NICKNAME);
+        request.setNickname(EXISTING_NICKNAME);
 
         // When & Then
         // IllegalArgumentException이 발생하는지 검증
@@ -88,6 +89,7 @@ public class MemberServiceTest {
         }, "이미 존재하는 닉네임으로 변경 시도 시 예외가 발생해야 합니다.");
 
         // 추가 검증: 닉네임이 변경되지 않고 유지되었는지 확인
+        em.flush();  // 변경사항을 DB에 반영
         em.clear();
         Member foundMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new AssertionError("멤버를 찾을 수 없습니다."));

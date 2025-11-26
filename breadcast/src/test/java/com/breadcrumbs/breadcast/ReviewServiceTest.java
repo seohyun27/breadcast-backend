@@ -66,6 +66,70 @@ public class ReviewServiceTest {
     }
 
     @Test
+    @DisplayName("리뷰 목록 조회 시 isMine 플래그가 정확히 계산되고 모든 정보가 매핑되어야 한다")
+    void getBakeryReviews_Success_WithIsMineFlag() {
+        // WHEN: 현재 사용자 ID(currentMemId)를 넘겨 리뷰 목록 조회
+        List<BakeryReviewResponse> responseList = reviewService.getBakeryReviews(bakeryId, currentMemId);
+
+        // THEN:
+        assertNotNull(responseList);
+        assertEquals(3, responseList.size(), "리뷰는 총 3개여야 합니다.");
+
+        // 1. 첫 번째 리뷰 (나의 리뷰) 검증
+        BakeryReviewResponse myReviewResponse = responseList.get(0);
+        assertEquals("유저1", myReviewResponse.getWriter(), "첫 번째 리뷰는 현재 사용자의 닉네임이어야 합니다.");
+        assertEquals(5.0, myReviewResponse.getRating(), 0.01);
+        assertTrue(myReviewResponse.isMine(), "현재 사용자 ID와 작성자 ID가 일치하므로 isMine은 true여야 합니다.");
+
+        // 2. 두 번째 리뷰 (다른 사람 리뷰) 검증
+        BakeryReviewResponse otherReviewResponse = responseList.get(1);
+        assertEquals("유저2", otherReviewResponse.getWriter(), "두 번째 리뷰는 다른 사용자의 닉네임이어야 합니다.");
+        assertEquals(4.0, otherReviewResponse.getRating(), 0.01);
+        assertFalse(otherReviewResponse.isMine(), "현재 사용자 ID와 작성자 ID가 다르므로 isMine은 false여야 합니다.");
+    }
+
+    @Test
+    @DisplayName("리뷰가 없는 가게 ID로 조회 시 빈 리스트를 반환해야 한다")
+    void getBakeryReviews_ReturnsEmptyList_IfNoReviews() {
+        // GIVEN: 리뷰가 없는 새로운 빵집 ID
+        Bakery bakeryEmpty = Bakery.createBakery("빈 빵집", "주소", "0", 0, 0,
+                "url", "p1", "p2", "비어있는 유명한 집", "15:00 - 16:00");
+        bakeryRepository.save(bakeryEmpty);
+        Long emptyBakeryId = bakeryEmpty.getId();
+
+        // WHEN
+        List<BakeryReviewResponse> responseList = reviewService.getBakeryReviews(emptyBakeryId, currentMemId);
+
+        // THEN
+        assertNotNull(responseList);
+        assertTrue(responseList.isEmpty(), "리뷰가 없으면 빈 리스트가 반환되어야 합니다.");
+    }
+
+    @Test
+    @DisplayName("리뷰 쓰기 성공 시, DB에 저장되고 응답 DTO가 정확해야 한다.")
+    void addBakeryReview_Success() {
+        // GIVEN: 새로운 리뷰 요청 데이터
+        BakeryReviewRequest request = new BakeryReviewRequest();
+        request.setRating(4.5);
+        request.setText("새로 쓴 리뷰 내용");
+        request.setPhoto("new_photo_url");
+
+        // WHEN: 리뷰 작성 서비스 호출
+        BakeryReviewResponse response = reviewService.addBakeryReview(
+                bakeryId,
+                currentMemId,
+                request
+        );
+
+        // THEN:
+        // 응답 DTO 검증
+        assertEquals(request.getRating(), response.getRating(), "별점이 일치해야 합니다.");
+        assertEquals(request.getText(), response.getText(), "리뷰 내용이 일치해야 합니다.");
+        assertEquals("유저1", response.getWriter(), "작성자 닉네임이 일치해야 합니다.");
+        assertTrue(response.isMine(), "작성 직후이므로 isMine은 true여야 합니다.");
+    }
+
+    @Test
     @DisplayName("리뷰 수정 성공 시, DB에 반영되고 수정된 DTO가 반환되어야 한다")
     void updateBakeryReview_Success() {
         // GIVEN: 새로운 수정 요청 데이터 (별점, 내용 변경)
@@ -138,29 +202,6 @@ public class ReviewServiceTest {
     }
 
     @Test
-    @DisplayName("리뷰 목록 조회 시 isMine 플래그가 정확히 계산되고 모든 정보가 매핑되어야 한다")
-    void getBakeryReviews_Success_WithIsMineFlag() {
-        // WHEN: 현재 사용자 ID(currentMemId)를 넘겨 리뷰 목록 조회
-        List<BakeryReviewResponse> responseList = reviewService.getBakeryReviews(bakeryId, currentMemId);
-
-        // THEN:
-        assertNotNull(responseList);
-        assertEquals(3, responseList.size(), "리뷰는 총 3개여야 합니다.");
-
-        // 1. 첫 번째 리뷰 (나의 리뷰) 검증
-        BakeryReviewResponse myReviewResponse = responseList.get(0);
-        assertEquals("유저1", myReviewResponse.getWriter(), "첫 번째 리뷰는 현재 사용자의 닉네임이어야 합니다.");
-        assertEquals(5.0, myReviewResponse.getRating(), 0.01);
-        assertTrue(myReviewResponse.isMine(), "현재 사용자 ID와 작성자 ID가 일치하므로 isMine은 true여야 합니다.");
-
-        // 2. 두 번째 리뷰 (다른 사람 리뷰) 검증
-        BakeryReviewResponse otherReviewResponse = responseList.get(1);
-        assertEquals("유저2", otherReviewResponse.getWriter(), "두 번째 리뷰는 다른 사용자의 닉네임이어야 합니다.");
-        assertEquals(4.0, otherReviewResponse.getRating(), 0.01);
-        assertFalse(otherReviewResponse.isMine(), "현재 사용자 ID와 작성자 ID가 다르므로 isMine은 false여야 합니다.");
-    }
-
-    @Test
     @DisplayName("리뷰 삭제 성공 시, DB에서 해당 리뷰가 제거되어야 한다")
     void deleteBakeryReview_Success() {
         // GIVEN: 초기 리뷰 개수 확인
@@ -207,46 +248,5 @@ public class ReviewServiceTest {
                     currentMemId
             );
         }, "존재하지 않는 리뷰 ID 삭제 시 IllegalArgumentException이 발생해야 합니다.");
-    }
-
-    @Test
-    @DisplayName("리뷰가 없는 가게 ID로 조회 시 빈 리스트를 반환해야 한다")
-    void getBakeryReviews_ReturnsEmptyList_IfNoReviews() {
-        // GIVEN: 리뷰가 없는 새로운 빵집 ID
-        Bakery bakeryEmpty = Bakery.createBakery("빈 빵집", "주소", "0", 0, 0,
-                "url", "p1", "p2", "비어있는 유명한 집", "15:00 - 16:00");
-        bakeryRepository.save(bakeryEmpty);
-        Long emptyBakeryId = bakeryEmpty.getId();
-
-        // WHEN
-        List<BakeryReviewResponse> responseList = reviewService.getBakeryReviews(emptyBakeryId, currentMemId);
-
-        // THEN
-        assertNotNull(responseList);
-        assertTrue(responseList.isEmpty(), "리뷰가 없으면 빈 리스트가 반환되어야 합니다.");
-    }
-
-    @Test
-    @DisplayName("리뷰 쓰기 성공 시, DB에 저장되고 응답 DTO가 정확해야 한다.")
-    void addBakeryReview_Success() {
-        // GIVEN: 새로운 리뷰 요청 데이터
-        BakeryReviewRequest request = new BakeryReviewRequest();
-        request.setRating(4.5);
-        request.setText("새로 쓴 리뷰 내용");
-        request.setPhoto("new_photo_url");
-
-        // WHEN: 리뷰 작성 서비스 호출
-        BakeryReviewResponse response = reviewService.addBakeryReview(
-                bakeryId,
-                currentMemId,
-                request
-        );
-
-        // THEN:
-        // 응답 DTO 검증
-        assertEquals(request.getRating(), response.getRating(), "별점이 일치해야 합니다.");
-        assertEquals(request.getText(), response.getText(), "리뷰 내용이 일치해야 합니다.");
-        assertEquals("유저1", response.getWriter(), "작성자 닉네임이 일치해야 합니다.");
-        assertTrue(response.isMine(), "작성 직후이므로 isMine은 true여야 합니다.");
     }
 }
