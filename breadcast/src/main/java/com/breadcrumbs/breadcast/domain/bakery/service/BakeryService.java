@@ -42,7 +42,7 @@ public class BakeryService {
                 favoriteId = favoriteBakery.getBakery().getId();
                 if (favoriteId == bakeryId) {
                     isFavorited = true;
-                    break; // 찾았으면 더 이상 루프를 돌 필요가 없습니다.
+                    break; // 찾았으면 loop를 멈춤
                 }
             }
         }
@@ -68,6 +68,7 @@ public class BakeryService {
 
         //dto를 controller에게 반환
         return bakeryDetailResponse;
+
         /*
         -Bakery bakeryRepository.findByBakeryId(bakeryId) 호출
         - 호출한 Bakery를 DTO로 변환하여 컨트롤러로 반환
