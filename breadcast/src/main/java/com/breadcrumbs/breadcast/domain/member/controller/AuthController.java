@@ -66,7 +66,6 @@ public class AuthController {
             @RequestBody @Valid LoginRequest request,
             HttpServletRequest httpRequest) {
         log.info("로그인 시도: {}", request.getLoginId());
-
         MemberResponse response = authService.login(request, httpRequest);
         log.info("로그인 성공: {}", request.getLoginId());
         return ApiResponse.onSuccess("로그인에 성공하였습니다.", response);
