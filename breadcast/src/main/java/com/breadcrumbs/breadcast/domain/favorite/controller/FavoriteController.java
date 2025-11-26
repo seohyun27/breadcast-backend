@@ -26,7 +26,9 @@ public class FavoriteController {
     @PostMapping("/bakeries/{bakeryId}")
     public ApiResponse<Void> addFavoriteBakery(@PathVariable Long bakeryId,
                                                @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return null;
+        Long userId = (userDetails != null) ? userDetails.getUserId() : null;
+        favoriteService.addFavoriteBakery(bakeryId, userId);
+        return ApiResponse.onSuccess("빵집 스크랩에 성공하였습니다.", null);
     }
 
     @DeleteMapping("/bakeries/{bakeryId}")
