@@ -1,5 +1,6 @@
 package com.breadcrumbs.breadcast.global.security;
 
+import com.breadcrumbs.breadcast.domain.member.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,9 +9,15 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity // Spring Security를 활성화
@@ -26,8 +33,18 @@ public class SecurityConfig {
     }
 
     /**
+     * UserDetailsService Bean 등록
+     * AuthService가 UserDetailsService를 구현하고 있으므로 이를 반환
+     * 메서드 주입을 통해 순환 참조 방지
+     */
+    @Bean
+    public UserDetailsService userDetailsService(AuthService authService) {
+        return authService;
+    }
+
+    /**
      * 인증 관리자 (AuthenticationManager)
-     * AuthService의 login() 메서드에서 주입받아 사용
+     * AuthController와 AuthService에서 주입받아 사용
      */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -41,6 +58,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                // 1. 시큐리티 필터 체인에서 CORS 설정을 활성화
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
                 // 1. CSRF 보호 비활성화 (REST API이므로)
                 .csrf(AbstractHttpConfigurer::disable)
 
@@ -63,7 +83,7 @@ public class SecurityConfig {
                 // 5. 로그아웃 설정
                 .logout(logout -> logout
                         // 클라이언트가 호출할 로그아웃 URL
-                        .logoutUrl("/api/auth/logout")
+                        .logoutUrl("/auth/logout")
 
                         // 로그아웃 성공 시 반환할 HTTP 상태 코드 (200 OK)
                         .logoutSuccessHandler((request, response, authentication) ->
@@ -78,5 +98,26 @@ public class SecurityConfig {
                 );
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // 허용할 오리진 목록 (3000, 5173 포함)
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173"));
+
+        // 허용할 HTTP 메서드 목록
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // 인증 정보(쿠키 등) 허용 여부
+        configuration.setAllowCredentials(true);
+
+        // 허용할 헤더 목록
+        configuration.setAllowedHeaders(List.of("*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // 모든 경로에 적용
+        return source;
     }
 }
