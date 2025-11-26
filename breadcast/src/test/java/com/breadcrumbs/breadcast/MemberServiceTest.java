@@ -5,6 +5,7 @@ import com.breadcrumbs.breadcast.domain.member.dto.MemberUpdateRequest;
 import com.breadcrumbs.breadcast.domain.member.entity.Member;
 import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
 import com.breadcrumbs.breadcast.domain.member.service.MemberService;
+import com.breadcrumbs.breadcast.global.apiPayload.exception.GeneralException;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -83,8 +84,8 @@ public class MemberServiceTest {
         request.setNickname(EXISTING_NICKNAME);
 
         // When & Then
-        // IllegalArgumentException이 발생하는지 검증
-        assertThrows(IllegalArgumentException.class, () -> {
+        // GeneralException이 발생하는지 검증
+        assertThrows(GeneralException.class, () -> {
             memberService.updateNickname(memberId, request);
         }, "이미 존재하는 닉네임으로 변경 시도 시 예외가 발생해야 합니다.");
 
@@ -108,7 +109,7 @@ public class MemberServiceTest {
 
         // When & Then
         // 멤버를 찾을 수 없다는 예외가 발생하는지 검증 (MemberService의 orElseThrow 로직)
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(GeneralException.class, () -> {
             memberService.updateNickname(nonExistentId, request);
         }, "존재하지 않는 ID로 요청 시 예외가 발생해야 합니다.");
     }
