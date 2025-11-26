@@ -2,6 +2,7 @@ package com.breadcrumbs.breadcast.domain.member.service;
 
 import com.breadcrumbs.breadcast.domain.member.dto.LoginRequest;
 import com.breadcrumbs.breadcast.domain.member.dto.MemberResponse;
+import com.breadcrumbs.breadcast.domain.member.dto.SignupRequest;
 import com.breadcrumbs.breadcast.domain.member.entity.Member;
 import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
 import com.breadcrumbs.breadcast.global.apiPayload.exception.GeneralException;
@@ -17,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,34 @@ public class AuthService implements UserDetailsService { // UserDetailsService �
 
     private final MemberRepository memberRepository;
     private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
+
+    /**
+     * 회원가입 메서드
+     */
+    @Transactional
+    public MemberResponse signup(SignupRequest request) {
+        // 1. 아이디 중복 검사는 @Valid의 @UniqueLoginId에서 처리됨
+        // 2. 닉네임 중복 검사는 @Valid의 @UniqueNickname에서 처리됨
+
+        // 3. 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+
+        // 4. Member 엔티티 생성
+        Member member = Member.createMember(
+                request.getLoginId(),
+                encodedPassword,
+                request.getNickname()
+        );
+
+        // 5. MemberRepository에 저장
+        memberRepository.save(member);
+
+        // 6. MemberResponse 반환
+        return MemberResponse.builder()
+                .nickname(member.getNickname())
+                .build();
+    }
 
     /**
      * 로그인 메서드
@@ -61,6 +91,22 @@ public class AuthService implements UserDetailsService { // UserDetailsService �
                 .build();
     }
 
+
+    /**
+     * 아이디 중복 확인
+     */
+    @Transactional(readOnly = true)
+    public boolean isLoginIdDuplicate(String loginId) {
+        return memberRepository.findByLoginId(loginId).isPresent();
+    }
+
+    /**
+     * 닉네임 중복 확인
+     */
+    @Transactional(readOnly = true)
+    public boolean isNicknameDuplicate(String nickname) {
+        return memberRepository.existsByNickname(nickname);
+    }
 
     /**
      * Spring Security가 내부적으로 호출할 메서드
