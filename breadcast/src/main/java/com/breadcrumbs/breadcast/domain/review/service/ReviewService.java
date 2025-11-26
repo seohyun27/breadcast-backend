@@ -50,16 +50,14 @@ public class ReviewService {
 
         if (memId == null) {
             // 비회원은 리뷰를 작성할 수 없으므로 권한 없음 예외를 발생시킵니다.
-            // Spring Security 컨텍스트 밖에서 직접 처리 시 IllegalStateException 사용
-            throw new IllegalStateException("로그인한 사용자만 리뷰를 작성할 수 있습니다.");
-            // (이 예외는 GlobalExceptionHandler에서 401 Unauthorized 또는 403 Forbidden으로 처리되도록 설정해야 합니다.)
+            throw new GeneralException("로그인한 사용자만 리뷰를 작성할 수 있습니다.");
         }
 
         Bakery bakery = bakeryRepository.findById(bakeryId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 빵집 ID입니다. ID: " + bakeryId));
+                .orElseThrow(() -> new GeneralException("존재하지 않는 빵집 ID입니다. ID: " + bakeryId));
 
         Member member = memberRepository.findById(memId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원 ID입니다. ID: " + memId));
+                .orElseThrow(() -> new GeneralException("존재하지 않는 회원 ID입니다. ID: " + memId));
 
         // 2. BakeryReview 엔티티 생성
         // (BakeryReview 엔티티에 createBakeryReview 정적 팩토리 메서드가 있다고 가정)
