@@ -4,6 +4,7 @@ import com.breadcrumbs.breadcast.global.apiPayload.ApiResponse;
 import com.breadcrumbs.breadcast.global.apiPayload.exception.GeneralException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -26,7 +27,30 @@ public class GeneralExceptionAdvice {
                 ));
     }
 
-    // 2. 그 외의 정의되지 않은 모든 예외를 처리
+    // 2. @Valid 검증 실패 시 발생하는 예외 처리
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Void>> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException ex
+    ) {
+        // HTTP 400 Bad Request로 처리
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+
+        // 첫 번째 검증 오류 메시지를 가져옴
+        String errorMessage = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .findFirst()
+                .map(error -> error.getDefaultMessage())
+                .orElse("입력값이 유효하지 않습니다.");
+
+        return ResponseEntity.status(httpStatus)
+                .body(ApiResponse.onFailure(
+                        errorMessage,
+                        null
+                ));
+    }
+
+    // 3. 그 외의 정의되지 않은 모든 예외를 처리
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<String>> handleAllOtherExceptions(
             Exception ex
