@@ -5,11 +5,11 @@ import com.breadcrumbs.breadcast.domain.member.dto.MemberResponse;
 import com.breadcrumbs.breadcast.domain.member.dto.SignupRequest;
 import com.breadcrumbs.breadcast.domain.member.service.AuthService;
 import com.breadcrumbs.breadcast.domain.member.service.MemberService;
+import com.breadcrumbs.breadcast.global.apiPayload.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,33 +33,20 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<MemberResponse> signup(@RequestBody @Valid SignupRequest request){
+    public ApiResponse<MemberResponse> signup(@RequestBody @Valid SignupRequest request){
         log.info("회원가입 시도: {}", request.getLoginId());
-        try {
-            MemberResponse response = memberService.addMember(request);
-            return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            log.error("회원가입 실패: {}", e.getMessage());
-            throw e;
-        }
+        MemberResponse response = memberService.addMember(request);
+        return ApiResponse.onSuccess("회원가입에 성공하였습니다.", response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<MemberResponse> login(
+    public ApiResponse<MemberResponse> login(
             @RequestBody @Valid LoginRequest request,
             HttpServletRequest httpRequest) {
         log.info("로그인 시도: {}", request.getLoginId());
-
-        try {
-            // AuthService에 인증 로직 위임
-            MemberResponse response = authService.login(request, httpRequest);
-            log.info("로그인 성공: {}", request.getLoginId());
-            return ResponseEntity.ok(response);
-
-        } catch (Exception e) {
-            log.error("로그인 실패: {}", e.getMessage());
-            throw new IllegalArgumentException("로그인에 실패했습니다: " + e.getMessage());
-        }
+        MemberResponse response = authService.login(request, httpRequest);
+        log.info("로그인 성공: {}", request.getLoginId());
+        return ApiResponse.onSuccess("로그인에 성공하였습니다.", response);
     }
 
 }
