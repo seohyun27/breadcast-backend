@@ -9,6 +9,7 @@ import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewResponse;
 import com.breadcrumbs.breadcast.domain.review.entity.BakeryReview;
 import com.breadcrumbs.breadcast.domain.review.repository.BakeryReviewRepository;
 import com.breadcrumbs.breadcast.domain.review.service.ReviewService;
+import com.breadcrumbs.breadcast.global.apiPayload.exception.GeneralException;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -170,15 +171,14 @@ public class ReviewServiceTest {
         updateRequest.setText("권한 없음 테스트");
         updateRequest.setPhoto("url");
 
-        // WHEN/THEN: 권한이 없는 사용자(otherMemId)가 수정 서비스 호출 시 IllegalStateException 발생
-        // (ReviewService의 권한 체크 로직에 따라 IllegalStateException 발생을 가정)
-        assertThrows(IllegalStateException.class, () -> {
+        // WHEN/THEN: 권한이 없는 사용자(otherMemId)가 수정 서비스 호출 시 GeneralException 발생
+        assertThrows(GeneralException.class, () -> {
             reviewService.updateBakeryReview(
                     reviewId,
                     otherMemId, // 💡 권한 없는 사용자 ID
                     updateRequest
             );
-        }, "작성자가 아닌 사용자가 수정 시도 시 IllegalStateException이 발생해야 합니다.");
+        }, "작성자가 아닌 사용자가 수정 시도 시 GeneralException이 발생해야 합니다.");
     }
 
     @Test
@@ -191,14 +191,14 @@ public class ReviewServiceTest {
         updateRequest.setText("존재하지 않음 테스트");
         updateRequest.setPhoto("url");
 
-        // WHEN/THEN: IllegalArgumentException 발생 (ReviewService의 .orElseThrow() 로직)
-        assertThrows(IllegalArgumentException.class, () -> {
+        // WHEN/THEN: GeneralException 발생 (ReviewService의 .orElseThrow() 로직)
+        assertThrows(GeneralException.class, () -> {
             reviewService.updateBakeryReview(
                     nonExistentId,
                     currentMemId,
                     updateRequest
             );
-        }, "존재하지 않는 리뷰 ID 수정 시 IllegalArgumentException이 발생해야 합니다.");
+        }, "존재하지 않는 리뷰 ID 수정 시 GeneralException이 발생해야 합니다.");
     }
 
     @Test
@@ -222,14 +222,13 @@ public class ReviewServiceTest {
     @Test
     @DisplayName("리뷰 삭제 시 권한이 없는 사용자가 시도하면 예외가 발생해야 한다")
     void deleteBakeryReview_Failure_NoAuthority() {
-        // WHEN/THEN: 권한이 없는 사용자(otherMemId)가 삭제 서비스 호출 시 IllegalStateException 발생
-        // (ReviewService의 권한 체크 로직에 따라 IllegalStateException 발생을 가정)
-        assertThrows(IllegalStateException.class, () -> {
+        // WHEN/THEN: 권한이 없는 사용자(otherMemId)가 삭제 서비스 호출 시 GeneralException 발생
+        assertThrows(GeneralException.class, () -> {
             reviewService.deleteBakeryReview(
                     reviewId,
                     otherMemId // 💡 권한 없는 사용자 ID
             );
-        }, "작성자가 아닌 사용자가 삭제 시도 시 IllegalStateException이 발생해야 합니다.");
+        }, "작성자가 아닌 사용자가 삭제 시도 시 GeneralException이 발생해야 합니다.");
 
         // 삭제 실패 후 리뷰가 DB에 남아있는지 확인
         assertTrue(bakeryReviewRepository.findById(reviewId).isPresent(), "삭제 실패 후 리뷰는 DB에 남아있어야 합니다.");
@@ -241,12 +240,12 @@ public class ReviewServiceTest {
         // GIVEN: 존재하지 않는 ID
         Long nonExistentId = 9999L;
 
-        // WHEN/THEN: IllegalArgumentException 발생 (ReviewService의 .orElseThrow() 로직)
-        assertThrows(IllegalArgumentException.class, () -> {
+        // WHEN/THEN: GeneralException 발생 (ReviewService의 .orElseThrow() 로직)
+        assertThrows(GeneralException.class, () -> {
             reviewService.deleteBakeryReview(
                     nonExistentId,
                     currentMemId
             );
-        }, "존재하지 않는 리뷰 ID 삭제 시 IllegalArgumentException이 발생해야 합니다.");
+        }, "존재하지 않는 리뷰 ID 삭제 시 GeneralException이 발생해야 합니다.");
     }
 }
