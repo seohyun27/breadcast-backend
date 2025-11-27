@@ -3,6 +3,7 @@ package com.breadcrumbs.breadcast;
 import com.breadcrumbs.breadcast.domain.bakery.entity.Bakery;
 import com.breadcrumbs.breadcast.domain.bakery.repository.BakeryRepository;
 import com.breadcrumbs.breadcast.domain.bakery.service.BakeryService;
+import com.breadcrumbs.breadcast.domain.favorite.dto.GetFavoriteBakeriesResponse;
 import com.breadcrumbs.breadcast.domain.favorite.entity.FavoriteBakery;
 import com.breadcrumbs.breadcast.domain.favorite.repository.FavoriteBakeryRepository;
 import com.breadcrumbs.breadcast.domain.favorite.service.FavoriteService;
@@ -19,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,6 +40,7 @@ public class FavoriteServiceTest {
 
     private Long memAId;
     private Long memDId;
+    private Long memEId;
     private Long bakeryId;
     private Long bakeryAId;
     private Long bakeryBId;
@@ -48,12 +52,15 @@ public class FavoriteServiceTest {
         Member member2 = Member.createMember("user2", "pass", "유저2");
         Member member3 = Member.createMember("user3", "pass", "유저3");
         Member member4 = Member.createMember("user4", "p", "유저4");
+        Member member5 = Member.createMember("user5", "p", "유저5");
         memberRepository.save(member1);
         memberRepository.save(member2);
         memberRepository.save(member3);
         memberRepository.save(member4);
+        memberRepository.save(member5);
         memAId = member1.getId();
         memDId = member4.getId();
+        memEId = member5.getId();
 
         // Bakery Entity 생성 및 저장
         Bakery bakery = Bakery.createBakery(
@@ -214,6 +221,58 @@ public class FavoriteServiceTest {
             favoriteService.deleteFavoriteBakery(bakeryAId, null);
         } catch (GeneralException e) {
             assertEquals("로그인한 사용자만 관심 가게를 삭제할 수 있습니다.", e.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("관심 가게 목록 조회 성공 시, 등록된 모든 빵집과 정보가 정확히 매핑되어야 한다")
+    void getFavoriteBakeries_Success_ReturnsAllFavorites() {
+        // GIVEN: memAId는 3개의 관심 가게를 가지고 있다.
+
+        // WHEN: memAId로 관심 가게 목록 조회
+        List<GetFavoriteBakeriesResponse> responseList = favoriteService.getFavoriteBakeries(memAId);
+
+        // THEN:
+        assertNotNull(responseList);
+        assertEquals(3, responseList.size(), "등록된 관심 가게는 총 3개여야 합니다.");
+
+        // 1. DTO 필드 매핑 검증 (테스트 빵집 - bakeryId)
+        GetFavoriteBakeriesResponse testBakeryResponse = responseList.stream()
+                .filter(r -> r.getId() == bakeryId)
+                .findFirst().orElseThrow(() -> new AssertionError("테스트 빵집이 결과 목록에 없습니다."));
+
+        assertEquals("테스트 빵집", testBakeryResponse.getName(), "이름이 일치해야 합니다.");
+        assertEquals("테스트 주소", testBakeryResponse.getAddress(), "주소가 일치해야 합니다.");
+        assertEquals("010-0000-0000", testBakeryResponse.getPhone(), "전화번호가 일치해야 합니다.");
+        assertEquals("p1", testBakeryResponse.getPhoto1(), "Photo1이 일치해야 합니다.");
+        assertEquals("p2", testBakeryResponse.getPhoto2(), "Photo2가 일치해야 합니다.");
+    }
+
+    @Test
+    @DisplayName("관심 가게가 없는 사용자 조회 시, 빈 리스트를 반환해야 한다")
+    void getFavoriteBakeries_Success_ReturnsEmptyList() {
+        // GIVEN: memEId는 관심 가게가 없다.
+
+        // WHEN: memEId로 관심 가게 목록 조회
+        List<GetFavoriteBakeriesResponse> responseList = favoriteService.getFavoriteBakeries(memEId);
+
+        // THEN:
+        assertNotNull(responseList);
+        assertTrue(responseList.isEmpty(), "관심 가게가 없으면 빈 리스트가 반환되어야 합니다.");
+    }
+
+    @Test
+    @DisplayName("관심 가게 목록 조회 실패: 로그인하지 않은 사용자 (memberId=null)")
+    void getFavoriteBakeries_Failure_NullMemberId() {
+        // WHEN/THEN: memberId가 null일 경우 GeneralException 발생
+        assertThrows(GeneralException.class, () -> {
+            favoriteService.getFavoriteBakeries(null);
+        }, "memberId가 null일 경우 GeneralException이 발생해야 합니다.");
+
+        try {
+            favoriteService.getFavoriteBakeries(null);
+        } catch (GeneralException e) {
+            assertEquals("로그인한 사용자만 관심 가게 목록을 볼 수 있습니다.", e.getMessage());
         }
     }
 }

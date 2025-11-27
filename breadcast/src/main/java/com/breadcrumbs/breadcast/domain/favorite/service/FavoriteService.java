@@ -1,5 +1,6 @@
 package com.breadcrumbs.breadcast.domain.favorite.service;
 
+import com.breadcrumbs.breadcast.domain.bakery.dto.SearchBakeryResponse;
 import com.breadcrumbs.breadcast.domain.bakery.entity.Bakery;
 import com.breadcrumbs.breadcast.domain.bakery.repository.BakeryRepository;
 import com.breadcrumbs.breadcast.domain.favorite.dto.GetFavoriteBakeriesResponse;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,6 +30,29 @@ public class FavoriteService {
 
     @Transactional(readOnly = true)
     public List<GetFavoriteBakeriesResponse> getFavoriteBakeries(Long memberId){
+        // 1. 사용자가 로그인한 자인지 확인
+        if (memberId == null) {
+            throw new GeneralException("로그인한 사용자만 관심 가게 목록을 볼 수 있습니다.");
+        }
+
+        List<GetFavoriteBakeriesResponse> getFavoriteBakeriesResponseList = new ArrayList<>();
+        List<FavoriteBakery> favoriteBakeryList = favoriteBakeryRepository.findByMemberId(memberId);
+
+        // 찾은 FavoriteBakery List를 getFavoriteBakeriesResponse List(dto List)로 변경
+        for(FavoriteBakery favoriteBakery : favoriteBakeryList){
+            GetFavoriteBakeriesResponse getFavoriteBakeriesResponse = GetFavoriteBakeriesResponse.builder()
+                    .id(favoriteBakery.getBakery().getId())
+                    .name(favoriteBakery.getBakery().getName())
+                    .address(favoriteBakery.getBakery().getAddress())
+                    .phone(favoriteBakery.getBakery().getPhone())
+                    .photo1(favoriteBakery.getBakery().getPhoto1())
+                    .photo2(favoriteBakery.getBakery().getPhoto2())
+                    .build();
+
+            getFavoriteBakeriesResponseList.add(getFavoriteBakeriesResponse);
+        }
+
+        return getFavoriteBakeriesResponseList;
         /*
         - favoriteBakeryRepository.findByMemberId(memId) 호출
         - 가게 사진 2장/가게 이름/가게 전화번호/주소
@@ -35,8 +60,6 @@ public class FavoriteService {
         - 변환된 리스트를 컨트롤러로 반환
         - 현재 단계에서는 임시로 List<>를 반환하도록 작성함
         */
-
-        return null;
     }
 
     public void addFavoriteBakery(Long bakeryId, Long memId){
