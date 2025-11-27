@@ -185,4 +185,35 @@ public class FavoriteServiceTest {
             assertEquals("빵집 정보를 찾을 수 없습니다.", e.getMessage());
         }
     }
+
+    @Test
+    @DisplayName("관심 가게 삭제 성공: 등록하지 않은 빵집을 삭제 시도해도 예외가 발생하지 않는다")
+    void deleteFavoriteBakery_Success_NonExistentEntry() {
+        // GIVEN: User4(memDId)는 맛있는 빵 A(bakeryAId)를 관심 가게로 등록하지 않았다.
+        long initialCount = favoriteBakeryRepository.count();
+        assertFalse(favoriteBakeryRepository.existsByMemberIdAndBakeryId(memDId, bakeryAId), "삭제 시도 전 엔트리가 존재하지 않아야 합니다.");
+
+        // WHEN: User4가 맛있는 빵 A의 관심 가게 등록을 삭제 시도
+        // Repository의 deleteByMemberIdAndBakeryId는 없으면 0개 삭제로 성공 처리됨
+        favoriteService.deleteFavoriteBakery(bakeryAId, memDId);
+
+        // THEN:
+        // 1. DB 카운트는 그대로 유지되어야 한다.
+        assertEquals(initialCount, favoriteBakeryRepository.count(), "엔트리가 없었으므로 전체 관심 가게 수는 변하지 않아야 합니다.");
+    }
+
+    @Test
+    @DisplayName("관심 가게 삭제 실패: 로그인하지 않은 사용자 (memId=null)")
+    void deleteFavoriteBakery_Failure_NullMemberId() {
+        // WHEN/THEN: memId가 null일 경우 예외 발생
+        assertThrows(GeneralException.class, () -> {
+            favoriteService.deleteFavoriteBakery(bakeryAId, null);
+        }, "memId가 null일 경우 GeneralException이 발생해야 합니다.");
+
+        try {
+            favoriteService.deleteFavoriteBakery(bakeryAId, null);
+        } catch (GeneralException e) {
+            assertEquals("로그인한 사용자만 관심 가게를 삭제할 수 있습니다.", e.getMessage());
+        }
+    }
 }
