@@ -68,6 +68,13 @@ public class FavoriteService {
     }
 
     public void deleteFavoriteBakery(Long bakeryId, Long memId){
+        // 1. 사용자가 로그인한 자인지 확인
+        if (memId == null) {
+            throw new GeneralException("로그인한 사용자만 관심 가게를 삭제할 수 있습니다.");
+        }
+
+        favoriteBakeryRepository.deleteByMemberIdAndBakeryId(memId, bakeryId);
+
         /*
         - 존재 여부 검사 favoriteBakeryRepository.existsByMemberIdAndBakeryId(memId, bakeryId);
         - 삭제 메소드 호출 favoriteBakeryRepository.deleteByMemberIdAndBakeryId(memId, bakeryId);
