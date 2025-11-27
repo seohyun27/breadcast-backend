@@ -28,13 +28,15 @@ public class FavoriteController {
                                                @AuthenticationPrincipal UserDetailsImpl userDetails){
         Long userId = (userDetails != null) ? userDetails.getUserId() : null;
         favoriteService.addFavoriteBakery(bakeryId, userId);
-        return ApiResponse.onSuccess("빵집 스크랩에 성공하였습니다.", null);
+        return ApiResponse.onSuccess("관심 빵집 등록에 성공하였습니다.", null);
     }
 
     @DeleteMapping("/bakeries/{bakeryId}")
     public ApiResponse<Void> deleteFavoriteBakery(@PathVariable Long bakeryId,
                                               @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return null;
+        Long userId = (userDetails != null) ? userDetails.getUserId() : null;
+        favoriteService.deleteFavoriteBakery(bakeryId, userId);
+        return ApiResponse.onSuccess("관심 빵집 삭제에 성공하였습니다.", null);
     }
 
     @GetMapping("/courses")
