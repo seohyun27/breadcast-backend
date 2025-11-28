@@ -21,7 +21,7 @@ public class FavoriteController {
     @GetMapping("/bakeries")
     public ApiResponse<List<GetFavoriteBakeriesResponse>> getFavoriteBakeries(@AuthenticationPrincipal UserDetailsImpl userDetails){
         Long userId = (userDetails != null) ? userDetails.getUserId() : null;
-        return ApiResponse.onSuccess("관심 빵집 등록에 성공하였습니다.", favoriteService.getFavoriteBakeries(userId));
+        return ApiResponse.onSuccess("관심 빵집 목록 보기에 성공하였습니다.", favoriteService.getFavoriteBakeries(userId));
     }
 
     @PostMapping("/bakeries/{bakeryId}")
