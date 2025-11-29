@@ -7,29 +7,45 @@ import com.breadcrumbs.breadcast.domain.member.entity.Member;
 import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
 import com.breadcrumbs.breadcast.global.apiPayload.exception.GeneralException;
 import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 인증 서비스
+ * - UserDetailsService 구현: Spring Security 인증에 필요한 사용자 정보 제공
+ * - 비즈니스 로직: 회원가입, 로그인, 중복 확인 등
+ * - @Lazy: AuthenticationManager의 순환 참조 방지 (일반적인 Spring 패턴)
+ */
 @Service
-@RequiredArgsConstructor
-public class AuthService implements UserDetailsService { // UserDetailsService 구현
+public class AuthService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+
+    /**
+     * 생성자 주입
+     * @Lazy: AuthenticationManager는 UserDetailsService를 필요로 하므로,
+     *        순환 참조 방지를 위해 지연 로딩 적용
+     */
+    public AuthService(
+            MemberRepository memberRepository,
+            @Lazy AuthenticationManager authenticationManager,
+            PasswordEncoder passwordEncoder
+    ) {
+        this.memberRepository = memberRepository;
+        this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     /**
      * 회원가입 메서드
@@ -60,10 +76,11 @@ public class AuthService implements UserDetailsService { // UserDetailsService �
 
     /**
      * 로그인 메서드
-     * Spring Security를 사용하여 인증을 수행하고 세션을 생성
+     * Spring Security를 사용하여 인증을 수행
+     * 세션 생성은 Spring Security가 자동으로 처리
      */
     @Transactional(readOnly = true)
-    public MemberResponse login(LoginRequest loginRequest, HttpServletRequest httpRequest) {
+    public MemberResponse login(LoginRequest loginRequest) {
         // 1. Spring Security 인증 수행
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -72,22 +89,18 @@ public class AuthService implements UserDetailsService { // UserDetailsService �
                 )
         );
 
-        // 2. SecurityContext 생성 및 인증 정보 설정
-        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(authentication);
-        SecurityContextHolder.setContext(securityContext);
+        // 2. SecurityContext에 인증 정보 설정 (세션은 Spring Security가 자동 관리)
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // 3. 세션 생성 및 SecurityContext 저장
-        HttpSession session = httpRequest.getSession(true);
-        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+        // 3. 인증된 사용자 정보에서 닉네임 추출
+        // UserDetails 인터페이스를 통해 접근 후, loginId로 Member 재조회
+        String loginId = authentication.getName();
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new GeneralException("사용자를 찾을 수 없습니다: " + loginId));
 
-        // 4. 인증된 사용자 정보에서 닉네임 추출
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        String nickname = userDetails.getMember().getNickname();
-
-        // 5. MemberResponse 반환
+        // 4. MemberResponse 반환
         return MemberResponse.builder()
-                .nickname(nickname)
+                .nickname(member.getNickname())
                 .build();
     }
 
@@ -109,7 +122,8 @@ public class AuthService implements UserDetailsService { // UserDetailsService �
     }
 
     /**
-     * Spring Security가 내부적으로 호출할 메서드
+     * Spring Security가 인증 시 호출하는 메서드
+     * UserDetailsService 인터페이스 구현
      */
     @Override
     @Transactional(readOnly = true)
@@ -118,7 +132,7 @@ public class AuthService implements UserDetailsService { // UserDetailsService �
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new GeneralException("사용자를 찾을 수 없습니다: " + loginId));
 
-        // 찾아낸 Member를 어댑터(UserDetailsImpl)로 감싸서 반환
+        // Member를 UserDetails로 변환하여 반환
         return new UserDetailsImpl(member);
     }
 }
