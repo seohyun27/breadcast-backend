@@ -193,13 +193,33 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public List<GetMyBakeryReviewResponse> getMyBakeryReview(Long bakeryId, Long memId) {
+    public List<GetMyBakeryReviewResponse> getMyBakeryReview(Long memId) {
+        // 1. 사용자가 로그인한 자인지 확인
+        if (memId == null) {
+            throw new GeneralException("로그인한 사용자만 내가 쓴 리뷰 목록 보기를 사용할 수 있습니다.");
+        }
+
+        List<GetMyBakeryReviewResponse> getMyBakeryReviewResponseList = new ArrayList<>();
+        List<BakeryReview> bakeryReviewList = bakeryReviewRepository.findByMemberId(memId);
+        for(BakeryReview bakeryReview : bakeryReviewList){
+            GetMyBakeryReviewResponse getMyBakeryReviewResponse = GetMyBakeryReviewResponse.builder()
+                    .bakeryId(bakeryReview.getBakery().getId())
+                    .name(bakeryReview.getBakery().getName())
+                    .reviewId(bakeryReview.getId())
+                    .text(bakeryReview.getText())
+                    .rating(bakeryReview.getRating())
+                    .photo(bakeryReview.getPhoto())
+                    .build();
+
+            getMyBakeryReviewResponseList.add(getMyBakeryReviewResponse);
+        }
+
+        return getMyBakeryReviewResponseList;
+
         /*
         - bakeryReviewRepository.findByMemberId(memId); 를 호출해 빵집 리뷰 목록을 가져온다
         - 해당하는 모든 리뷰에 대해 가게 사진 1 장 / 가게 이름 / 리뷰 내용을 DTO로 묶어 반환
         */
-
-        return null;
     }
 
     public MenuReviewResponse addMenuReview(Long menuId, Long memId,

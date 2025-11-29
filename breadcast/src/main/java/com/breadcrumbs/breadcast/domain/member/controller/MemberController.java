@@ -11,6 +11,7 @@ import com.breadcrumbs.breadcast.domain.review.dto.myPage.GetMyMenuReviewRespons
 import com.breadcrumbs.breadcast.domain.review.repository.BakeryReviewRepository;
 import com.breadcrumbs.breadcast.domain.review.repository.CourseReviewRepository;
 import com.breadcrumbs.breadcast.domain.review.repository.MenuReviewRepository;
+import com.breadcrumbs.breadcast.domain.review.service.ReviewService;
 import com.breadcrumbs.breadcast.global.apiPayload.ApiResponse;
 import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
@@ -26,6 +27,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final ReviewService reviewService;
     private final BakeryReviewRepository bakeryReviewRepository;
     private final MenuReviewRepository menuReviewRepository;
     private final CourseRepository courseRepository;
@@ -44,7 +46,8 @@ public class MemberController {
 
     @GetMapping("/bakery-reviews")
     public ApiResponse<List<GetMyBakeryReviewResponse>> getMyBakeryReview(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return null;
+        Long userId = (userDetails != null) ? userDetails.getUserId() : null;
+        return ApiResponse.onSuccess("내가 쓴 리뷰 목록 보기에 성공하였습니다.", reviewService.getMyBakeryReview(userId));
     }
 
     @GetMapping("/menu-reviews")
