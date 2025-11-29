@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class Menu {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "menu_id")
     private long id;
 
