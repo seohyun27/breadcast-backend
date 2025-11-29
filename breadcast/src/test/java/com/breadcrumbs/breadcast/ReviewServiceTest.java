@@ -6,6 +6,7 @@ import com.breadcrumbs.breadcast.domain.member.entity.Member;
 import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
 import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewRequest;
 import com.breadcrumbs.breadcast.domain.review.dto.bakery.BakeryReviewResponse;
+import com.breadcrumbs.breadcast.domain.review.dto.myPage.GetMyBakeryReviewResponse;
 import com.breadcrumbs.breadcast.domain.review.entity.BakeryReview;
 import com.breadcrumbs.breadcast.domain.review.repository.BakeryReviewRepository;
 import com.breadcrumbs.breadcast.domain.review.service.ReviewService;
@@ -35,7 +36,9 @@ public class ReviewServiceTest {
     @Autowired MemberRepository memberRepository;
 
     private Long reviewId;
+    private Long reviewOtherId;
     private Long bakeryId;
+    private Long bakeryId2;
     private Long currentMemId; // 현재 로그인한 사용자 ID
     private Long otherMemId; // 유저2 ID
 
@@ -45,8 +48,13 @@ public class ReviewServiceTest {
         Bakery bakery = Bakery.createBakery(
                 "테스트 빵집", "주소", "010-0000-0000", 37.0, 127.0,
                 "url", "p1", "p2", "테스트 맛집", "13:00 - 18:00");
+        Bakery bakery2 = Bakery.createBakery(
+                "두 번째 빵집", "주소2", "010-3333-3333", 37.1, 127.1,
+                "url2", "p3", "p4", "또 다른 맛집", "14:00 - 19:00");
         bakeryRepository.save(bakery);
+        bakeryRepository.save(bakery2);
         bakeryId = bakery.getId();
+        bakeryId2 = bakery2.getId();
 
         // 2. Member Entity 생성 및 저장
         Member member1 = Member.createMember("user1", "pass", "유저1");
@@ -59,8 +67,10 @@ public class ReviewServiceTest {
         // 3. BakeryReview 3개 저장 (평균: 4.0)
         BakeryReview review1 = bakeryReviewRepository.save(BakeryReview.createBakeryReview(5.0, "굿", null, member1, bakery));
         BakeryReview review2 = bakeryReviewRepository.save(BakeryReview.createBakeryReview(4.0, "최고", null, member2, bakery));
-        BakeryReview review3 = bakeryReviewRepository.save(BakeryReview.createBakeryReview(3.0, "쏘쏘", null, member1, bakery));
+        BakeryReview review3 = bakeryReviewRepository.save(BakeryReview.createBakeryReview(3.0, "쏘쏘", null, member1, bakery2));
+        BakeryReview review4 = bakeryReviewRepository.save(BakeryReview.createBakeryReview(4.5, "괜찮음", "photo_R4", member2, bakery2));
         reviewId = review1.getId();
+        reviewOtherId = review2.getId();
 
         em.flush();
         em.clear();
@@ -74,7 +84,7 @@ public class ReviewServiceTest {
 
         // THEN:
         assertNotNull(responseList);
-        assertEquals(3, responseList.size(), "리뷰는 총 3개여야 합니다.");
+        assertEquals(2, responseList.size(), "리뷰는 총 2개여야 합니다.");
 
         // 1. 첫 번째 리뷰 (나의 리뷰) 검증
         BakeryReviewResponse myReviewResponse = responseList.get(0);
@@ -205,7 +215,7 @@ public class ReviewServiceTest {
     @DisplayName("리뷰 삭제 성공 시, DB에서 해당 리뷰가 제거되어야 한다")
     void deleteBakeryReview_Success() {
         // GIVEN: 초기 리뷰 개수 확인
-        assertEquals(3, bakeryReviewRepository.count(), "삭제 전 리뷰는 3개여야 합니다.");
+        assertEquals(4, bakeryReviewRepository.count(), "삭제 전 리뷰는 4개여야 합니다.");
 
         // WHEN: 작성자 본인(currentMemId)이 리뷰 삭제 서비스 호출
         reviewService.deleteBakeryReview(reviewId, currentMemId);
@@ -216,7 +226,7 @@ public class ReviewServiceTest {
         assertFalse(deletedReview.isPresent(), "삭제 후 DB에서 리뷰를 찾을 수 없어야 합니다.");
 
         // 2. 전체 리뷰 개수 확인
-        assertEquals(2, bakeryReviewRepository.count(), "삭제 후 리뷰는 2개여야 합니다.");
+        assertEquals(3, bakeryReviewRepository.count(), "삭제 후 리뷰는 3개여야 합니다.");
     }
 
     @Test
@@ -247,5 +257,68 @@ public class ReviewServiceTest {
                     currentMemId
             );
         }, "존재하지 않는 리뷰 ID 삭제 시 GeneralException이 발생해야 합니다.");
+    }
+
+    @Test
+    @DisplayName("내가 쓴 리뷰 목록 조회 성공 시, 해당 사용자의 모든 리뷰와 정보가 정확히 매핑되어야 한다")
+    void getMyBakeryReview_Success() {
+        // GIVEN: currentMemId는 2개의 리뷰를 작성했다. (bakery, bakery2)
+
+        // WHEN: currentMemId로 내가 쓴 리뷰 목록 조회
+        List<GetMyBakeryReviewResponse> responseList = reviewService.getMyBakeryReview(currentMemId);
+
+        // THEN:
+        assertNotNull(responseList);
+        assertEquals(2, responseList.size(), "현재 사용자(User1)가 작성한 리뷰는 총 2개여야 합니다.");
+
+        // 1. 첫 번째 리뷰 (bakery에 작성) 검증
+        GetMyBakeryReviewResponse reviewResponse1 = responseList.stream()
+                .filter(r -> r.getReviewId() == reviewId)
+                .findFirst().orElseThrow(() -> new AssertionError("첫 번째 리뷰가 목록에 없습니다."));
+
+        assertEquals(bakeryId, reviewResponse1.getBakeryId(), "첫 번째 리뷰의 빵집 ID가 일치해야 합니다.");
+        assertEquals("테스트 빵집", reviewResponse1.getName(), "빵집 이름이 일치해야 합니다.");
+        assertEquals("굿", reviewResponse1.getText(), "리뷰 내용이 일치해야 합니다.");
+        assertEquals(5.0, reviewResponse1.getRating(), 0.01);
+        assertEquals(null, reviewResponse1.getPhoto(), "사진 URL이 일치해야 합니다.");
+
+        // 2. 두 번째 리뷰 (bakery2에 작성) 검증
+        GetMyBakeryReviewResponse reviewResponse2 = responseList.stream()
+                .filter(r -> r.getBakeryId() == bakeryId2)
+                .findFirst().orElseThrow(() -> new AssertionError("두 번째 리뷰가 목록에 없습니다."));
+
+        assertEquals("두 번째 빵집", reviewResponse2.getName(), "두 번째 리뷰의 빵집 이름이 일치해야 합니다.");
+        assertEquals("쏘쏘", reviewResponse2.getText(), "두 번째 리뷰의 내용이 일치해야 합니다.");
+    }
+
+    @Test
+    @DisplayName("내가 쓴 리뷰가 없는 사용자 조회 시 빈 리스트를 반환해야 한다")
+    void getMyBakeryReview_ReturnsEmptyList_IfNoReviews() {
+        // GIVEN: 새로운 멤버 (유저3) 생성 및 저장. 리뷰는 작성하지 않았다.
+        Member member3 = Member.createMember("user3", "pass", "유저3");
+        memberRepository.save(member3);
+        Long emptyMemId = member3.getId();
+
+        // WHEN: 리뷰가 없는 사용자 ID로 조회
+        List<GetMyBakeryReviewResponse> responseList = reviewService.getMyBakeryReview(emptyMemId);
+
+        // THEN:
+        assertNotNull(responseList);
+        assertTrue(responseList.isEmpty(), "작성한 리뷰가 없으면 빈 리스트가 반환되어야 합니다.");
+    }
+
+    @Test
+    @DisplayName("내가 쓴 리뷰 목록 조회 실패: 로그인하지 않은 사용자 (memId=null)")
+    void getMyBakeryReview_Failure_NullMemberId() {
+        // WHEN/THEN: memId가 null일 경우 GeneralException 발생
+        assertThrows(GeneralException.class, () -> {
+            reviewService.getMyBakeryReview(null);
+        }, "memId가 null일 경우 GeneralException이 발생해야 합니다.");
+
+        try {
+            reviewService.getMyBakeryReview(null);
+        } catch (GeneralException e) {
+            assertEquals("로그인한 사용자만 내가 쓴 리뷰 목록 보기를 사용할 수 있습니다.", e.getMessage());
+        }
     }
 }

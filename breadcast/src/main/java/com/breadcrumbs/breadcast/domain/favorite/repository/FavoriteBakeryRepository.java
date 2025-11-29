@@ -11,4 +11,6 @@ public interface FavoriteBakeryRepository extends JpaRepository<FavoriteBakery, 
     void deleteByMemberIdAndBakeryId(Long memId, Long bakeryId);
 
     int countByBakeryId(Long bakeryId);
+
+    boolean existsByMemberIdAndBakeryId(Long memId, Long bakeryId);
 }

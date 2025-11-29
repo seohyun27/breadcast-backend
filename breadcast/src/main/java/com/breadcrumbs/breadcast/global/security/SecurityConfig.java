@@ -1,6 +1,5 @@
 package com.breadcrumbs.breadcast.global.security;
 
-import com.breadcrumbs.breadcast.domain.member.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +8,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -33,18 +31,9 @@ public class SecurityConfig {
     }
 
     /**
-     * UserDetailsService Bean 등록
-     * AuthService가 UserDetailsService를 구현하고 있으므로 이를 반환
-     * 메서드 주입을 통해 순환 참조 방지
-     */
-    @Bean
-    public UserDetailsService userDetailsService(AuthService authService) {
-        return authService;
-    }
-
-    /**
      * 인증 관리자 (AuthenticationManager)
-     * AuthController와 AuthService에서 주입받아 사용
+     * AuthService에서 주입받아 사용
+     * Spring Security가 UserDetailsService Bean을 자동으로 찾아 인증에 사용
      */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -108,7 +97,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173"));
 
         // 허용할 HTTP 메서드 목록
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
 
         // 인증 정보(쿠키 등) 허용 여부
         configuration.setAllowCredentials(true);
