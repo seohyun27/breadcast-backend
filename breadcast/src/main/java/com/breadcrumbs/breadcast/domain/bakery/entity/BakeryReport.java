@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class BakeryReport {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bakery_report_id")
     private long id;
 
