@@ -59,6 +59,11 @@ public class SecurityConfig {
                 // 3. 폼 기반 로그인 비활성화 (우리가 /login API를 직접 만듦)
                 .formLogin(AbstractHttpConfigurer::disable)
 
+                // 세션 관리 설정
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.IF_REQUIRED)
+                )
+
                 // 4. (중요!!!!!) URL별 접근 권한 설정
                 .authorizeHttpRequests(authorize -> authorize
                         // 인증 없이 사용 가능한 경로들
