@@ -5,6 +5,8 @@ import com.breadcrumbs.breadcast.domain.member.dto.MemberResponse;
 import com.breadcrumbs.breadcast.domain.member.dto.SignupRequest;
 import com.breadcrumbs.breadcast.domain.member.service.AuthService;
 import com.breadcrumbs.breadcast.global.apiPayload.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,9 +63,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ApiResponse<MemberResponse> login(@RequestBody @Valid LoginRequest request) {
+    public ApiResponse<MemberResponse> login(@RequestBody @Valid LoginRequest request,
+                                             HttpServletRequest httpRequest,
+                                             HttpServletResponse httpResponse) {
         log.info("로그인 시도: {}", request.getLoginId());
-        MemberResponse response = authService.login(request);
+        MemberResponse response = authService.login(request, httpRequest, httpResponse);
         log.info("로그인 성공: {}", request.getLoginId());
         return ApiResponse.onSuccess("로그인에 성공하였습니다.", response);
     }

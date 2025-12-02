@@ -7,15 +7,19 @@ import com.breadcrumbs.breadcast.domain.member.entity.Member;
 import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
 import com.breadcrumbs.breadcast.global.apiPayload.exception.GeneralException;
 import com.breadcrumbs.breadcast.global.security.UserDetailsImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +35,7 @@ public class AuthService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final SecurityContextRepository securityContextRepository;
 
     /**
      * 생성자 주입
@@ -40,11 +45,13 @@ public class AuthService implements UserDetailsService {
     public AuthService(
             MemberRepository memberRepository,
             @Lazy AuthenticationManager authenticationManager,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            SecurityContextRepository securityContextRepository
     ) {
         this.memberRepository = memberRepository;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
+        this.securityContextRepository = securityContextRepository;
     }
 
     /**
@@ -77,10 +84,10 @@ public class AuthService implements UserDetailsService {
     /**
      * 로그인 메서드
      * Spring Security를 사용하여 인증을 수행
-     * 세션 생성은 Spring Security가 자동으로 처리
+     * Spring Security 6.x부터는 SecurityContext를 명시적으로 저장해야 함
      */
     @Transactional(readOnly = true)
-    public MemberResponse login(LoginRequest loginRequest) {
+    public MemberResponse login(LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
         // 1. Spring Security 인증 수행
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -89,16 +96,20 @@ public class AuthService implements UserDetailsService {
                 )
         );
 
-        // 2. SecurityContext에 인증 정보 설정 (세션은 Spring Security가 자동 관리)
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        // 2. SecurityContext 생성 및 인증 정보 설정
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
 
-        // 3. 인증된 사용자 정보에서 닉네임 추출
-        // UserDetails 인터페이스를 통해 접근 후, loginId로 Member 재조회
+        // 3. **중요**: SecurityContext를 HTTP 세션에 명시적으로 저장 (Spring Security 6.x 필수)
+        securityContextRepository.saveContext(context, request, response);
+
+        // 4. 인증된 사용자 정보에서 닉네임 추출
         String loginId = authentication.getName();
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new GeneralException("사용자를 찾을 수 없습니다: " + loginId));
 
-        // 4. MemberResponse 반환
+        // 5. MemberResponse 반환
         return MemberResponse.builder()
                 .nickname(member.getNickname())
                 .build();
