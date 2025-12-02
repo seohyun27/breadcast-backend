@@ -64,6 +64,11 @@ public class SecurityConfig {
                         .sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.IF_REQUIRED)
                 )
 
+                // SecurityContext를 세션에 저장하도록 설정 (Spring Security 6.x 필수)
+                .securityContext(context -> context
+                        .requireExplicitSave(false)  // SecurityContext 자동 저장
+                )
+
                 // 4. (중요!!!!!) URL별 접근 권한 설정
                 .authorizeHttpRequests(authorize -> authorize
                         // 인증 없이 사용 가능한 경로들
