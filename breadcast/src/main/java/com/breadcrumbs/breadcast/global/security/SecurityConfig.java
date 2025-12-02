@@ -126,8 +126,14 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // 허용할 오리진 목록 (3000, 5173 포함)
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173"));
+        // 허용할 오리진 목록 (allowCredentials(true)일 때는 setAllowedOriginPatterns 사용)
+        // 실제 서버 주소와 로컬 개발 환경 모두 포함
+        configuration.setAllowedOriginPatterns(List.of(
+                "http://localhost:3000",
+                "http://localhost:5173",
+                "http://43.200.233.19",
+                "http://43.200.233.19:*"
+        ));
 
         // 허용할 HTTP 메서드 목록
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
@@ -137,6 +143,9 @@ public class SecurityConfig {
 
         // 허용할 헤더 목록
         configuration.setAllowedHeaders(List.of("*"));
+
+        // 노출할 헤더 목록 (쿠키 등)
+        configuration.setExposedHeaders(List.of("Set-Cookie", "Authorization"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // 모든 경로에 적용
