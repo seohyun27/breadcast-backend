@@ -29,7 +29,9 @@ public class ReportController {
     public ApiResponse<ReportsResponse> addReport(@PathVariable Long bakeryId,
                                               @AuthenticationPrincipal UserDetailsImpl userDetails,
                                               @RequestBody @Valid AddReportRequest request){
-        return null;
+        Long userId = (userDetails != null) ? userDetails.getUserId() : null;
+        ReportsResponse response = reportService.addReport(bakeryId, userId, request);
+        return ApiResponse.onSuccess("제보 작성에 성공하였습니다.", response);
     }
 
     @DeleteMapping("/reports/{bakeryReportId}")
