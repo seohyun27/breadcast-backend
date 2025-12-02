@@ -1,6 +1,6 @@
 INSERT INTO bakery (bakery_name, bakery_text, address, phone, latitude, longitude, url, photo1, photo2, operating_hours)
 
-VALUES ( '그리다빵 영남대본점', '편안함이 있는 베이커리 공간',
+VALUES ('그리다빵 영남대본점', '편안함이 있는 베이커리 공간',
         '경상북도 경산시 조영동 583-1','0507-1401-2788', 35.8386542860074, 128.753310857291,
         'https://www.instagram.com/gridabread/', 
         'https://breadcast-image-bucket.s3.ap-northeast-2.amazonaws.com/bakery1-1.png', 
@@ -41,15 +41,15 @@ VALUES ('초코버터크로플', 4500, '크로플 위에 초코소스와 쿠키�
 
 
 
-INSERT INTO bakery (bakery_id, bakery_name, bakery_text, address, phone, latitude, longitude, url, photo1, photo2, operating_hours)
-VALUES (3, '밀로우', '딸기 크레이프 케이크의 부드러운 매력',
+INSERT INTO bakery (bakery_name, bakery_text, address, phone, latitude, longitude, url, photo1, photo2, operating_hours)
+VALUES ('밀로우', '딸기 크레이프 케이크의 부드러운 매력',
         '경북 경산시 청운로 57-5 1층', '0507-1487-7028', 35.8399169164116, 128.755842329982,
         'https://www.instagram.com/meal.low', 
         'https://breadcast-image-bucket.s3.ap-northeast-2.amazonaws.com/bakery3-1.jpg', 
         'https://breadcast-image-bucket.s3.ap-northeast-2.amazonaws.com/bakery3-2.jpg', 
         '18:00 - 22:00');
 
-INSERT INTO menu ( menu_name, price, inform, menu_photo, bakery_id)
+INSERT INTO menu (menu_name, price, inform, menu_photo, bakery_id)
 VALUES ('후르츠크레이프', 9800, '바닐라빈이들어간 디플로마크림에 제철과일 4-5가지가 들오가는 후르츠크레이프', 'https://breadcast-image-bucket.s3.ap-northeast-2.amazonaws.com/bakery3-menu-11.jpg', 3);
 INSERT INTO menu (menu_name, price, inform, menu_photo, bakery_id)
 VALUES ('프렌치토스트', 10000, '직접 구운 브리오슈를 아파레유에 30시간 이상 숙성 후 버터에 구워낸 겉바속촉 토스트', 'https://breadcast-image-bucket.s3.ap-northeast-2.amazonaws.com/bakery3-menu-12.jpg', 3);
@@ -162,5 +162,3 @@ INSERT INTO menu (menu_name, price, inform, menu_photo, bakery_id)
 VALUES ('골드키위와플', 13000, '달콤한 골드키위 한가득 + 와플 + 100% 매일우유 휘핑 크림 + 요거트아이스크림', 'https://breadcast-image-bucket.s3.ap-northeast-2.amazonaws.com/bakery8-menu-38.jpg', 8);
 INSERT INTO menu (menu_name, price, inform, menu_photo, bakery_id)
 VALUES ('요거트와플', 9000, '바삭달콤와플 + 100% 매일우유 휘핑 크림 + 요거트아이스크림 + 메이플시럽', 'https://breadcast-image-bucket.s3.ap-northeast-2.amazonaws.com/bakery8-menu-39.jpg', 8);
-
-
