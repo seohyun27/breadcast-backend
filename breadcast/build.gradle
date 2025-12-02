@@ -44,6 +44,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation' // Validation(유효성 검사)
     implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.793') // aws의 S3를 사용하기 위한 설정
     implementation 'com.amazonaws:aws-java-sdk-s3'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0' // Swagger
 }
 
 tasks.named('test') {

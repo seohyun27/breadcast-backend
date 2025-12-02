@@ -64,6 +64,7 @@ public class SecurityConfig {
                         // 인증 없이 사용 가능한 경로들
                         .requestMatchers("/auth/**").permitAll() // 로그인 회원 가입을 위한 경로
                         .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Swagger UI
 
                         // 나머지 모든 요청은 인증(로그인)이 필요함
                         .anyRequest().authenticated()
