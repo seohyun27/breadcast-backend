@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -41,11 +43,20 @@ public class SecurityConfig {
     }
 
     /**
+     * SecurityContext를 HTTP 세션에 저장하는 Repository
+     * Spring Security 6.x에서 세션 기반 인증을 사용하려면 필수
+     */
+    @Bean
+    public SecurityContextRepository securityContextRepository() {
+        return new HttpSessionSecurityContextRepository();
+    }
+
+    /**
      * Spring Security의 핵심
      * HTTP 보안 규칙 설정
      */
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, SecurityContextRepository securityContextRepository) throws Exception {
         http
                 // 1. 시큐리티 필터 체인에서 CORS 설정을 활성화
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -64,9 +75,9 @@ public class SecurityConfig {
                         .sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.IF_REQUIRED)
                 )
 
-                // SecurityContext를 세션에 저장하도록 설정 (Spring Security 6.x 필수)
+                // SecurityContext를 HTTP 세션에 저장하도록 설정 (Spring Security 6.x 필수)
                 .securityContext(context -> context
-                        .requireExplicitSave(false)  // SecurityContext 자동 저장
+                        .securityContextRepository(securityContextRepository)
                 )
 
                 // 4. (중요!!!!!) URL별 접근 권한 설정
