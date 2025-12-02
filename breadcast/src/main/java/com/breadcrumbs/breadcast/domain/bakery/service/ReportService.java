@@ -2,7 +2,13 @@ package com.breadcrumbs.breadcast.domain.bakery.service;
 
 import com.breadcrumbs.breadcast.domain.bakery.dto.report.AddReportRequest;
 import com.breadcrumbs.breadcast.domain.bakery.dto.report.ReportsResponse;
+import com.breadcrumbs.breadcast.domain.bakery.entity.Bakery;
+import com.breadcrumbs.breadcast.domain.bakery.entity.BakeryReport;
 import com.breadcrumbs.breadcast.domain.bakery.repository.BakeryReportRepository;
+import com.breadcrumbs.breadcast.domain.bakery.repository.BakeryRepository;
+import com.breadcrumbs.breadcast.domain.member.entity.Member;
+import com.breadcrumbs.breadcast.domain.member.repository.MemberRepository;
+import com.breadcrumbs.breadcast.global.apiPayload.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +21,8 @@ import java.util.List;
 public class ReportService {
 
     private final BakeryReportRepository bakeryReportRepository;
+    private final BakeryRepository bakeryRepository;
+    private final MemberRepository memberRepository;
 
     // 사용자 인증 및 권한 확인 Service 추가로 필요
 
@@ -35,14 +43,35 @@ public class ReportService {
 
     public ReportsResponse addReport(Long bakeryId, Long memId,
                                      AddReportRequest request) {
-        /*
-        -memId와 BakeryReport 엔티티를 사용하여 제보를 데이터베이스에 저장합니다.
-        -보고서에 필요한 필수 정보(빵집 ID, 사용자 ID 등) 가 올바른지 확인합니다.
-        - bakeryReportRepository.save를 호출하여 데이터베이스에 제보를 저장합니다.
-        -저장 후 BakeryReport 엔티티를 반환합니다.
-        */
+        // 1. 사용자 인증 확인
+        if (memId == null) {
+            throw new GeneralException("로그인한 사용자만 제보를 작성할 수 있습니다.");
+        }
 
-        return null;
+        // 2. Member 조회
+        Member member = memberRepository.findById(memId)
+                .orElseThrow(() -> new GeneralException("사용자 정보를 찾을 수 없습니다."));
+
+        // 3. Bakery 조회
+        Bakery bakery = bakeryRepository.findById(bakeryId)
+                .orElseThrow(() -> new GeneralException("빵집 정보를 찾을 수 없습니다."));
+
+        // 4. BakeryReport 엔티티 생성 및 저장
+        BakeryReport bakeryReport = BakeryReport.createBakeryReport(
+                request.getText(),
+                member,
+                bakery
+        );
+        bakeryReportRepository.save(bakeryReport);
+
+        // 5. Response DTO 생성 및 반환
+        return ReportsResponse.builder()
+                .bakeryReportId(bakeryReport.getId())
+                .title(request.getText())
+                .name(member.getNickname())
+                .date(bakeryReport.getDate())
+                .isMine(true)  // 방금 작성한 글이므로 true
+                .build();
     }
 
 

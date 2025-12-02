@@ -7,14 +7,15 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
+    defer-datasource-initialization: true  # data.sql이 JPA 테이블 생성 후 실행되도록
 
-  #sql:
-  #  init:
-  #    mode: always
+  sql:
+    init:
+      mode: always
 
 cloud:
   aws:
