@@ -39,6 +39,8 @@ public class MenuService {
                     .name(menu.getName())
                     .rating(rating)
                     .count(reviewCount)
+                    .price(menu.getPrice())
+                    .photo(menu.getPhoto())
                     .build();
 
             menusResponseList.add(getMenusResponse);

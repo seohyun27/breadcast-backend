@@ -113,6 +113,7 @@ public class BakeryService {
                     .rating(rating)
                     .reviewCount(reviewCountLong.intValue())
                     .favoriteCount(favoriteCountLong.intValue())
+                    .URL(bakery.getURL())
                     .build();
 
             searchBakeryResponseList.add(searchBakeryResponse);
