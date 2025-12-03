@@ -30,9 +30,11 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build -x test
 
-    # 4. 스크립트 실행 권한 주기 & 실행
-    - name: Execute Deploy Script
+# 4. 파일을 하나로 통일하고 서비스 재시작
+    - name: Deploy to Prod
       run: |
-        chmod +x ./deploy.sh
-        ./deploy.sh
-      shell: bash
+        # 1. 기존 jar 파일이 있다면 이름 변경 (app.jar로 고정)
+        mv build/libs/*SNAPSHOT.jar build/libs/app.jar
+        
+        # 2. 시스템 서비스 재시작 (비밀번호 없이 실행되길 기도하며)
+        sudo systemctl restart breadcast
