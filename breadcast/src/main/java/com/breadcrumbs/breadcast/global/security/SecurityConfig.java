@@ -1,15 +1,21 @@
 package com.breadcrumbs.breadcast.global.security;
 
+import com.breadcrumbs.breadcast.global.apiPayload.ApiResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
@@ -17,6 +23,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.io.IOException;
 import java.util.List;
 
 @Configuration
@@ -78,6 +85,11 @@ public class SecurityConfig {
                 // SecurityContext를 HTTP 세션에 저장하도록 설정 (Spring Security 6.x 필수)
                 .securityContext(context -> context
                         .securityContextRepository(securityContextRepository)
+                )
+
+                // 인증 실패 시 JSON 응답 반환
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(customAuthenticationEntryPoint())
                 )
 
                 // 4. (중요!!!!!) URL별 접근 권한 설정
@@ -150,5 +162,29 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // 모든 경로에 적용
         return source;
+    }
+
+    /**
+     * 인증 실패 시 JSON 응답을 반환하는 EntryPoint
+     * 쿠키가 없거나 세션이 만료된 경우 401 Unauthorized와 함께 JSON 응답 반환
+     */
+    @Bean
+    public AuthenticationEntryPoint customAuthenticationEntryPoint() {
+        return new AuthenticationEntryPoint() {
+            private final ObjectMapper objectMapper = new ObjectMapper();
+
+            @Override
+            public void commence(HttpServletRequest request, HttpServletResponse response,
+                                 AuthenticationException authException) throws IOException {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                response.setCharacterEncoding("UTF-8");
+
+                ApiResponse<Void> apiResponse = ApiResponse.onFailure(
+                        "인증이 필요합니다. 로그인 후 다시 시도해주세요.", null);
+
+                objectMapper.writeValue(response.getWriter(), apiResponse);
+            }
+        };
     }
 }
