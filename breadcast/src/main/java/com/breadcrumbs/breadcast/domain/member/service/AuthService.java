@@ -151,7 +151,7 @@ public class AuthService implements UserDetailsService {
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
         // DB에서 loginId로 Member를 조회
         Member member = memberRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new GeneralException("사용자를 찾을 수 없습니다: " + loginId));
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + loginId));
 
         // Member를 UserDetails로 변환하여 반환
         return new UserDetailsImpl(member);
