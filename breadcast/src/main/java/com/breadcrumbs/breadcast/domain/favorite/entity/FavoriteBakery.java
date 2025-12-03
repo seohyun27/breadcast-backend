@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class FavoriteBakery {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "favorite_bakery_id")
     private long id;
 
