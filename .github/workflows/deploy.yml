@@ -30,21 +30,9 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build -x test
 
-    # 4. 기존 서버 종료 & 새 서버 실행
-    - name: Restart Spring Boot
+    # 4. 스크립트 실행 권한 주기 & 실행
+    - name: Execute Deploy Script
       run: |
-        # 8080 포트 쓰고 있는 프로세스 찾아서 죽이기
-        pid=$(lsof -t -i:8080) || true
-        if [ ! -z "$pid" ]; then
-          echo "Stopping process $pid..."
-          kill -9 $pid
-        else
-          echo "No process running on port 8080."
-        fi
-        
-        # 잠시 대기
-        sleep 2
-        
-        # [핵심 수정] RUNNER_TRACKING_ID="" 를 붙여서 러너가 프로세스를 죽이지 못하게 함
-        echo "Starting new application..."
-        RUNNER_TRACKING_ID="" nohup java -jar build/libs/*SNAPSHOT.jar > nohup.out 2>&1 &
+        chmod +x ./deploy.sh
+        ./deploy.sh
+      shell: bash
