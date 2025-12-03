@@ -23,23 +23,14 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    # 3. 환경 변수 주입 (Github Secrets에 등록한 내용 가져오기)
-    # application.yml을 새로 만드는 과정입니다. 필요 없으면 생략 가능.
-    - name: Make application.yml
-      run: |
-        mkdir -p ./src/main/resources
-        touch ./src/main/resources/application.yml
-        echo "${{ secrets.APPLICATION_YML }}" > ./src/main/resources/application.yml
-      shell: bash
-
-    # 4. 빌드 권한 부여 및 빌드
+    # 3. 빌드 권한 부여 및 빌드
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
     - name: Build with Gradle
       run: ./gradlew build -x test
 
-    # 5. 기존 서버 종료 & 새 서버 실행
+    # 4. 기존 서버 종료 & 새 서버 실행
     - name: Restart Spring Boot
       run: |
         # 8080 포트 쓰고 있는 프로세스 찾아서 죽이기
