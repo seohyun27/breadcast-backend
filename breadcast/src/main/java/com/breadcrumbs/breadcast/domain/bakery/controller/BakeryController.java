@@ -68,7 +68,7 @@ public class BakeryController {
 
     @GetMapping("/bakeries")
     public ApiResponse<List<SearchBakeryResponse>> searchBakeries(
-            @RequestParam String keyword,
+            @RequestParam (required = false) String keyword,
             @RequestParam(required = false, defaultValue = "popular") String sort
     ) {
         return ApiResponse.onSuccess("빵집 조회에 성공하였습니다.",
