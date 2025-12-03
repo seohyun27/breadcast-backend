@@ -42,9 +42,9 @@ jobs:
           echo "No process running on port 8080."
         fi
         
-        # 잠시 대기 (안전하게)
+        # 잠시 대기
         sleep 2
         
-        # 새 서버 실행 (로그는 nohup.out에 저장됨)
+        # [핵심 수정] RUNNER_TRACKING_ID="" 를 붙여서 러너가 프로세스를 죽이지 못하게 함
         echo "Starting new application..."
-        nohup java -jar build/libs/*SNAPSHOT.jar > nohup.out 2>&1 &
+        RUNNER_TRACKING_ID="" nohup java -jar build/libs/*SNAPSHOT.jar > nohup.out 2>&1 &
