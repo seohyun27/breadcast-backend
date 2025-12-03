@@ -213,6 +213,7 @@ public class ReviewService {
                     .text(bakeryReview.getText())
                     .rating(bakeryReview.getRating())
                     .photo(bakeryReview.getPhoto())
+                    .date(bakeryReview.getDate())
                     .build();
 
             getMyBakeryReviewResponseList.add(getMyBakeryReviewResponse);
