@@ -8,6 +8,10 @@ jobs:
   build-and-deploy:
     runs-on: self-hosted # [중요] 내 서버(Runner)에서 실행해라!
 
+    defaults:
+      run:
+        working-directory: ./breadcast
+
     steps:
     # 1. 코드 가져오기
     - uses: actions/checkout@v3
