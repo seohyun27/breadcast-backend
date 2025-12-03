@@ -1,0 +1,55 @@
+name: Deploy to my server
+
+on:
+  push:
+    branches: [ "main" ] # main 브랜치에 코드를 올릴 때마다 실행
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted # [중요] 내 서버(Runner)에서 실행해라!
+
+    steps:
+    # 1. 코드 가져오기
+    - uses: actions/checkout@v3
+
+    # 2. 자바 설치 (프로젝트 버전에 맞춰 17 또는 11로 수정)
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    # 3. 환경 변수 주입 (Github Secrets에 등록한 내용 가져오기)
+    # application.yml을 새로 만드는 과정입니다. 필요 없으면 생략 가능.
+    - name: Make application.yml
+      run: |
+        mkdir -p ./src/main/resources
+        touch ./src/main/resources/application.yml
+        echo "${{ secrets.APPLICATION_YML }}" > ./src/main/resources/application.yml
+      shell: bash
+
+    # 4. 빌드 권한 부여 및 빌드
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build with Gradle
+      run: ./gradlew build -x test
+
+    # 5. 기존 서버 종료 & 새 서버 실행
+    - name: Restart Spring Boot
+      run: |
+        # 8080 포트 쓰고 있는 프로세스 찾아서 죽이기
+        pid=$(lsof -t -i:8080) || true
+        if [ ! -z "$pid" ]; then
+          echo "Stopping process $pid..."
+          kill -9 $pid
+        else
+          echo "No process running on port 8080."
+        fi
+        
+        # 잠시 대기 (안전하게)
+        sleep 2
+        
+        # 새 서버 실행 (로그는 nohup.out에 저장됨)
+        echo "Starting new application..."
+        nohup java -jar build/libs/*SNAPSHOT.jar > nohup.out 2>&1 &
