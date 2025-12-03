@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 인증 서비스
@@ -29,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
  * - 비즈니스 로직: 회원가입, 로그인, 중복 확인 등
  * - @Lazy: AuthenticationManager의 순환 참조 방지 (일반적인 Spring 패턴)
  */
+@Slf4j
 @Service
 public class AuthService implements UserDetailsService {
 
@@ -101,15 +103,23 @@ public class AuthService implements UserDetailsService {
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
 
-        // 3. **중요**: SecurityContext를 HTTP 세션에 명시적으로 저장 (Spring Security 6.x 필수)
+        // 3. 세션 생성 (세션이 없으면 생성)
+        jakarta.servlet.http.HttpSession session = request.getSession(true);
+        
+        // 4. **중요**: SecurityContext를 HTTP 세션에 명시적으로 저장 (Spring Security 6.x 필수)
         securityContextRepository.saveContext(context, request, response);
 
-        // 4. 인증된 사용자 정보에서 닉네임 추출
+        // 5. 세션 쿠키가 제대로 설정되도록 세션 ID를 로그로 확인
+        if (session != null) {
+            log.info("세션 생성 완료: sessionId={}", session.getId());
+        }
+
+        // 6. 인증된 사용자 정보에서 닉네임 추출
         String loginId = authentication.getName();
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new GeneralException("사용자를 찾을 수 없습니다: " + loginId));
 
-        // 5. MemberResponse 반환
+        // 7. MemberResponse 반환
         return MemberResponse.builder()
                 .nickname(member.getNickname())
                 .build();
@@ -141,7 +151,7 @@ public class AuthService implements UserDetailsService {
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
         // DB에서 loginId로 Member를 조회
         Member member = memberRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new GeneralException("사용자를 찾을 수 없습니다: " + loginId));
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + loginId));
 
         // Member를 UserDetails로 변환하여 반환
         return new UserDetailsImpl(member);

@@ -1,15 +1,21 @@
 package com.breadcrumbs.breadcast.global.security;
 
+import com.breadcrumbs.breadcast.global.apiPayload.ApiResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
@@ -17,6 +23,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.io.IOException;
 import java.util.List;
 
 @Configuration
@@ -80,6 +87,11 @@ public class SecurityConfig {
                         .securityContextRepository(securityContextRepository)
                 )
 
+                // 인증 실패 시 JSON 응답 반환
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(customAuthenticationEntryPoint())
+                )
+
                 // 4. (중요!!!!!) URL별 접근 권한 설정
                 .authorizeHttpRequests(authorize -> authorize
                         // 인증 없이 사용 가능한 경로들
@@ -126,8 +138,14 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // 허용할 오리진 목록 (3000, 5173 포함)
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173"));
+        // 허용할 오리진 목록 (allowCredentials(true)일 때는 setAllowedOriginPatterns 사용)
+        // 실제 서버 주소와 로컬 개발 환경 모두 포함
+        configuration.setAllowedOriginPatterns(List.of(
+                "http://localhost:3000",
+                "http://localhost:5173",
+                "http://43.200.233.19",
+                "http://43.200.233.19:*"
+        ));
 
         // 허용할 HTTP 메서드 목록
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
@@ -138,8 +156,35 @@ public class SecurityConfig {
         // 허용할 헤더 목록
         configuration.setAllowedHeaders(List.of("*"));
 
+        // 노출할 헤더 목록 (쿠키 등)
+        configuration.setExposedHeaders(List.of("Set-Cookie", "Authorization"));
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // 모든 경로에 적용
         return source;
+    }
+
+    /**
+     * 인증 실패 시 JSON 응답을 반환하는 EntryPoint
+     * 쿠키가 없거나 세션이 만료된 경우 401 Unauthorized와 함께 JSON 응답 반환
+     */
+    @Bean
+    public AuthenticationEntryPoint customAuthenticationEntryPoint() {
+        return new AuthenticationEntryPoint() {
+            private final ObjectMapper objectMapper = new ObjectMapper();
+
+            @Override
+            public void commence(HttpServletRequest request, HttpServletResponse response,
+                                 AuthenticationException authException) throws IOException {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                response.setCharacterEncoding("UTF-8");
+
+                ApiResponse<Void> apiResponse = ApiResponse.onFailure(
+                        "인증이 필요합니다. 로그인 후 다시 시도해주세요.", null);
+
+                objectMapper.writeValue(response.getWriter(), apiResponse);
+            }
+        };
     }
 }
