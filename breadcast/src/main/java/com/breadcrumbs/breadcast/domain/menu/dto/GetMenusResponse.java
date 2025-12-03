@@ -17,4 +17,6 @@ public class GetMenusResponse {
     private String name; // 메뉴 이름
     private double rating; // 메뉴 평균 별점
     private long count; // 메뉴 리뷰 수
+    private int price; //메뉴 가격
+    private String photo; //메뉴 사진
 }
