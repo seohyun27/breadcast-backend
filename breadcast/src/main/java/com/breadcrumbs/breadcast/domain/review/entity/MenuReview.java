@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class MenuReview {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "menu_review_id")
     private long id;
 
