@@ -7,7 +7,7 @@ on:
 
 jobs:
   build_and_test: # Job 이름을 build_and_test로 변경
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4.1.7
@@ -19,7 +19,7 @@ jobs:
           distribution: 'temurin'
           
       - name: Build with Gradle and Test # 테스트와 빌드를 함께 수행
-        run: ./gradlew clean build
+        run: ./gradlew clean build --no-daemon
         
       # 빌드된 JAR 파일을 다음 Job으로 전달하기 위해 업로드합니다.
       - name: Upload Artifact
@@ -73,7 +73,7 @@ jobs:
 
             # 2) 새로운 JAR 파일 찾기 및 실행 (가장 최근에 전송된 파일 실행)
             # EC2 서버에서 build/libs/ 디렉터리 내의 가장 최신 JAR 파일을 찾습니다.
-            JAR_FILE=$(ls -tr build/libs/*.jar | tail -1)
+            JAR_FILE=$(ls -tr *.jar | tail -1)
         
             # 3) 백그라운드에서 실행하고 로그 남기기
             echo "Starting new application: $JAR_FILE"
