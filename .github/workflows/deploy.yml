@@ -23,9 +23,6 @@ jobs:
           echo "--- Runner의 기본 작업 공간 (${GITHUB_WORKSPACE}/breadcast) 파일 목록 ---"
           # 현재 디렉터리의 파일 및 폴더 목록을 재귀적으로 출력합니다.
           ls -RF .
-          echo "--- 'breadcast' 하위 디렉터리 내부 파일 목록 ---"
-          # breadcast 폴더 내부 파일 목록을 출력합니다.
-          ls -RF breadcast/
           
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew 
