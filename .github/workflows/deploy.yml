@@ -19,12 +19,27 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4.1.7
 
-      # ⭐️ [진단 단계] 이 로그를 통해 gradlew의 정확한 위치를 파악할 수 있습니다.
-      - name: Debug_List Files in Working Directory
+      - name: Clean Gradle Daemon and Cache
         run: |
-          echo "--- Runner의 기본 작업 공간 (${GITHUB_WORKSPACE}/breadcast) 파일 목록 ---"
-          # 현재 디렉터리의 파일 및 폴더 목록을 재귀적으로 출력합니다.
-          ls -RF .
+          echo "🧹 Cleaning Gradle daemon and cache..."
+
+          # Gradle daemon 중지
+          ./gradlew --stop 2>/dev/null || true
+
+          # 프로세스 강제 종료
+          pkill -9 -f gradle 2>/dev/null || true
+          pkill -9 -f GradleWorkerMain 2>/dev/null || true
+
+          # 프로젝트 내 Gradle 아티팩트 정리
+          rm -rf .gradle build
+
+          # Lock 파일 정리
+          find ~/.gradle -name "*.lock" -type f -delete 2>/dev/null || true
+
+          # Gradle daemon 디렉터리 정리
+          rm -rf ~/.gradle/daemon/* 2>/dev/null || true
+
+          echo "✅ Gradle cleanup completed"
           
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew 
