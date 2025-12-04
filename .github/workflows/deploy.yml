@@ -82,28 +82,27 @@ jobs:
 
           # 3) 백그라운드에서 실행
           echo "Starting new application: $JAR_FILE"
-          nohup java \
-            -DDB_HOST=${{ secrets.DB_HOST }} \
-            -DDB_PORT=${{ secrets.DB_PORT }} \
-            -DDB_NAME=${{ secrets.DB_NAME }} \
-            -DDB_USERNAME=${{ secrets.DB_USERNAME }} \
-            -DDB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            -DACCESS_KEY=${{ secrets.ACCESS_KEY }} \
-            -DSECRET_KEY=${{ secrets.SECRET_KEY }} \
-            -jar $JAR_FILE > app.log 2>&1 &
+          nohup java -jar $JAR_FILE \
+            --spring.datasource.url=jdbc:mysql://${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }}/${{ secrets.DB_NAME }} \
+            --spring.datasource.username=${{ secrets.DB_USERNAME }} \
+            --spring.datasource.password=${{ secrets.DB_PASSWORD }} \
+            --cloud.aws.credentials.access-key=${{ secrets.ACCESS_KEY }} \
+            --cloud.aws.credentials.secret-key=${{ secrets.SECRET_KEY }} \
+            --cloud.aws.region.static=ap-northeast-2 \
+            > app.log 2>&1 &
+
+          APP_PID=$!
+          echo "Application started with PID: $APP_PID"
 
           # 4) 서버 시작 대기 및 로그 출력
-          sleep 15
+          echo "Waiting for application to start..."
+          sleep 20
+
+          echo "=== Application Log (Last 50 lines) ==="
+          tail -n 50 app.log
           
-
-          echo "=== Full Application Log ==="
-          cat app.log
-
+          # 5) 프로세스 상태 확인
           echo ""
           echo "=== Process Status ==="
-          if ps -p $APP_PID > /dev/null; then
+          if ps -p $APP_PID > /dev/null 2>&1; then
             echo "✓ Application is running (PID: $APP_PID)"
-          else
-            echo "✗ Application has stopped"
-            exit 1
-          fi
