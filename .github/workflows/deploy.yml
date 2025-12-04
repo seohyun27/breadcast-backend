@@ -1,4 +1,4 @@
-name: Deploy to EC2 (Diagnostics Mode)
+name: Deploy on EC2 
 
 on:
   push:
