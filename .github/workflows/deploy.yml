@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - hotfix:settings
+      - hotfix/settings
 
 jobs:
   deploy:
