@@ -94,5 +94,16 @@ jobs:
 
           # 4) 서버 시작 대기 및 로그 출력
           sleep 15
-          echo "Application logs (Last 30 lines):"
-          tail -n 30 app.log
+          
+
+          echo "=== Full Application Log ==="
+          cat app.log
+
+          echo ""
+          echo "=== Process Status ==="
+          if ps -p $APP_PID > /dev/null; then
+            echo "✓ Application is running (PID: $APP_PID)"
+          else
+            echo "✗ Application has stopped"
+            exit 1
+          fi
