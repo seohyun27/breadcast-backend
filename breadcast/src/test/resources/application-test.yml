@@ -21,3 +21,23 @@ spring:
         format_sql: true
   logging.level:
     org.hibernate.SQL: debug
+
+  session:
+    cookie:
+      name: JSESSIONID
+      http-only: true
+      secure: false
+      same-site: lax
+      max-age: 43200
+
+cloud:
+  aws:
+    credentials:
+      access-key: test-access-key
+      secret-key: test-secret-key
+    s3:
+      bucket: test-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
