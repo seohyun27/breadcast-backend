@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - hotfix/settings
 
 jobs:
   # 1. Build and Test
