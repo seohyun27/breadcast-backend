@@ -64,45 +64,86 @@ jobs:
           name: deployment-package
           path: ./deploy
 
-      - name: Execute Deploy Script on EC2
-        shell: /usr/bin/bash -e {0}
+      - name: Deploy with systemd
         run: |
+          DEPLOY_DIR="/home/ubuntu/breadcast-app"
           TARGET_PORT=8080
 
-          echo "Current working directory for deployment: $(pwd)"
+          echo "=== Starting Deployment ==="
 
-          # 1) 포트 사용 프로세스 종료
-          echo "Stopping old process on port $TARGET_PORT..."
-          sudo fuser -k -n tcp $TARGET_PORT || true 
-          sleep 5
+          # 1) 배포 디렉터리 확인
+          mkdir -p "$DEPLOY_DIR"
 
           # 2) 새로운 JAR 파일 찾기 및 실행
           JAR_FILE=$(ls -tr ./deploy/*.jar | grep -v plain | tail -1)
 
-          # 3) 백그라운드에서 실행
-          echo "Starting new application: $JAR_FILE"
-          nohup java -jar $JAR_FILE \
-            --spring.datasource.url=jdbc:mysql://${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }}/${{ secrets.DB_NAME }} \
-            --spring.datasource.username=${{ secrets.DB_USERNAME }} \
-            --spring.datasource.password=${{ secrets.DB_PASSWORD }} \
-            --cloud.aws.credentials.access-key=${{ secrets.ACCESS_KEY }} \
-            --cloud.aws.credentials.secret-key=${{ secrets.SECRET_KEY }} \
-            --cloud.aws.region.static=ap-northeast-2 \
-            > app.log 2>&1 &
+          echo "Deploying JAR: $JAR_FILE"
+          sudo cp "$JAR_FILE" "$DEPLOY_DIR/app.jar"
+          sudo chown ubuntu:ubuntu "$DEPLOY_DIR/app.jar"
 
-          APP_PID=$!
-          echo "Application started with PID: $APP_PID"
+          # 3) systemd 재시작
+          sudo systemctl restart breadcast
 
-          # 4) 서버 시작 대기 및 로그 출력
+          # 4) 시작 대기
           echo "Waiting for application to start..."
-          sleep 20
+          for i in {1..30}; do
+            sleep 1
+            if sudo systemctl is-active --quiet breadcast; then
+              echo "✅ Service is active!"
+              break
+            fi
+            echo "   Waiting... ($i/30)"
+          done
 
-          echo "=== Application Log (Last 50 lines) ==="
-          tail -n 50 app.log
-          
-          # 5) 프로세스 상태 확인
+          # 5) 서비스 상태 확인
           echo ""
-          echo "=== Process Status ==="
-          if ps -p $APP_PID > /dev/null 2>&1; then
-            echo "✓ Application is running (PID: $APP_PID)"
+          echo "=========================================="
+          echo "  Service Status"
+          echo "=========================================="
+          sudo systemctl status breadcast --no-pager -l
+          
+          # 6) 포트 확인
+          echo ""
+          echo "=========================================="
+          echo "  Port Status"
+          echo "=========================================="
+          
+          sleep 5  # 포트가 열릴 시간 추가 대기
+          
+          if sudo lsof -i :$TARGET_PORT; then
+            echo ""
+            echo "✅ Application is listening on port $TARGET_PORT"
+          else
+            echo ""
+            echo "❌ Application is NOT listening on port $TARGET_PORT"
+            echo ""
+            echo "=== Recent Service Logs ==="
+            sudo journalctl -u breadcast -n 50 --no-pager
+            exit 1
           fi
+          
+          # 7) 애플리케이션 로그 미리보기
+          echo ""
+          echo "=========================================="
+          echo "  Application Log (Last 20 lines)"
+          echo "=========================================="
+          if [ -f "$DEPLOY_DIR/app.log" ]; then
+            tail -n 20 "$DEPLOY_DIR/app.log"
+          else
+            echo "⚠️  Log file not created yet"
+          fi
+          
+          # 8) 최종 메시지
+          echo ""
+          echo "=========================================="
+          echo "  ✅ Deployment Successful!"
+          echo "=========================================="
+          echo "Application URL: http://$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4):$TARGET_PORT"
+          echo ""
+          echo "Useful commands:"
+          echo "  - Check status: sudo systemctl status breadcast"
+          echo "  - View logs: sudo journalctl -u breadcast -f"
+          echo "  - App logs: tail -f $DEPLOY_DIR/app.log"
+          echo "  - Restart: sudo systemctl restart breadcast"
+          echo "=========================================="
+
