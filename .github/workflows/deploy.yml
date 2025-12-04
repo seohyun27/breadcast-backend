@@ -1,4 +1,4 @@
-name: Deploy to EC2 (Diagnostics Mode)
+name: Deploy on EC2 
 
 on:
   push:
@@ -6,7 +6,8 @@ on:
       - main
 
 jobs:
-  deploy:
+  # 1. Build and Test
+  build:
     runs-on: self-hosted
     # Runner의 기본 작업 디렉터리: ${GITHUB_WORKSPACE}/breadcast
     defaults:
@@ -17,12 +18,27 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4.1.7
 
-      # ⭐️ [진단 단계] 이 로그를 통해 gradlew의 정확한 위치를 파악할 수 있습니다.
-      - name: Debug_List Files in Working Directory
+      - name: Clean Gradle Daemon and Cache
         run: |
-          echo "--- Runner의 기본 작업 공간 (${GITHUB_WORKSPACE}/breadcast) 파일 목록 ---"
-          # 현재 디렉터리의 파일 및 폴더 목록을 재귀적으로 출력합니다.
-          ls -RF .
+          echo "🧹 Cleaning Gradle daemon and cache..."
+
+          # Gradle daemon 중지
+          ./gradlew --stop 2>/dev/null || true
+
+          # 프로세스 강제 종료
+          pkill -9 -f gradle 2>/dev/null || true
+          pkill -9 -f GradleWorkerMain 2>/dev/null || true
+
+          # 프로젝트 내 Gradle 아티팩트 정리
+          rm -rf .gradle build
+
+          # Lock 파일 정리
+          find ~/.gradle -name "*.lock" -type f -delete 2>/dev/null || true
+
+          # Gradle daemon 디렉터리 정리
+          rm -rf ~/.gradle/daemon/* 2>/dev/null || true
+
+          echo "✅ Gradle cleanup completed"
           
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew 
@@ -33,36 +49,159 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      # 1. Build and Test
       - name: Build with Gradle and Test
-        # 명시적인 경로를 사용하여 gradlew를 실행합니다.
-        run: ./breadcast/gradlew clean build --no-daemon
+        run: ./gradlew clean build --no-daemon
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
-      # 2. Deploy (Self-hosted Runner의 로컬 실행)
-      - name: Execute Deploy Script on EC2 (Local Execution)
-        shell: /usr/bin/bash -e {0}
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-package
+          path: breadcast/build/libs/*.jar
+
+  # 2. Deploy
+  deploy:
+    runs-on: self-hosted
+    needs: build
+
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: deployment-package
+          path: ./deploy
+
+      - name: Deploy with systemd
         run: |
-          # 배포 전에 실제 코드가 있는 디렉터리로 이동합니다.
-          cd breadcast || exit 1 
-          
-          TARGET_DIR=$(pwd) 
+          DEPLOY_DIR="/home/ubuntu/breadcast-app"
           TARGET_PORT=8080
-
-          echo "Current working directory for deployment: $TARGET_DIR"
-
-          # 1) 포트 사용 프로세스 종료
-          echo "Stopping old process on port $TARGET_PORT..."
-          sudo fuser -k -n tcp $TARGET_PORT || true 
-          sleep 5
-
-          # 2) 새로운 JAR 파일 찾기 및 실행
-          JAR_FILE=$(ls -tr build/libs/*.jar | tail -1)
-
-          # 3) 백그라운드에서 실행
-          echo "Starting new application: $JAR_FILE"
-          nohup java -jar $JAR_FILE > app.log 2>&1 &
-
-          # 4) 서버 시작 대기 및 로그 출력
-          sleep 15
-          echo "Application logs (Last 30 lines):"
-          tail -n 30 app.log
+          
+          echo "=========================================="
+          echo "  BreadCast Deployment Started"
+          echo "=========================================="
+          
+          # 1. 배포 디렉터리 확인
+          mkdir -p "$DEPLOY_DIR"
+          
+          # 2. JAR 파일 찾기 및 복사
+          JAR_FILE=$(ls -t ./deploy/*.jar | grep -v plain | head -1)
+          
+          if [ -z "$JAR_FILE" ]; then
+            echo "❌ Error: No JAR file found in ./deploy/"
+            ls -la ./deploy/
+            exit 1
+          fi
+          
+          echo "📦 Found JAR: $(basename $JAR_FILE)"
+          echo "📂 Copying to: $DEPLOY_DIR/app.jar"
+          
+          sudo cp "$JAR_FILE" "$DEPLOY_DIR/app.jar"
+          sudo chown ubuntu:ubuntu "$DEPLOY_DIR/app.jar"
+          
+          echo "✅ JAR file deployed"
+          
+          # 3. 서비스 재시작
+          echo ""
+          echo "🔄 Restarting breadcast service..."
+          sudo systemctl restart breadcast
+          
+          # 4. 서비스가 active 상태가 될 때까지 대기
+          echo "⏳ Waiting for service to become active..."
+          for i in {1..10}; do
+            if sudo systemctl is-active --quiet breadcast; then
+              echo "✅ Service is active!"
+              break
+            fi
+            sleep 1
+            echo "   Checking service... ($i/10)"
+          done
+          
+          # 5. 포트가 열릴 때까지 대기 (최대 40초)
+          echo ""
+          echo "⏳ Waiting for application to listen on port $TARGET_PORT..."
+          PORT_OPEN=false
+          for i in {1..40}; do
+            if sudo lsof -i :$TARGET_PORT >/dev/null 2>&1; then
+              echo "✅ Port $TARGET_PORT is now listening!"
+              PORT_OPEN=true
+              break
+            fi
+            sleep 1
+            printf "."
+          done
+          echo ""
+          
+          # 6. 서비스 상태 확인
+          echo ""
+          echo "=========================================="
+          echo "  Service Status"
+          echo "=========================================="
+          sudo systemctl status breadcast --no-pager -l
+          
+          # 7. 포트 확인 결과
+          echo ""
+          echo "=========================================="
+          echo "  Port Status"
+          echo "=========================================="
+          
+          if [ "$PORT_OPEN" = true ]; then
+            sudo lsof -i :$TARGET_PORT
+            echo ""
+            echo "✅ Application is listening on port $TARGET_PORT"
+          else
+            echo "❌ Application is NOT listening on port $TARGET_PORT after 40 seconds"
+            echo ""
+            echo "=== Checking if service is still running ==="
+            if sudo systemctl is-active --quiet breadcast; then
+              echo "⚠️  Service is active but port not open yet - may need more time"
+              echo "Check logs with: sudo journalctl -u breadcast -f"
+            else
+              echo "❌ Service has failed"
+            fi
+            echo ""
+            echo "=== Recent Application Logs ==="
+            if [ -f "$DEPLOY_DIR/app.log" ]; then
+              tail -n 100 "$DEPLOY_DIR/app.log"
+            else
+              echo "No app.log file found"
+            fi
+            echo ""
+            echo "=== Recent Service Logs ==="
+            sudo journalctl -u breadcast -n 100 --no-pager
+            exit 1
+          fi
+          
+          # 8. 애플리케이션 로그 미리보기
+          echo ""
+          echo "=========================================="
+          echo "  Application Log (Last 30 lines)"
+          echo "=========================================="
+          if [ -f "$DEPLOY_DIR/app.log" ]; then
+            tail -n 30 "$DEPLOY_DIR/app.log"
+          else
+            echo "⚠️  Log file not created yet"
+          fi
+          
+          # 9. 최종 메시지
+          echo ""
+          echo "=========================================="
+          echo "  ✅ Deployment Successful!"
+          echo "=========================================="
+          PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4 2>/dev/null || echo "unknown")
+          if [ "$PUBLIC_IP" != "unknown" ]; then
+            echo "Application URL: http://$PUBLIC_IP:$TARGET_PORT"
+          fi
+          echo ""
+          echo "Useful commands:"
+          echo "  - Check status: sudo systemctl status breadcast"
+          echo "  - View service logs: sudo journalctl -u breadcast -f"
+          echo "  - View app logs: tail -f $DEPLOY_DIR/app.log"
+          echo "  - Restart: sudo systemctl restart breadcast"
+          echo "=========================================="
