@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - hotfix:settings
 
 jobs:
   deploy:
@@ -35,16 +36,12 @@ jobs:
 
       # 1. Build and Test
       - name: Build with Gradle and Test
-        # 명시적인 경로를 사용하여 gradlew를 실행합니다.
-        run: ./breadcast/gradlew clean build --no-daemon
+        run: ./gradlew clean build --no-daemon
 
-      # 2. Deploy (Self-hosted Runner의 로컬 실행)
-      - name: Execute Deploy Script on EC2 (Local Execution)
+      # 2. Deploy
+      - name: Execute Deploy Script on EC2
         shell: /usr/bin/bash -e {0}
         run: |
-          # 배포 전에 실제 코드가 있는 디렉터리로 이동합니다.
-          cd breadcast || exit 1 
-          
           TARGET_DIR=$(pwd) 
           TARGET_PORT=8080
 
