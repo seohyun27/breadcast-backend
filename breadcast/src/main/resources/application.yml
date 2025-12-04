@@ -24,8 +24,8 @@ spring:
 cloud:
   aws:
     credentials:
-      access-key: ${ACCESS-KEY}
-      secret-key: ${SECRET-KEY}
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
     s3:
       bucket: breadcast-image-bucket  # 1단계에서 생성한 내 버킷 이름
     region:
