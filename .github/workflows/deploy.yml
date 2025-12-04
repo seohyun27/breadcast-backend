@@ -67,10 +67,9 @@ jobs:
       - name: Execute Deploy Script on EC2
         shell: /usr/bin/bash -e {0}
         run: |
-          TARGET_DIR=$(pwd) 
           TARGET_PORT=8080
 
-          echo "Current working directory for deployment: $TARGET_DIR"
+          echo "Current working directory for deployment: $(pwd)"
 
           # 1) 포트 사용 프로세스 종료
           echo "Stopping old process on port $TARGET_PORT..."
@@ -106,3 +105,4 @@ jobs:
           echo "=== Process Status ==="
           if ps -p $APP_PID > /dev/null 2>&1; then
             echo "✓ Application is running (PID: $APP_PID)"
+          fi
