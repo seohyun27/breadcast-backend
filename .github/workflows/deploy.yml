@@ -8,10 +8,6 @@ on:
 jobs:
   deploy: # 빌드, 테스트, 배포를 하나의 Job으로 통합하여 효율성을 높였습니다.
     runs-on: self-hosted
-    # 모든 스크립트가 'breadcast' 폴더 내에서 실행되도록 작업 디렉터리를 설정합니다.
-    defaults:
-      run:
-        working-directory: breadcast
 
     steps:
       - name: Checkout Source Code
