@@ -7,6 +7,7 @@ on:
       - hotfix/settings
 
 jobs:
+  # 1. Build and Test
   build:
     runs-on: self-hosted
     # Runner의 기본 작업 디렉터리: ${GITHUB_WORKSPACE}/breadcast
@@ -34,7 +35,6 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      # 1. Build and Test
       - name: Build with Gradle and Test
         run: ./gradlew clean build --no-daemon
         env:
@@ -46,12 +46,24 @@ jobs:
           ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
           SECRET_KEY: ${{ secrets.SECREY_KEY }}
 
-      # 2. Deploy
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-package
+          path: build/libs/
+
+  # 2. Deploy
   deploy:
     runs-on: self-hosted
     needs: build
 
     steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: deployment-package
+          path: ./
+
       - name: Execute Deploy Script on EC2
         shell: /usr/bin/bash -e {0}
         run: |
