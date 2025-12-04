@@ -20,4 +20,5 @@ public class SearchBakeryResponse {
     private double rating; 		// 빵집 평균 별점
     private int favoriteCount; 	//빵집 스크랩 수
     private int reviewCount; 	//빵집 리뷰 수
+    private String URL; //빵집 url
 }

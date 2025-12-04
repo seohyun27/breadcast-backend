@@ -77,15 +77,23 @@ public class BakeryService {
 
     //사용자가 빵집들을 검색할 수 있게 해주는 함수
     public List<SearchBakeryResponse> searchBakeries(String keyword, String sort) {
+        String searchTerm;
+
+        if (keyword != null && keyword.trim().isEmpty()) {
+            searchTerm = null; // 빈 문자열을 null로 처리
+        } else {
+            searchTerm = keyword; // 그 외의 경우는 원래 keyword 값을 사용
+        }
+
         List<SearchBakeryResponse> searchBakeryResponseList = new ArrayList<>();
         List<Object[]> bakeryList; // 쿼리 결과는 Object[] 목록으로 받음
         double rating = 0.0;
 
-        if(keyword == null){
+        if(searchTerm == null){
             bakeryList = bakeryRepository.findAllPopularBakeries();
         }
         else {
-            String cleanedSearchTerm = keyword.replaceAll("\\s+", "");
+            String cleanedSearchTerm = searchTerm.replaceAll("\\s+", "");
 
             // 문자열을 대소문자 구분 없이 비교
             if ("REVIEW".equalsIgnoreCase(sort)) {
@@ -113,6 +121,7 @@ public class BakeryService {
                     .rating(rating)
                     .reviewCount(reviewCountLong.intValue())
                     .favoriteCount(favoriteCountLong.intValue())
+                    .URL(bakery.getURL())
                     .build();
 
             searchBakeryResponseList.add(searchBakeryResponse);

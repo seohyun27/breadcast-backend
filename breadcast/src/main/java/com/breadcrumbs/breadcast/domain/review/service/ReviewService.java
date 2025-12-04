@@ -162,6 +162,10 @@ public class ReviewService {
     @Transactional(readOnly = true)
     public List<BakeryReviewResponse> getBakeryReviews(Long bakeryId, Long memId) {
         List<BakeryReviewResponse> bakeryReviewResponseList = new ArrayList<>();
+
+        Bakery bakery = bakeryRepository.findById(bakeryId)
+                .orElseThrow(() -> new GeneralException("해당 가게를 찾을 수 없습니다. ID: " + bakeryId));
+
         List<BakeryReview> bakeryReviewList = bakeryReviewRepository.findByBakeryId(bakeryId);
         boolean isMine = false;
 
@@ -209,6 +213,7 @@ public class ReviewService {
                     .text(bakeryReview.getText())
                     .rating(bakeryReview.getRating())
                     .photo(bakeryReview.getPhoto())
+                    .date(bakeryReview.getDate())
                     .build();
 
             getMyBakeryReviewResponseList.add(getMyBakeryReviewResponse);
