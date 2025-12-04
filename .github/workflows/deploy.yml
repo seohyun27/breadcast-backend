@@ -8,14 +8,14 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-    # Runner의 기본 작업 공간 (${GITHUB_WORKSPACE})에서 시작합니다.
+    # Runner의 기본 작업 디렉터리: ${GITHUB_WORKSPACE}/breadcast
+    defaults:
+      run:
+        working-directory: breadcast
 
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4.1.7
-        with:
-          # 소스 코드를 ${GITHUB_WORKSPACE}/breadcast에 복사합니다.
-          path: breadcast 
 
       # ⭐️ [진단 단계] 이 로그를 통해 gradlew의 정확한 위치를 파악할 수 있습니다.
       - name: Debug_List Files in Working Directory
