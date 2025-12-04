@@ -7,7 +7,7 @@ on:
       - hotfix/settings
 
 jobs:
-  deploy:
+  build:
     runs-on: self-hosted
     # Runner의 기본 작업 디렉터리: ${GITHUB_WORKSPACE}/breadcast
     defaults:
@@ -47,6 +47,11 @@ jobs:
           SECRET_KEY: ${{ secrets.SECREY_KEY }}
 
       # 2. Deploy
+  deploy:
+    runs-on: self-hosted
+    needs: build
+
+    steps:
       - name: Execute Deploy Script on EC2
         shell: /usr/bin/bash -e {0}
         run: |
@@ -65,7 +70,15 @@ jobs:
 
           # 3) 백그라운드에서 실행
           echo "Starting new application: $JAR_FILE"
-          nohup java -jar $JAR_FILE > app.log 2>&1 &
+          nohup java \
+            -DDB_HOST=${{ secrets.DB_HOST }} \
+            -DDB_PORT=${{ secrets.DB_PORT }} \
+            -DDB_NAME=${{ secrets.DB_NAME }} \
+            -DDB_USERNAME=${{ secrets.DB_USERNAME }} \
+            -DDB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -DACCESS_KEY=${{ secrets.ACCESS_KEY }} \
+            -DSECRET_KEY=${{ secrets.SECRET_KEY }} \
+            -jar $JAR_FILE > app.log 2>&1 &
 
           # 4) 서버 시작 대기 및 로그 출력
           sleep 15
