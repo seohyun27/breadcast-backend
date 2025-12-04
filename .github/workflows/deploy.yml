@@ -68,82 +68,126 @@ jobs:
         run: |
           DEPLOY_DIR="/home/ubuntu/breadcast-app"
           TARGET_PORT=8080
-
-          echo "=== Starting Deployment ==="
-
-          # 1) 배포 디렉터리 확인
+          
+          echo "=========================================="
+          echo "  BreadCast Deployment Started"
+          echo "=========================================="
+          
+          # 1. 배포 디렉터리 확인
           mkdir -p "$DEPLOY_DIR"
-
-          # 2) 새로운 JAR 파일 찾기 및 실행
-          JAR_FILE=$(ls -tr ./deploy/*.jar | grep -v plain | tail -1)
-
-          echo "Deploying JAR: $JAR_FILE"
+          
+          # 2. JAR 파일 찾기 및 복사
+          JAR_FILE=$(ls -t ./deploy/*.jar | grep -v plain | head -1)
+          
+          if [ -z "$JAR_FILE" ]; then
+            echo "❌ Error: No JAR file found in ./deploy/"
+            ls -la ./deploy/
+            exit 1
+          fi
+          
+          echo "📦 Found JAR: $(basename $JAR_FILE)"
+          echo "📂 Copying to: $DEPLOY_DIR/app.jar"
+          
           sudo cp "$JAR_FILE" "$DEPLOY_DIR/app.jar"
           sudo chown ubuntu:ubuntu "$DEPLOY_DIR/app.jar"
-
-          # 3) systemd 재시작
+          
+          echo "✅ JAR file deployed"
+          
+          # 3. 서비스 재시작
+          echo ""
+          echo "🔄 Restarting breadcast service..."
           sudo systemctl restart breadcast
-
-          # 4) 시작 대기
-          echo "Waiting for application to start..."
-          for i in {1..30}; do
-            sleep 1
+          
+          # 4. 서비스가 active 상태가 될 때까지 대기
+          echo "⏳ Waiting for service to become active..."
+          for i in {1..10}; do
             if sudo systemctl is-active --quiet breadcast; then
               echo "✅ Service is active!"
               break
             fi
-            echo "   Waiting... ($i/30)"
+            sleep 1
+            echo "   Checking service... ($i/10)"
           done
-
-          # 5) 서비스 상태 확인
+          
+          # 5. 포트가 열릴 때까지 대기 (최대 40초)
+          echo ""
+          echo "⏳ Waiting for application to listen on port $TARGET_PORT..."
+          PORT_OPEN=false
+          for i in {1..40}; do
+            if sudo lsof -i :$TARGET_PORT >/dev/null 2>&1; then
+              echo "✅ Port $TARGET_PORT is now listening!"
+              PORT_OPEN=true
+              break
+            fi
+            sleep 1
+            printf "."
+          done
+          echo ""
+          
+          # 6. 서비스 상태 확인
           echo ""
           echo "=========================================="
           echo "  Service Status"
           echo "=========================================="
           sudo systemctl status breadcast --no-pager -l
           
-          # 6) 포트 확인
+          # 7. 포트 확인 결과
           echo ""
           echo "=========================================="
           echo "  Port Status"
           echo "=========================================="
           
-          sleep 5  # 포트가 열릴 시간 추가 대기
-          
-          if sudo lsof -i :$TARGET_PORT; then
+          if [ "$PORT_OPEN" = true ]; then
+            sudo lsof -i :$TARGET_PORT
             echo ""
             echo "✅ Application is listening on port $TARGET_PORT"
           else
+            echo "❌ Application is NOT listening on port $TARGET_PORT after 40 seconds"
             echo ""
-            echo "❌ Application is NOT listening on port $TARGET_PORT"
+            echo "=== Checking if service is still running ==="
+            if sudo systemctl is-active --quiet breadcast; then
+              echo "⚠️  Service is active but port not open yet - may need more time"
+              echo "Check logs with: sudo journalctl -u breadcast -f"
+            else
+              echo "❌ Service has failed"
+            fi
+            echo ""
+            echo "=== Recent Application Logs ==="
+            if [ -f "$DEPLOY_DIR/app.log" ]; then
+              tail -n 100 "$DEPLOY_DIR/app.log"
+            else
+              echo "No app.log file found"
+            fi
             echo ""
             echo "=== Recent Service Logs ==="
-            sudo journalctl -u breadcast -n 50 --no-pager
+            sudo journalctl -u breadcast -n 100 --no-pager
             exit 1
           fi
           
-          # 7) 애플리케이션 로그 미리보기
+          # 8. 애플리케이션 로그 미리보기
           echo ""
           echo "=========================================="
-          echo "  Application Log (Last 20 lines)"
+          echo "  Application Log (Last 30 lines)"
           echo "=========================================="
           if [ -f "$DEPLOY_DIR/app.log" ]; then
-            tail -n 20 "$DEPLOY_DIR/app.log"
+            tail -n 30 "$DEPLOY_DIR/app.log"
           else
             echo "⚠️  Log file not created yet"
           fi
           
-          # 8) 최종 메시지
+          # 9. 최종 메시지
           echo ""
           echo "=========================================="
           echo "  ✅ Deployment Successful!"
           echo "=========================================="
-          echo "Application URL: http://$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4):$TARGET_PORT"
+          PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4 2>/dev/null || echo "unknown")
+          if [ "$PUBLIC_IP" != "unknown" ]; then
+            echo "Application URL: http://$PUBLIC_IP:$TARGET_PORT"
+          fi
           echo ""
           echo "Useful commands:"
           echo "  - Check status: sudo systemctl status breadcast"
-          echo "  - View logs: sudo journalctl -u breadcast -f"
-          echo "  - App logs: tail -f $DEPLOY_DIR/app.log"
+          echo "  - View service logs: sudo journalctl -u breadcast -f"
+          echo "  - View app logs: tail -f $DEPLOY_DIR/app.log"
           echo "  - Restart: sudo systemctl restart breadcast"
           echo "=========================================="
-
