@@ -76,6 +76,7 @@ public class ReviewService {
 
         // 4. 응답 DTO로 변환하여 반환
         return BakeryReviewResponse.builder()
+                .id(bakeryReview.getId())
                 .writer(savedReview.getMember().getNickname()) // Member 엔티티에서 닉네임 조회 가정
                 .rating(savedReview.getRating())
                 .text(savedReview.getText())
@@ -117,6 +118,7 @@ public class ReviewService {
         // 4. 수정된 엔티티를 DTO로 변환하여 반환
         // 수정 후이므로 isMine은 당연히 true입니다.
         return BakeryReviewResponse.builder()
+                .id(bakeryReview.getId())
                 .writer(bakeryReview.getMember().getNickname())
                 .rating(bakeryReview.getRating())
                 .text(bakeryReview.getText())
