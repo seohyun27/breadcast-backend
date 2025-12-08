@@ -18,6 +18,7 @@ public class BakeryReviewResponse {
      * 가게 리뷰 쓰기
      * 가게 리뷰 수정하기
      **/
+    private long id; //빵집 리뷰 id
     private String writer; 		// 리뷰 작성자
     private double rating; 		// 리뷰 별점
     private String text; 		// 리뷰 내용
