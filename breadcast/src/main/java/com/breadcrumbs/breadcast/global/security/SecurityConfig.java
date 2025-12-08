@@ -143,10 +143,9 @@ public class SecurityConfig {
         configuration.setAllowedOriginPatterns(List.of(
                 "http://localhost:3000",
                 "http://localhost:5173",
-                "http://43.200.233.19",
-                "http://43.200.233.19:*",
                 "http://breadcast-frontend-six.vercel.app",
-                "https://breadcast-frontend-six.vercel.app"
+                "https://breadcast-frontend-six.vercel.app",
+                "https://breadcast-frontend-5nnkqmjk5-nonzes-projects.vercel.app"
         ));
 
         // 허용할 HTTP 메서드 목록
@@ -157,6 +156,9 @@ public class SecurityConfig {
 
         // 허용할 헤더 목록
         configuration.setAllowedHeaders(List.of("*"));
+
+        // maxAge 설정
+        configuration.setMaxAge(3600L);
 
         // 노출할 헤더 목록 (쿠키 등)
         configuration.setExposedHeaders(List.of("Set-Cookie", "Authorization"));
