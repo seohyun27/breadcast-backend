@@ -21,7 +21,7 @@ public class ReportController {
 
     @GetMapping("/bakeries/{bakeryId}/reports")
     public ApiResponse<List<ReportsResponse>> getReports(@PathVariable Long bakeryId,
-                                                         @AuthenticationPrincipal UserDetailsImpl userDetails){
+                                                         @AuthenticationPrincipal(required = false) UserDetailsImpl userDetails){
         return null;
     }
 

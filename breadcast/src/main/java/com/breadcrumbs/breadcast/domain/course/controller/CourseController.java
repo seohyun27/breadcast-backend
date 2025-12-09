@@ -76,7 +76,7 @@ public class CourseController {
 
     @GetMapping("/courses/{courseId}")
     public ApiResponse<CourseDetailResponse> getCourseDetail(@PathVariable Long courseId,
-                                                @AuthenticationPrincipal UserDetailsImpl userDetails){
+                                                @AuthenticationPrincipal(required = false) UserDetailsImpl userDetails){
         return null;
     }
 }

@@ -25,7 +25,7 @@ public class BakeryController {
 
     @GetMapping("/bakeries/{bakeryId}")
     public ApiResponse<BakeryDetailResponse> getBakeryDetail(@PathVariable Long bakeryId,
-                                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                             @AuthenticationPrincipal(required = false) UserDetailsImpl userDetails) {
         // 로그인 유저가 없으면 서비스로 null을 넘겨주도록 설계함
         Long userId = (userDetails != null) ? userDetails.getUserId() : null;
         return ApiResponse.onSuccess("빵집 정보 조회에 성공하였습니다.",
@@ -34,7 +34,7 @@ public class BakeryController {
 
     @GetMapping("/bakeries/{bakeryId}/bakery-reviews")
     public ApiResponse<List<BakeryReviewResponse>> getBakeryReviews(@PathVariable Long bakeryId,
-                                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                       @AuthenticationPrincipal(required = false) UserDetailsImpl userDetails) {
         Long userId = (userDetails != null) ? userDetails.getUserId() : null;
         return ApiResponse.onSuccess("빵집 리뷰 조회에 성공하였습니다.",
                 reviewService.getBakeryReviews(bakeryId, userId));
