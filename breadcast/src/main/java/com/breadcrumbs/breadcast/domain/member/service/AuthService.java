@@ -118,7 +118,7 @@ public class AuthService implements UserDetailsService {
             .httpOnly(true)
             .secure(true)           // HTTPS 환경
             .sameSite("None")       // Cross-origin 허용
-            .maxAge(3600)           // 1시간
+            .maxAge(60 * 60 * 24 * 30)           // 30일
             .build();
     
         response.addHeader("Set-Cookie", cookie.toString());

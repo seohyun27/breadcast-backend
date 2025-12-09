@@ -185,7 +185,7 @@ public class SecurityConfig {
                 response.setCharacterEncoding("UTF-8");
 
                 ApiResponse<Void> apiResponse = ApiResponse.onFailure(
-                        "인증이 필요합니다. 로그인 후 다시 시도해주세요.", null);
+                        "로그인이 필요한 서비스입니다.", null);
 
                 objectMapper.writeValue(response.getWriter(), apiResponse);
             }

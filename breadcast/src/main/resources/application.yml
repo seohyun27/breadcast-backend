@@ -13,15 +13,6 @@ spring:
         format_sql: true
     defer-datasource-initialization: true  # data.sql이 JPA 테이블 생성 후 실행되도록
 
-  session:
-    cookie:
-      name: JSESSIONID
-      http-only: true
-      secure: true
-      same-site: none
-      path: /
-      max-age: 43200  # 세션 쿠키 유효 시간 (초 단위)
-
 cloud:
   aws:
     credentials:
