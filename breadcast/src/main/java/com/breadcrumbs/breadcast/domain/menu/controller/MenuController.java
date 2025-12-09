@@ -32,7 +32,7 @@ public class MenuController {
 
     @GetMapping("/menus/{menuId}")
     public ApiResponse<GetMenuDetailResponse> getMenuDetail(@PathVariable Long menuId,
-                                               @AuthenticationPrincipal UserDetailsImpl userDetails){
+                                               @AuthenticationPrincipal(required = false) UserDetailsImpl userDetails){
         return null;
     }
 
