@@ -21,11 +21,12 @@ public class SignupRequest {
     private String loginId; 		// 유저 로그인 id
 
     @NotBlank(message = "비밀번호는 필수입니다")
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,20}$", 
-             message = "비밀번호는 영문, 숫자, 특수문자를 각각 하나 이상 포함하여 8자 이상 20자 이하여야 합니다")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9\\s])[a-zA-Z0-9\\p{Punct}]{8,20}$", 
+             message = "비밀번호는 대문자, 소문자, 특수문자를 각각 하나 이상 포함하여 8자 이상 20자 이하여야 합니다")
     private String password; 	// 패스워드
 
     @NotBlank(message = "닉네임은 필수입니다")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣]{2,20}$", message = "닉네임은 영문, 숫자, 한글로 구성된 2자 이상 20자 이하여야 합니다")
     @UniqueNickname(message = "이미 사용중인 닉네임이 있습니다.")
     private String nickname; 	// 유저 닉네임
 }
