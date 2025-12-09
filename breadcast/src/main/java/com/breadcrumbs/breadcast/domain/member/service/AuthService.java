@@ -23,6 +23,8 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * 인증 서비스
@@ -91,28 +93,38 @@ public class AuthService implements UserDetailsService {
     @Transactional(readOnly = true)
     public MemberResponse login(LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
         // 1. Spring Security 인증 수행
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getLoginId(),
-                        loginRequest.getPassword()
-                )
-        );
+    Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                    loginRequest.getLoginId(),
+                    loginRequest.getPassword()
+            )
+    );
 
         // 2. SecurityContext 생성 및 인증 정보 설정
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
 
-        // 3. 세션 생성 (세션이 없으면 생성)
-        jakarta.servlet.http.HttpSession session = request.getSession(true);
-        
-        // 4. **중요**: SecurityContext를 HTTP 세션에 명시적으로 저장 (Spring Security 6.x 필수)
+        // 3. ⭐ 세션 강제 생성 (이게 중요!)
+        HttpSession session = request.getSession(true);
+        session.setAttribute("SPRING_SECURITY_CONTEXT", context);  // 명시적으로 저장
+    
+        // 4. SecurityContext를 HTTP 세션에 저장
         securityContextRepository.saveContext(context, request, response);
 
-        // 5. 세션 쿠키가 제대로 설정되도록 세션 ID를 로그로 확인
-        if (session != null) {
-            log.info("세션 생성 완료: sessionId={}", session.getId());
-        }
+        // 5. ⭐ 쿠키 명시적으로 설정
+        ResponseCookie cookie = ResponseCookie.from("JSESSIONID", session.getId())
+            .path("/")
+            .httpOnly(true)
+            .secure(true)           // HTTPS 환경
+            .sameSite("None")       // Cross-origin 허용
+            .maxAge(3600)           // 1시간
+            .build();
+    
+        response.addHeader("Set-Cookie", cookie.toString());
+    
+        log.info("세션 생성 완료: sessionId={}", session.getId());
+        log.info("쿠키 설정: {}", cookie.toString());
 
         // 6. 인증된 사용자 정보에서 닉네임 추출
         String loginId = authentication.getName();
@@ -124,7 +136,6 @@ public class AuthService implements UserDetailsService {
                 .nickname(member.getNickname())
                 .build();
     }
-
 
     /**
      * 아이디 중복 확인
