@@ -19,6 +19,7 @@
 | **Database** | MySQL | 8.0 | 지리 정보(좌표) 저장 및 트랜잭션 관리에 용이 |
 | **Infra** | AWS EC2 / S3 | - | 이미지 파일의 효율적 관리 및 확장성 고려 |
 | **CI/CD** | GitHub Actions | - | 반복적인 배포 작업 자동화 |
+
 ![Java](https://img.shields.io/badge/Java-21-007396?logo=java&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.4-6DB33F?logo=springboot&logoColor=white)
 ![Spring Security](https://img.shields.io/badge/Spring%20Security-6DB33F?logo=springsecurity&logoColor=white)
@@ -41,22 +42,22 @@
 ## 👨‍💻 Contributors & Roles (팀원 및 역할)
 **Backend Team**
 
-| 이름 | 역할 | 담당 업무                                                                                      | GitHub |
-| :---: | :---: |:-------------------------------------------------------------------------------------------| :---: |
-| **김서현**<br>(Leader) | **PM, Infra** | • **전체 프로젝트 일정 관리 및 회의 주재**<br>• **DB 스키마 설계 및 JPA 엔티티 매핑 총괄**<br>• API 응답 및 에러 처리 규격화<br> | [GitHub](https://github.com/seohyun27) |
-| **김서연** | Core Dev | • Swagger UI 연동<br>• 사용자 인증/인가 (Spring Security)<br>• GitHub Actions 기반 CI/CD 파이프라인 구축        | [GitHub](https://github.com/seoyeoki) |
-| **박세은** | Core Dev | • 주요 도메인의 핵심 로직 구현<br>• 서비스 계층 단위 테스트 코드 작성<br>• API 연동 테스트 및 버그 픽스                        | [GitHub](https://github.com/Uzrt) |
+|          이름          |     역할     | 담당 업무                                                                                                 | GitHub |
+|:--------------------:|:----------:|:------------------------------------------------------------------------------------------------------| :---: |
+|       **김서현**        | **Leader** | • **전체 프로젝트 일정 관리 및 회의 주재**<br>• **DB 스키마 설계 및 JPA 엔티티 매핑 총괄**<br>• **API 응답 및 에러 처리 규격화**<br>        | [GitHub](https://github.com/seohyun27) |
+|        **김서연**       |  **Core Dev**  | • **Swagger UI 연동**<br>• **사용자 인증/인가 구현** (Spring Security)<br>• **GitHub Actions 기반 CI/CD 파이프라인 구축** | [GitHub](https://github.com/seoyeoki) |
+|       **박세은**        |  **Core Dev**  | • **주요 도메인의 핵심 로직 구현**<br>• **서비스 계층 단위 테스트 코드 작성**<br>• **API 연동 테스트 및 버그 픽스**                                   | [GitHub](https://github.com/Uzrt) |
 
 **Frontend Team**
 
-| 이름 |    역할   |       담당 업무        |                 GitHub                  |
-| :---: |:---------:|:------------------:|:---------------------------------------:|
-| **김현지** | Frontend  |  FE 환경 구축 및 기능 구현  | [GitHub](https://github.com/rlaguswl04) |
-| **노은재** | Frontend | API 클라이언트 구축 및 배포  |  [GitHub](https://github.com/nonze23)   |
-| **이지원** | Frontend  | 백엔드 API 연결 및 기능 구현 |  [GitHub](https://github.com/dlwleasy)  |
+| 이름 |       역할        | 담당 업무                |                 GitHub                  |
+| :---: |:---------------:|:---------------------|:---------------------------------------:|
+| **김현지** |  **Frontend**   | • **FE 환경 구축 및 기능 구현**   | [GitHub](https://github.com/rlaguswl04) |
+| **노은재** |  **Frontend**   | • **API 클라이언트 구축 및 배포**  |  [GitHub](https://github.com/nonze23)   |
+| **이지원** |  **Frontend**   | • **백엔드 API 연결 및 기능 구현** |  [GitHub](https://github.com/dlwleasy)  |
 
 
-## 🚀 Trouble Shooting (문제 해결)
+## 🚀 Trouble Shooting
 
 ### 1. API 응답 통일 (협업 효율성)
 * **문제:** API마다 응답 구조가 상이하여 프론트엔드 연동 시 데이터 파싱 로직이 파편화되고, 예외 상황에 대한 처리가 모호함.
@@ -67,8 +68,10 @@
 
 <details>
 <summary>📸 해결 결과 캡처 (접기/펼치기)</summary>
+
 ![trouble shooting image](/docs/images/trouble-shooting-1-1.png)
 ![trouble shooting image](/docs/images/trouble-shooting-1-2.png)
+
 </details>
 
 ### 2. CORS 정책 위반 및 인증 쿠키 이슈 해결
@@ -79,7 +82,9 @@
 
 <details>
 <summary>📸 해결 코드 캡처 (접기/펼치기)</summary>
+
 ![trouble shooting image](/docs/images/trouble-shooting-2.png)
+
 </details>
 
 ### 3. JPA N+1 문제 해결 및 조회 성능 최적화
@@ -91,9 +96,11 @@
 
 <details>
 <summary>📸 해결 코드 캡처 (접기/펼치기)</summary>
+
 ![trouble shooting image](/docs/images/trouble-shooting-3-1.png)
 ![trouble shooting image](/docs/images/trouble-shooting-3-2.png)
 ![trouble shooting image](/docs/images/trouble-shooting-3-3.png)
+
 </details>
 
 ## 📂 Repository Structure
