@@ -1,18 +1,23 @@
 # 🍞 breadcast - Server (빵지순례 지도 서비스)
 ![main image](/docs/images/breadcast-main.png)
-> **"쉽게 하나로 모여있는 빵 맛집 정보, 빵지순례"** > 빵집 리뷰 공유 및 나만의 빵지순례 루트를 기록하는 서비스입니다.
+> **"쉽게 하나로 모여있는 빵 맛집 정보, 빵지순례"** <br/>
+> 빵집 리뷰 공유 및 나만의 빵지순례 루트를 기록하는 서비스입니다.
 
 ## 📅 프로젝트 개요
 * **진행 기간:** 2025.09 ~ 2025.12 (약 3개월)
 * **인원:** 백엔드 3명, 프론트엔드 3명 (총 6명)
 
+## 🔗 Project Repositories
+* **Documents Repository:** [Go to Documents](https://github.com/seohyun27/breadcast-docs)
+* **Client Repository:** [Go to Frontend](https://github.com/nonze23/breadcast-frontend)
+
 ## 🚀 Demo
-> 현재 AWS 비용 문제로 배포 서버는 중단되었습니다. 아래 시연 영상으로 주요 기능을 확인하실 수 있습니다.
-**📺 [시연 영상 링크](https://drive.google.com/file/d/1zLUFRnXhpUwhN_LXdtVT9UZSIo8RsGxM/view?usp=sharing)**
+> 현재 AWS 비용 문제로 배포 서버는 중단되었습니다. 아래 시연 영상으로 주요 기능을 확인하실 수 있습니다. <br/>
+> **📺 [시연 영상 링크](https://drive.google.com/file/d/1zLUFRnXhpUwhN_LXdtVT9UZSIo8RsGxM/view?usp=sharing)**
 
 ## 🛠️ Tech Stack & Decision
 사용 기술과 **해당 기술을 선정한 이유**입니다.
-| Category | Stack | Version | Why? (선정 이유) |
+| Category | Stack | Version | 선정 이유 |
 | :--- | :--- | :--- | :--- |
 | **Language** | Java | 21 | 최신 LTS 버전의 안정성과 가상 스레드 등 신기능 학습 목적 |
 | **Framework** | Spring Boot | 3.5.4 | 빠르고 안정적인 REST API 서버 구축 |
@@ -44,9 +49,9 @@
 
 |          이름          |     역할     | 담당 업무                                                                                                 | GitHub |
 |:--------------------:|:----------:|:------------------------------------------------------------------------------------------------------| :---: |
-|       **김서현**        | **Leader** | • **전체 프로젝트 일정 관리 및 회의 주재**<br>• **DB 스키마 설계 및 JPA 엔티티 매핑 총괄**<br>• **API 응답 및 에러 처리 규격화**<br>        | [GitHub](https://github.com/seohyun27) |
+|       **김서현**        | **Leader** | • **전체 프로젝트 일정 관리 및 회의 주재**<br>• **DB 스키마 설계 및 JPA 엔티티 매핑 총괄**<br>• **API 응답 및 에러 처리 규격화** | [GitHub](https://github.com/seohyun27) |
 |        **김서연**       |  **Core Dev**  | • **Swagger UI 연동**<br>• **사용자 인증/인가 구현** (Spring Security)<br>• **GitHub Actions 기반 CI/CD 파이프라인 구축** | [GitHub](https://github.com/seoyeoki) |
-|       **박세은**        |  **Core Dev**  | • **주요 도메인의 핵심 로직 구현**<br>• **서비스 계층 단위 테스트 코드 작성**<br>• **API 연동 테스트 및 버그 픽스**                                   | [GitHub](https://github.com/Uzrt) |
+|       **박세은**        |  **Core Dev**  | • **주요 도메인의 핵심 로직 구현**<br>• **서비스 계층 단위 테스트 코드 작성**<br>• **API 연동 테스트 및 버그 픽스** | [GitHub](https://github.com/Uzrt) |
 
 **Frontend Team**
 
@@ -124,8 +129,8 @@
 ## 📂 Repository Structure
 ```
 BreadCast-Backend/
-├── .github/            # 깃허브 액션 및 PR 템플릿
-├── breadcast/          # 스프링 부트 어플리케이션 메인 소스코드
+├── .github/                   # 깃허브 액션 및 PR 템플릿
+├── breadcast/                 # 스프링 부트 어플리케이션 메인 소스코드
 │   ├── src/
 │   └── build.gradle
 ├── docs/                      # 프로젝트 문서화
