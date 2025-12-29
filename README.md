@@ -19,7 +19,7 @@
 사용 기술과 **해당 기술을 선정한 이유**입니다.
 | Category | Stack | Version | 선정 이유 |
 | :--- | :--- | :--- | :--- |
-| **Language** | Java | 21 | 최신 LTS 버전의 안정성과 가상 스레드 등 신기능 학습 목적 |
+| **Language** | Java | 21 | 최신 LTS 버전의 안정성과 신기능 학습 목적 |
 | **Framework** | Spring Boot | 3.5.4 | 빠르고 안정적인 REST API 서버 구축 |
 | **Database** | MySQL | 8.0 | 지리 정보(좌표) 저장 및 트랜잭션 관리에 용이 |
 | **Infra** | AWS EC2 / S3 | - | 이미지 파일의 효율적 관리 및 확장성 고려 |
