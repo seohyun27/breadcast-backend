@@ -133,7 +133,7 @@ BreadCast-Backend/
 ├── breadcast/                 # 스프링 부트 어플리케이션 메인 소스코드
 │   ├── src/
 │   └── build.gradle
-├── docs/                      # 프로젝트 문서화
+├── docs/                      # 백엔드 개발을 위한 문서들
 │   ├── architecture/          # 시스템 아키텍처 및 폴더 구조 설명
 │   ├── guides/                # 개발 가이드라인
 │   └── images/                # 리드미 및 문서용 이미지 리소스
