@@ -13,7 +13,7 @@
 
 ## 🚀 Demo
 > 현재 AWS 비용 문제로 배포 서버는 중단되었습니다. 아래 시연 영상으로 주요 기능을 확인하실 수 있습니다. <br/>
-> **📺 [시연 영상 링크](https://drive.google.com/file/d/1zLUFRnXhpUwhN_LXdtVT9UZSIo8RsGxM/view?usp=sharing)**
+> **📺 [시연 영상 링크](https://youtu.be/5p7J1zI7btk)**
 
 ## 🛠️ Tech Stack & Decision
 사용 기술과 **해당 기술을 선정한 이유**입니다.
